@@ -20,9 +20,9 @@
 
 FlyBrainLab provides an environment where computational researchers can present configurable, executable neural circuits, and experimental scientists can interactively explore circuit structure and function ultimately leading to biological validation.
 
-# Installation Instructions
+# Installation
 
-FlyBrainLab currently provides a docker installation option, which comes in with a bundled version of the [FFBO](http://fruitflybrain.org/) project. In addition, we provide manual setup instructions below.
+FlyBrainLab currently provides a Docker installation option, which comes in with a bundled version of the [FFBO](http://fruitflybrain.org/) project. In addition, we provide manual setup instructions below.
 
 ## Docker Installation
 
