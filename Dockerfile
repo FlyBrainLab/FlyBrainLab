@@ -14,12 +14,10 @@ RUN apt-get update
 RUN apt-get install -y build-essential
 
 #Python dependencies
-RUN conda create -n neuromynerva python=3.6 nodejs jupyterlab cookiecutter git -c conda-forge
+RUN conda create -n neuromynerva python=3.6 nodejs scipy pandas jupyterlab cookiecutter git -c conda-forge
 #NOTE: This is not recommended, but it does work
 ENV PATH /opt/conda/envs/neuromynerva/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-RUN pip install txaio twisted autobahn crochet service_identity autobahn-sync matplotlib h5py networkx
-#RUN /bin/bash -c "conda activate ffbolabdev && pip install txaio twisted autobahn crochet service_identity autobahn-sync matplotlib h5py networkx"
-RUN pip install txaio twisted autobahn crochet service_identity autobahn-sync matplotlib h5py networkx
+RUN pip install txaio twisted autobahn crochet service_identity autobahn-sync matplotlib h5py seaborn networkx
 RUN git clone https://github.com/FlyBrainLab/Neuroballad.git
 WORKDIR ./Neuroballad
 RUN python setup.py develop
