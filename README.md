@@ -28,4 +28,4 @@ FlyBrainLab currently provides a Docker installation option, which comes in with
 
 ## Quick Installation
 
-If you would like to start using FlyBrainLab without setting up your own FFBO environment, please follow the instructions at the [NeuroMynerva](https://github.com/FlyBrainLab/NeuroMynerva) repository.
+If you would like to start using FlyBrainLab without setting up your own FFBO environment, please follow the instructions in the [NeuroMynerva](https://github.com/FlyBrainLab/NeuroMynerva) repository.
