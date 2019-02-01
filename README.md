@@ -46,7 +46,7 @@ jupyter lab
 to get started.
 
 To test if your installations are working, check
-1. whether you see an "FFBO" section below "Other" in JupyterLab, as shown here:
+1. whether you see an "FFBO" section below "Other" in JupyterLab Launcher, as shown here:
 
 <p align="center">
   <img src="https://github.com/flybrainlab/flybrainlab/raw/master/fbl_loaded.png" width="50%">
