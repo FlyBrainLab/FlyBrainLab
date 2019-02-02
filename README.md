@@ -24,13 +24,25 @@ FlyBrainLab provides an environment where computational researchers can present 
 
 First, make sure that you have an installation of Anaconda or miniconda. Anaconda can be installed from https://www.anaconda.com/ and miniconda is available at https://docs.conda.io/en/latest/miniconda.html . We recommend Anaconda. Then, open up your terminal or command line, go to an empty directory in which you want your FlyBrainLab installation to reside and enter the following line by line:
 ```bash
+# create anaconda environment called neuromynerva with appropriate packages installed
 conda create -n neuromynerva python=3.6 nodejs scipy pandas jupyterlab cookiecutter git yarn -c conda-forge
+# activate the neuromynerva environment just created
+# if you have conda>4.4, you may need to use `conda activate neuromynerva` instead
 source activate neuromynerva
+# Install additional package into the environment
 pip install txaio twisted autobahn crochet service_identity autobahn-sync matplotlib h5py seaborn networkx jupyter
+
+# Create a preferred installation directory and go into that directory, For example:
+# mkdir ~/MyFBL
+# cd ~/MyFBL
+
+# Clone packages into your preferred directory (~/MyFBL) in the example above
 git clone https://github.com/FlyBrainLab/Neuroballad.git
 git clone https://github.com/FlyBrainLab/FBLClient.git
 git clone https://github.com/FlyBrainLab/NeuroMynerva.git
-cd Neuroballad
+
+# Install all relevant packages
+cd ./Neuroballad
 python setup.py develop
 cd ../FBLClient
 python setup.py develop
