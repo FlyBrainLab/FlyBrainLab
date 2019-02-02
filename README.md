@@ -48,6 +48,8 @@ cd ../FBLClient
 python setup.py develop
 cd ../NeuroMynerva
 yarn install
+npm run build # this will fail, do not worry
+npm run build # this will also fail, do not worry
 npm run link
 jupyter lab build
 ```
