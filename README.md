@@ -20,7 +20,19 @@
 
 FlyBrainLab provides an environment where computational researchers can present configurable, executable neural circuits, and experimental scientists can interactively explore circuit structure and function ultimately leading to biological validation.
 
-# Installation
+# Setting up FlyBrainLab
+
+## Prerequisites
+
+### macOS
+
+Before the installation, enter the following to your terminal:
+```bash
+xcode-select --install
+```
+to install the Xcode Command Line Tools that are needed for the compilation of certain packages.
+
+## Installation
 
 First, make sure that you have an installation of Anaconda or miniconda. Anaconda can be installed from https://www.anaconda.com/ and miniconda is available at https://docs.conda.io/en/latest/miniconda.html. We recommend Anaconda. Then, open up your terminal or command line, go to an empty directory in which you want your FlyBrainLab installation to reside and enter the following line by line:
 ```bash
@@ -31,6 +43,8 @@ conda create -n neuromynerva python=3.6 nodejs scipy pandas jupyterlab cookiecut
 source activate neuromynerva
 # Install additional package into the environment
 pip install txaio twisted autobahn crochet service_identity autobahn-sync matplotlib h5py seaborn networkx jupyter
+# If on Windows, execute the following:
+pip install pypiwin32
 
 # Create a preferred installation directory and go into that directory, For example:
 # mkdir ~/MyFBL
@@ -53,7 +67,11 @@ npm run build # this will also fail, do not worry
 npm run link
 jupyter lab build
 ```
-You may be prompted. On Windows, you will only need to write "activate neuromynerva" instead of "source activate neuromynerva". After this installation, simply run
+You may be prompted. On Windows, you will only need to write "activate neuromynerva" instead of "source activate neuromynerva". 
+
+# Starting Up FlyBrainLab
+
+After the installation, simply run
 ```bash
 jupyter lab
 ```
