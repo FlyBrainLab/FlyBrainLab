@@ -42,7 +42,7 @@ conda create -n neuromynerva python=3.6 nodejs scipy pandas jupyterlab cookiecut
 # if you have conda>4.4, you may need to use `conda activate neuromynerva` instead
 source activate neuromynerva
 # Install additional package into the environment
-pip install txaio twisted autobahn crochet service_identity autobahn-sync matplotlib h5py seaborn networkx jupyter
+pip install txaio twisted autobahn crochet service_identity autobahn-sync matplotlib h5py seaborn fastcluster networkx jupyter
 # If on Windows, execute the following:
 pip install pypiwin32
 
