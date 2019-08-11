@@ -41,7 +41,7 @@ to install the Xcode Command Line Tools that are needed for the compilation of c
 First, make sure that you have an installation of Anaconda or miniconda. Anaconda can be installed from https://www.anaconda.com/ and miniconda is available at https://docs.conda.io/en/latest/miniconda.html. We recommend Anaconda. Secondly, download fbl_installer.sh from this repository (link above). Then, open up your terminal or command line, go to an empty directory in which you want your FlyBrainLab installation to reside and enter the following line by line:
 
 ```bash
-conda create -n flybrainlab python=3.6 -y
+conda create -n flybrainlab python=3.7 -y
 source activate flybrainlab
 ```
 
@@ -56,7 +56,7 @@ sh fbl_installer.sh
 First, make sure that you have an installation of Anaconda or miniconda. Anaconda can be installed from https://www.anaconda.com/ and miniconda is available at https://docs.conda.io/en/latest/miniconda.html. We recommend Anaconda. Secondly, download fbl_installer.cmd from this repository (link above). Then, open up your terminal or command line, go to an empty directory in which you want your FlyBrainLab installation to reside and enter the following line by line:
 
 ```bash
-conda create -n flybrainlab python=3.6 -y
+conda create -n flybrainlab python=3.7 -y
 activate flybrainlab
 ```
 
