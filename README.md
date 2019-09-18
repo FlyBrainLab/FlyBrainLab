@@ -45,11 +45,19 @@ conda create -n flybrainlab python=3.7 -y
 source activate flybrainlab
 ```
 
-You can change "flybrainlab" to a different name of your choice. Then, run:
+You can change "flybrainlab" to a different name of your choice. Then, on macOS, run:
 
 ```bash
-sh fbl_installer.sh
+sh fbl_installer_mac.sh
 ```
+
+on Linux, run:
+
+```bash
+sh fbl_installer_ubuntu.sh
+```
+
+Linux installation was only tested on Ubuntu, but should work with the other operating systems.
 
 #### Windows
 
