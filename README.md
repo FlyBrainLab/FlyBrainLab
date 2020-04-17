@@ -61,14 +61,7 @@ Linux installation was only tested on Ubuntu, but should work with the other ope
 
 #### Windows
 
-First, make sure that you have an installation of Anaconda or miniconda. Anaconda can be installed from https://www.anaconda.com/ and miniconda is available at https://docs.conda.io/en/latest/miniconda.html. We recommend Anaconda. Secondly, download fbl_installer.cmd from this repository (link above). Then, open up your terminal or command line, go to an empty directory in which you want your FlyBrainLab installation to reside and enter the following line by line:
-
-```bash
-conda create -n flybrainlab python=3.7 -y
-activate flybrainlab
-```
-
-You can change "flybrainlab" to a different name of your choice. Then, run:
+First, make sure that you have an installation of Anaconda or miniconda. Anaconda can be installed from https://www.anaconda.com/ and miniconda is available at https://docs.conda.io/en/latest/miniconda.html. We recommend Anaconda. Secondly, download fbl_installer.cmd from this repository (link above). Then, open up your terminal or command line, go to an empty directory in which you want your FlyBrainLab installation to reside and run the following:
 
 ```bash
 fbl_installer.cmd
@@ -79,7 +72,7 @@ fbl_installer.cmd
 First, make sure that you have an installation of Anaconda or miniconda. Anaconda can be installed from https://www.anaconda.com/ and miniconda is available at https://docs.conda.io/en/latest/miniconda.html. We recommend Anaconda. Then, open up your terminal or command line, go to an empty directory in which you want your FlyBrainLab installation to reside and enter the following line by line:
 ```bash
 # create anaconda environment called neuromynerva with appropriate packages installed
-conda create -n neuromynerva python=3.6 nodejs scipy pandas jupyterlab cookiecutter git yarn -c conda-forge -y
+conda create -n neuromynerva python=3.7 nodejs scipy pandas jupyterlab cookiecutter git yarn -c conda-forge -y
 # activate the neuromynerva environment just created
 # if you have conda>4.4, you may need to use `conda activate neuromynerva` instead
 source activate neuromynerva
