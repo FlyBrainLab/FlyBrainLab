@@ -96,11 +96,17 @@ python setup.py develop
 cd ../FBLClient
 python setup.py develop
 cd ../NeuroMynerva
-yarn install
-npm run build # this will fail, do not worry
-npm run build # this will also fail, do not worry
-npm run link
+jlpm
+jlpm run build
+
+# Execute this if you are a user
+jupyter labextension install .
 jupyter lab build
+jupyter lab
+
+# Execute this if you are a developer
+jupyter labextension link .
+jupyter lab --watch
 ```
 You may be prompted. On Windows, you will only need to write "activate neuromynerva" instead of "source activate neuromynerva". 
 
