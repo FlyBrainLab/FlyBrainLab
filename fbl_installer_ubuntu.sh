@@ -1,6 +1,6 @@
 conda install nodejs scipy pandas cookiecutter git yarn -c conda-forge -y
-conda install jupyterlab=1.2.4 -y
-pip install txaio twisted autobahn crochet service_identity autobahn-sync matplotlib h5py seaborn fastcluster networkx jupyter msgpack
+pip install jupyter jupyterlab==2.1.5
+pip install txaio twisted autobahn crochet service_identity autobahn-sync matplotlib h5py seaborn fastcluster networkx msgpack
 mkdir FlyBrainLab
 cd FlyBrainLab
 git clone https://github.com/FlyBrainLab/Neuroballad.git

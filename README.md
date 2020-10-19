@@ -57,7 +57,7 @@ on Linux, run:
 sh fbl_installer_ubuntu.sh
 ```
 
-Linux installation was only tested on Ubuntu, but should work with the other operating systems.
+Linux installation was only tested on Ubuntu, but should work with the other Linux distributions.
 
 #### Windows
 
@@ -71,13 +71,14 @@ fbl_installer.cmd
 
 First, make sure that you have an installation of Anaconda or miniconda. Anaconda can be installed from https://www.anaconda.com/ and miniconda is available at https://docs.conda.io/en/latest/miniconda.html. We recommend Anaconda. Then, open up your terminal or command line, go to an empty directory in which you want your FlyBrainLab installation to reside and enter the following line by line:
 ```bash
-# create anaconda environment called neuromynerva with appropriate packages installed
-conda create -n neuromynerva python=3.7 nodejs scipy pandas jupyterlab cookiecutter git yarn -c conda-forge -y
-# activate the neuromynerva environment just created
-# if you have conda>4.4, you may need to use `conda activate neuromynerva` instead
-source activate neuromynerva
+# create anaconda environment called flybrainlab with appropriate packages installed
+conda create -n flybrainlab python=3.7 nodejs scipy pandas jupyterlab cookiecutter git yarn -c conda-forge -y
+# activate the flybrainlab environment just created
+# if you have conda<4.4, you may need to use `source activate flybrainlab` instead
+conda activate flybrainlab
 # Install additional package into the environment
-pip install txaio twisted autobahn crochet service_identity autobahn-sync matplotlib h5py seaborn fastcluster networkx jupyter
+pip install jupyter jupyterlab==2.1.5
+pip install txaio twisted autobahn crochet service_identity autobahn-sync matplotlib h5py seaborn fastcluster networkx msgpack
 # If on Windows, execute the following:
 pip install pypiwin32
 
