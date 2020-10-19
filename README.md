@@ -36,7 +36,7 @@ If you encounter error:
 ```
 Can’t install the software because it is not currently available from the Software Update server.
 ```
-you can download the installer directly at https://developer.apple.com/download/more/ (Apple ID Login required).
+you can download the installer directly at https://developer.apple.com/download/more/ (Apple ID Login required), and select the latest stable version. If you encounter further error, you can try installing Xcode and then the Command Line Tools again.
 
 ## Installation
 
