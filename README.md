@@ -16,6 +16,9 @@
              alt="GitHub last commit">
     </a>
 </p>
+<p align="center">
+  <a href="https://github.com/FlyBrainLab/FlyBrainLab/wiki">Wiki</a> | <a href="https://github.com/FlyBrainLab/FlyBrainLab/wiki/Troubleshooting">Troubleshooting</a>
+</p>
 
 
 FlyBrainLab provides an environment where computational researchers can present configurable, executable neural circuits, and experimental scientists can interactively explore circuit structure and function ultimately leading to biological validation.
@@ -72,6 +75,8 @@ First, make sure that you have an installation of Anaconda or miniconda. Anacond
 ```bash
 fbl_installer.cmd
 ```
+
+Alternatively, feel free to copy and paste its contents to your terminal, so that you can see the commands run and tell us the line in which you encountered an issue if you do.
 
 ### Step-by-step Installation
 
