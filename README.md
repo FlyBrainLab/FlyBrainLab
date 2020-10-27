@@ -131,7 +131,7 @@ jupyter lab
 to get started.
 
 To test if your installations are working, check
-1. whether you see an "FFBO" section below "Other" in JupyterLab Launcher, as shown here:
+1. whether you see a "FlyBrainLab" section below "Other" in JupyterLab Launcher, as shown here:
 
 <p align="center">
   <img src="https://github.com/FlyBrainLab/Tutorials/raw/master/tutorials/osn_ephys_tutorial/images/osn_1.png" width="50%">
