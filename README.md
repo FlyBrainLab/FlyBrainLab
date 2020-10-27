@@ -134,7 +134,7 @@ To test if your installations are working, check
 1. whether you see an "FFBO" section below "Other" in JupyterLab Launcher, as shown here:
 
 <p align="center">
-  <img src="https://github.com/flybrainlab/flybrainlab/raw/master/fbl_loaded.png" width="50%">
+  <img src="https://github.com/FlyBrainLab/Tutorials/raw/master/tutorials/osn_ephys_tutorial/images/osn_1.png" width="50%">
 </p>
 
-2. whether you can run the example notebook [here](https://github.com/FlyBrainLab/FBLClient/blob/master/examples/jupyter_notebooks/1_introduction.ipynb).
+2. whether you can run the example notebook [here](https://github.com/FlyBrainLab/Tutorials/blob/master/tutorials/osn_ephys_tutorial/OSN_ephys_tutorial.ipynb). Afterwards, feel free to go through [all of the tutorials](https://github.com/FlyBrainLab/Tutorials).
