@@ -138,3 +138,7 @@ To test if your installations are working, check
 </p>
 
 2. whether you can run the example notebook [here](https://github.com/FlyBrainLab/Tutorials/blob/master/tutorials/osn_ephys_tutorial/OSN_ephys_tutorial.ipynb). Afterwards, feel free to go through [all of the tutorials](https://github.com/FlyBrainLab/Tutorials).
+
+## Adding New Servers
+
+Please read https://github.com/FlyBrainLab/FlyBrainLab/wiki/Installation for instructions on adding new servers.
