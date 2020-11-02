@@ -30,7 +30,7 @@ More details about FlyBrainLab can be found in the following publication:
 This repository serve as the entry point for FlyBrainLab, where documentation and installation scripts can be found.
 
 ### Content
-1. [Installation](#1-Installation)
+1. [Installation](#1-installation)
   - 1.1 [Installing Only User-side Components](#11-installing-only-user-side-components)
   - 1.2 [Full Installation](#12-full-installation)
   - 1.3 [Docker Image](#13-docker-image)
