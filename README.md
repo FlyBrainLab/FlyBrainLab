@@ -45,10 +45,10 @@ This repository serve as the entry point for FlyBrainLab, where documentation an
 ## 1. Installation
 
 FlyBrainLab consists of backend components and user-side components. There are a few options for installation.
-1. [Installing only User-side Components](#11-installing-only-user-side-components): This will install a copy of all FlyBrainLab user-side components that, by default, connect to backend servers hosted by the Fruit Fly Brain Observatory Team. If you only need to visualize and explore the biological data, this will be the fastest way to install. However, the public backend servers do not provide capabilities for executing neural circuits on GPUs using [Neurokernel](https://neurokernel.github.io).
-1. [Full Installation](#12-full-installation): This will install both the user-side and backend components on the same machine. By default, FlyBrainLab will connect to the backend servers locally hosted.
-1. [Docker Image](#13-docker-image): We maintain [this Docker image] with a full FlyBrainLab installation. If you are set up with Docker with GPU support, this will be the easiest way to try FlyBrainLab that runs locally.
-1. [Amazon Machine Image](#14-amazon-machine-image): We also maintain AMI [`ami-039ef13d01c0e8e2f`](https://console.aws.amazon.com/ec2/v2/home?region=us-east-1#LaunchInstanceWizard:ami=ami-039ef13d01c0e8e2f) that has the FlyBrainLab fully installed. It is helpful in case you do not have a machine with NVIDIA GPU handy, but still want to try out the full installation.
+1. [**Installing only User-side Components**](#11-installing-only-user-side-components): This will install a copy of all FlyBrainLab user-side components that, by default, connect to backend servers hosted by the Fruit Fly Brain Observatory Team. If you only need to visualize and explore the biological data, this will be the fastest way to install. However, the public backend servers do not provide capabilities for executing neural circuits on GPUs using [Neurokernel](https://neurokernel.github.io).
+1. [**Full Installation**](#12-full-installation): This will install both the user-side and backend components on the same machine. By default, FlyBrainLab will connect to the backend servers locally hosted.
+1. [**Docker Image**](#13-docker-image): We maintain [this Docker image] with a full FlyBrainLab installation. If you are set up with Docker with GPU support, this will be the easiest way to try FlyBrainLab that runs locally.
+1. [**Amazon Machine Image**](#14-amazon-machine-image): We also maintain AMI [`ami-039ef13d01c0e8e2f`](https://console.aws.amazon.com/ec2/v2/home?region=us-east-1#LaunchInstanceWizard:ami=ami-039ef13d01c0e8e2f) that has the FlyBrainLab fully installed. It is helpful in case you do not have a machine with NVIDIA GPU handy, but still want to try out the full installation.
 
 
 ### 1.1 Installing Only User-side Components
@@ -78,19 +78,22 @@ Download the installation script for your OS to an empty folder where you want y
 - macOS: [`fbl_installer_mac.sh`](https://raw.githubusercontent.com/FlyBrainLab/FlyBrainLab/master/fbl_installer.cmd)
 
 In terminal or command line, go to the folder and execute the following commands line by line (you can change `flybrainlab` to a different name of your choice for the environment name):
-- Linux:
+
+##### Linux:
 ```bash
 conda create -n flybrainlab python=3.7 -c conda-forge -y
 conda activate flybrainlab
 sh fbl_installer_linux.sh
 ```
-- Windows:
+
+##### Windows:
 ```bash
 conda create -n flybrainlab python=3.7 -c conda-forge -y
 activate flybrainlab
 fbl_installer.cmd
 ```
-- macOS:
+
+##### macOS:
 ```bash
 conda create -n flybrainlab python=3.7 -c conda-forge -y
 conda activate flybrainlab
@@ -276,7 +279,7 @@ conda activate FlyBrainLab
 jupyter lab
 ```
 
-Default port is 8888. Go to browser with url: `localhost:8888`, and refer to [FlyBrainLab User Interface](#22flybrainlab-user-interface).
+Default port is 8888. Go to browser with url: `localhost:8888`, and refer to [FlyBrainLab User Interface](#22-flybrainlab-user-interface).
 
 #### Launching FlyBrainLab from Full Installation
 
@@ -285,7 +288,7 @@ $FFBO_DIR/bin/start.sh
 ````
 where `$FFBO_DIR` is the directory you configured to install FlyBrainLab in.
 
-Default port is 8888. Go to browser with url: `localhost:8888`, and refer to [FlyBrainLab User Interface](#22flybrainlab-user-interface).
+Default port is 8888. Go to browser with url: `localhost:8888`, and refer to [FlyBrainLab User Interface](#22-flybrainlab-user-interface).
 
 #### Launching FlyBrainLab from FlyBrainLab Docker Image
 
@@ -294,7 +297,7 @@ Assuming all GPUs will be available to the docker container,
 docker run --name fbl --gpus all -p 9999:8888 -v $database/hemibrain:/opt/orientdb/databases/hemibrain -v $database/flycircuit:/opt/orientdb/databases/flycircuit -v $database/l1em:/opt/orientdb/databases/l1em -it fruitflybrain/fbl:latest
 ```
 
-Go to browser with url: `localhost:9999`. Note that the default jupyter notebook port in the Docker container is `8888` and is mapped to `9999` on host machine. Then refer to [FlyBrainLab User Interface](#22flybrainlab-user-interface).
+Go to browser with url: `localhost:9999`. Note that the default jupyter notebook port in the Docker container is `8888` and is mapped to `9999` on host machine. Then refer to [FlyBrainLab User Interface](#22-flybrainlab-user-interface).
 
 For advanced usage of the Docker image, please refer to the [FlyBrainLab Docker Image Page](https://hub.docker.com/r/fruitflybrain/fbl).
 
@@ -314,7 +317,7 @@ This will open the main FlyBrainLab user interface, as shown in the following fi
   <img src="http://www.bionet.ee.columbia.edu/images/FBL_ui.jpg" width="80%">
 </p>
 
-If you encounter a popup window showing error, you may need to check if the configuration of servers is correct. See [Configuring Backend Servers](#configuring-backend-servers).
+If you encounter a popup window showing error, you may need to check if the configuration of servers is correct. See [Configuring Backend Servers](#23-configuring-backend-servers).
 
 In order for a opened notebook to interact with the NeuroNLP and NeuroGFX windows, please select the kernel correspoding to the kernal used by the NeuroNLP window (e.g. `Untitled.ipynb` in the following figure).
 
@@ -336,6 +339,8 @@ They are available in the [Tutorials](https://github.com/FlyBrainLab/Tutorials) 
 ## 3. Troubleshooting
 
 Please see the wiki page for [Troubleshooting](https://github.com/FlyBrainLab/FlyBrainLab/wiki/Troubleshooting).
+
+You can also report bugs and get help in this [Issue Tracker](https://github.com/FlyBrainLab/FlyBrainLab/issues).
 
 ## Citing FlyBrainLab
 
