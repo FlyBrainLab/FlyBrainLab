@@ -1,4 +1,4 @@
-#/bin/bash
+#!/bin/bash
 
 # STEP 1: Make sure the system prerequisites are installed.
 
