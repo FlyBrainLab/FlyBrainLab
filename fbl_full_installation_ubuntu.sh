@@ -30,7 +30,7 @@ FFBO_ENV=ffbo # conda environment for main fbl
 NLP_ENV=ffbo_legacy # additional conda environment for NLP
 FFBO_DIR=$HOME/ffbo # directory to store local repositories
 ORIENTDB_ROOT=$HOME/orientdb # root directory where you want to install OrientDB
-FFBO_PORT=8081
+FFBO_PORT=8081 # main port number of the FFBO processor, make sure to use an uncommon port that will not be used by other program
 
 # End of folder configuration.
 
@@ -209,12 +209,11 @@ rm -rf $FFBO_DIR/run_scripts
 echo "Installation complete. Downloading databases ......"
 cd $ORIENTDB_ROOT/databases
 wget --load-cookies /tmp/cookies.txt "https://docs.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://docs.google.com/uc?export=download&id=1Nbo0C55X52OeYJtYVzB-52mo7I7H4UCc' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1Nbo0C55X52OeYJtYVzB-52mo7I7H4UCc" -O flycircuit.tar.gz && rm -rf /tmp/cookies.txt
-tar
-tar xf flycircuit.tar.gz
+tar zxf flycircuit.tar.gz
 wget --load-cookies /tmp/cookies.txt "https://docs.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://docs.google.com/uc?export=download&id=1puvabvKGFBchKiD56cjlu3MFNQ-Soam1' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1puvabvKGFBchKiD56cjlu3MFNQ-Soam1" -O hemibrain.tar.gz && rm -rf /tmp/cookies.txt
-tar xf hemibrain.tar.gz
+tar zxf hemibrain.tar.gz
 wget --load-cookies /tmp/cookies.txt "https://docs.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://docs.google.com/uc?export=download&id=1U4TfYXzhN7siQtwupDDmgW7sOBRXmQrL' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1U4TfYXzhN7siQtwupDDmgW7sOBRXmQrL" -O l1em.tar.gz && rm -rf /tmp/cookies.txt
-tar xf l1em.tar.gz
+tar zxf l1em.tar.gz
 
 echo
 
