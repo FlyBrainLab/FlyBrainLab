@@ -5,10 +5,8 @@ mkdir FlyBrainLab
 cd FlyBrainLab
 git clone https://github.com/FlyBrainLab/Neuroballad.git
 git clone https://github.com/FlyBrainLab/FBLClient.git
-git clone https://github.com/FlyBrainLab/NeuroMynerva.git
 cd ./Neuroballad
 python setup.py develop
 cd ../FBLClient
 python setup.py develop
-cd ../NeuroMynerva
 jupyter labextension install @flybrainlab/neuromynerva
