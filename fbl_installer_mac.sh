@@ -11,8 +11,4 @@ python setup.py develop
 cd ../FBLClient
 python setup.py develop
 cd ../NeuroMynerva
-jlpm || true
-jlpm run build || true
-jupyter labextension install . || true
-jupyter lab build || true
-jupyter lab || true
+jupyter labextension install @flybrainlab/neuromynerva
