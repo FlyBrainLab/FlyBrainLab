@@ -73,7 +73,7 @@ you can download the installer directly at https://developer.apple.com/download/
 #### Installing the Latest Release Version
 
 Download the installation script for your OS to an empty folder where you want your FlyBrainLab installation to reside,
-- Linux: [`fbl_installer_linux.sh`](https://raw.githubusercontent.com/FlyBrainLab/FlyBrainLab/master/fbl_installer_linux.sh)
+- Linux: [`fbl_installer_linux.sh`](https://raw.githubusercontent.com/FlyBrainLab/FlyBrainLab/master/fbl_installer_ubuntu.sh)
 - Windows: [`fbl_installer.cmd`](https://raw.githubusercontent.com/FlyBrainLab/FlyBrainLab/master/fbl_installer_mac.sh)
 - macOS: [`fbl_installer_mac.sh`](https://raw.githubusercontent.com/FlyBrainLab/FlyBrainLab/master/fbl_installer.cmd)
 
