@@ -119,7 +119,7 @@ mkdir nk_tmp
 . $CONDA_ROOT/etc/profile.d/conda.sh
 
 echo "Installing FBL ......"
-conda create -n $FFBO_ENV python=3.6 nodejs scipy pandas cookiecutter git yarn jupyterlab=2.1.5 -c conda-forge -y
+conda create -n $FFBO_ENV python=3.6 nodejs scipy pandas cookiecutter git yarn -c conda-forge -y
 
 
 # Install OpenMPI if cannot find a CUDA-aware openmpi installation
@@ -142,7 +142,7 @@ fi
 
 echo "Installing FFBO environments"
 conda activate $FFBO_ENV
-pip install autobahn[twisted]==19.2.1 beautifulsoup4 tinydb simplejson configparser docopt sparqlwrapper python-levenshtein pyopenssl service_identity plac==0.9.6 crossbar==17.12.1 datadiff refo msgpack msgpack-numpy pyorient_native pyorient daff path.py txaio crochet autobahn-sync seaborn fastcluster networkx h5py jupyter matplotlib pycuda mpi4py
+pip install jupyter jupyterlab>2.2.8 autobahn[twisted]==19.2.1 beautifulsoup4 tinydb simplejson configparser docopt sparqlwrapper python-levenshtein pyopenssl service_identity plac==0.9.6 crossbar==17.12.1 datadiff refo msgpack msgpack-numpy pyorient_native pyorient daff path.py txaio crochet autobahn-sync seaborn fastcluster networkx h5py jupyter matplotlib pycuda mpi4py
 
 sed -i.bak -e '100,103d' $CONDA_ROOT/envs/$FFBO_ENV/lib/python3.6/site-packages/pyorient/orient.py
 sed -i.bak -e '222d' $CONDA_ROOT/envs/$FFBO_ENV/lib/python3.6/site-packages/jupyterlab_server/process.py
