@@ -2,12 +2,18 @@
 
 set -e
 
+# The 'conda activate' command doesn't work within
+# shell scripts unless we run this magic line first.
+# https://github.com/conda/conda/issues/7980#issuecomment-492784093
 eval "$(conda shell.bash hook)"
-conda create -n flybrainlab mamba -c conda-forge -y
-conda activate flybrainlab
+
+ENV_NAME=${1:-flybrainlab}
+echo "Installing FlyBrainLab to environment '${ENV_NAME}'"
+
+conda create -n ${ENV_NAME} python=3.7 mamba -c conda-forge -y
+conda activate ${ENV_NAME}
 
 conda_pkgs=(
-    'python=3.7'
     nodejs
     scipy
     pandas
@@ -45,3 +51,14 @@ python setup.py develop
 
 cd ../FBLClient
 python setup.py develop
+
+echo ""
+echo "*********************"
+echo "Installation complete"
+echo "*********************"
+echo ""
+echo "Launch FlyBrainLab with the following commands:"
+echo ""
+echo "    conda activate ${ENV_NAME}"
+echo "    jupyter lab"
+echo ""
