@@ -27,7 +27,7 @@ FlyBrainLab provides an environment where computational researchers can present 
 More details about FlyBrainLab can be found in the following publication:
 - Aurel A. Lazar, Tingkai Liu, Mehmet K. Turkcan, and Yiyin Zhou, [FlyBrainLab: Accelerating the Discovery of the Functional Logic of the Fruit Fly Brain in the Connectomic/Synaptomic Era](https://doi.org/10.1101/2020.06.23.168161), bioRxiv, June 2020.
 
-This repository serve as the entry point for FlyBrainLab, where documentation and installation scripts can be found.
+This repository serves as the entry point for FlyBrainLab, where documentation and installation scripts can be found.
 
 ### Content
 1. [Installation](#1-installation)
