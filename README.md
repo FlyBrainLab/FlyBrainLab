@@ -223,7 +223,7 @@ docker pull fruitflybrain/fbl:latest
 ```
 
 Download NeuroArch Databases to a folder, for example, `~/databases`.
-You can use the [`download_datasets.sh`](raw.githubusercontent.com/FlyBrainLab/run_scripts/main/flybrainlab/download_datasets.sh) script,
+You can use the [`download_datasets.sh`](https://raw.githubusercontent.com/FlyBrainLab/run_scripts/main/flybrainlab/download_datasets.sh) script,
 or follow the steps below.
 
 - FlyCircuit and Janelia Medulla 7 column datasets
