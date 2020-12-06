@@ -73,17 +73,14 @@ you can download the installer directly at https://developer.apple.com/download/
 #### Installing the Latest Release Version
 
 Download the installation script for your OS to an empty folder where you want your FlyBrainLab installation to reside,
-- Linux: [`fbl_installer_linux.sh`](https://raw.githubusercontent.com/FlyBrainLab/FlyBrainLab/master/fbl_installer_ubuntu.sh)
+- Linux/Mac: [`fbl_installer_unix.sh`](https://raw.githubusercontent.com/FlyBrainLab/FlyBrainLab/master/fbl_installer_unix.sh)
 - Windows: [`fbl_installer.cmd`](https://raw.githubusercontent.com/FlyBrainLab/FlyBrainLab/master/fbl_installer.cmd)
-- macOS: [`fbl_installer_mac.sh`](https://raw.githubusercontent.com/FlyBrainLab/FlyBrainLab/master/fbl_installer_mac.sh)
 
 In terminal or command line, go to the folder and execute the following commands line by line (you can change `flybrainlab` to a different name of your choice for the environment name):
 
-##### Linux:
+##### Linux/Mac:
 ```bash
-conda create -n flybrainlab python=3.7 -c conda-forge -y
-conda activate flybrainlab
-sh fbl_installer_linux.sh
+bash fbl_installer_unix.sh flybrainlab
 ```
 
 ##### Windows:
@@ -93,13 +90,6 @@ activate flybrainlab
 conda install nodejs scipy pandas cookiecutter git yarn -c conda-forge -y
 conda install graphviz pygraphviz -c alubbock
 fbl_installer.cmd
-```
-
-##### macOS:
-```bash
-conda create -n flybrainlab python=3.7 -c conda-forge -y
-conda activate flybrainlab
-sh fbl_installer_mac.sh
 ```
 
 After the script finishes, go to [Launching FlyBrainLab from User-side Only Installation](#launching-flybrainlab-from-user-side-only-installation).
@@ -284,7 +274,7 @@ Note that all default databases are stored in `~/databases`.
 #### Launching FlyBrainLab from User-side Only Installation
 
 ```bash
-conda activate FlyBrainLab
+conda activate flybrainlab
 jupyter lab
 ```
 
