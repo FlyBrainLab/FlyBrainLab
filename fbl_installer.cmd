@@ -1,5 +1,7 @@
+
 pip install jupyter "jupyterlab>=2.2.8" & ^
-pip install txaio twisted autobahn crochet service_identity autobahn-sync matplotlib h5py seaborn fastcluster networkx msgpack msgpack-numpy & ^
+pip install txaio autobahn[twisted]==19.2.1 crochet service_identity matplotlib h5py seaborn fastcluster networkx msgpack msgpack-numpy & ^
+pip install git+https://github.com/mkturkcan/autobahn-sync.git & ^
 pip install pypiwin32 & ^
 mkdir fbl_installation & ^
 cd fbl_installation & ^

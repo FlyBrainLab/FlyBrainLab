@@ -91,6 +91,7 @@ sh fbl_installer_linux.sh
 conda create -n flybrainlab python=3.7 -c conda-forge -y
 activate flybrainlab
 conda install nodejs scipy pandas cookiecutter git yarn -c conda-forge -y
+conda install graphviz pygraphviz -c alubbock
 fbl_installer.cmd
 ```
 
@@ -222,7 +223,7 @@ docker pull fruitflybrain/fbl:latest
 ```
 
 Download NeuroArch Databases to a folder, for example, `~/databases`.
-You can use the [`download_datasets.sh`](raw.githubusercontent.com/FlyBrainLab/run_scripts/main/flybrainlab/download_datasets.sh) script,
+You can use the [`download_datasets.sh`](https://raw.githubusercontent.com/FlyBrainLab/run_scripts/main/flybrainlab/download_datasets.sh) script,
 or follow the steps below.
 
 - FlyCircuit and Janelia Medulla 7 column datasets
