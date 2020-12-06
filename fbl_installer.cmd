@@ -1,4 +1,4 @@
-pip install jupyter jupyterlab>=2.2.8 & ^
+pip install jupyter "jupyterlab>=2.2.8" & ^
 pip install txaio twisted autobahn crochet service_identity autobahn-sync matplotlib h5py seaborn fastcluster networkx msgpack msgpack-numpy & ^
 pip install pypiwin32 & ^
 mkdir fbl_installation & ^
