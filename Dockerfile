@@ -71,23 +71,24 @@ RUN wget https://repo.continuum.io/miniconda/Miniconda2-latest-Linux-x86_64.sh -
     /bin/bash -c ". $HOME/miniconda/etc/profile.d/conda.sh && \
     conda create -n ffbo_legacy python=2.7 numpy -y && \
     conda activate ffbo_legacy && \
-    pip install autobahn[twisted]==19.2.1 configparser docopt sparqlwrapper nltk spacy==1.6.0 fuzzywuzzy python-levenshtein pyopenssl plac==0.9.6 crossbar==17.12.1 && \
+    pip install autobahn[twisted] configparser docopt sparqlwrapper nltk spacy==1.6.0 fuzzywuzzy python-levenshtein pyopenssl plac==0.9.6 && \
     conda deactivate && \
-    conda create -n ffbo python=3.6 nodejs scipy pandas cookiecutter git yarn -c conda-forge -y && \
+    conda create -n ffbo python=3.7 nodejs cookiecutter git yarn -c conda-forge -y && \
     conda activate ffbo && \
     #export PATH=/usr/local/bin:/usr/local/cuda/bin:$PATH && \
     #export LD_LIBRARY_PATH=/usr/local/lib:/usr/local/cuda/lib64:$LD_LIBRARY_PATH && \
-    pip install jupyter jupyterlab>2.2.8 autobahn[twisted]==19.2.1 beautifulsoup4 tinydb simplejson configparser docopt sparqlwrapper python-levenshtein pyopenssl service_identity plac==0.9.6 crossbar==17.12.1 datadiff refo msgpack msgpack-numpy pyorient_native pyorient daff path.py txaio crochet autobahn-sync seaborn fastcluster networkx h5py jupyter matplotlib pycuda mpi4py" && \
+    pip install crossbar jupyter "jupyterlab>=2.2.8" autobahn[twisted] beautifulsoup4 tinydb simplejson configparser docopt sparqlwrapper python-levenshtein pyopenssl service_identity plac==0.9.6 datadiff refo msgpack msgpack-numpy pyorient_native pyorient daff path.py txaio crochet autobahn-sync seaborn fastcluster networkx h5py jupyter matplotlib pycuda mpi4py scipy pandas" && \
     cd /home/ffbo/ && \
     wget https://github.com/explosion/spaCy/releases/download/v1.6.0/en-1.1.0.tar.gz && \
     mkdir /home/ffbo/miniconda/envs/ffbo_legacy/lib/python2.7/site-packages/spacy/data && \
     tar zxvf en-1.1.0.tar.gz --directory /home/ffbo/miniconda/envs/ffbo_legacy/lib/python2.7/site-packages/spacy/data && \
     rm en-1.1.0.tar.gz && \
-    sed -i.bak -e '100,103d' /home/ffbo/miniconda/envs/ffbo/lib/python3.6/site-packages/pyorient/orient.py && \
-    sed -i.bak -e '222d' /home/ffbo/miniconda/envs/ffbo/lib/python3.6/site-packages/jupyterlab_server/process.py && \
+    sed -i.bak -e '100,103d' /home/ffbo/miniconda/envs/ffbo/lib/python3.7/site-packages/pyorient/orient.py && \
+    sed -i.bak -e '222d' /home/ffbo/miniconda/envs/ffbo/lib/python3.7/site-packages/jupyterlab_server/process.py && \
+    sed -i.bak -e '77d; /^    def call(.*/i \ \ \ \ @crochet.wait_for(timeout=2**31)' /home/ffbo/miniconda//envs/ffbo/lib/python3.7/site-packages/autobahn_sync/session.py && \
     rm -rf /home/ffbo/.cache
 
-# line 222 of process.py is: print(line.rstrip())    
+# line 222 of process.py is: print(line.rstrip())
 
 ENV ORIENTDB_ROOT_PASSWORD=root \
     ORIENTDB_OPTS_MEMORY="-Xms1G -Xmx64G"

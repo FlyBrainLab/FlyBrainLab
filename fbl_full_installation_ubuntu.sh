@@ -119,7 +119,7 @@ mkdir nk_tmp
 . $CONDA_ROOT/etc/profile.d/conda.sh
 
 echo "Installing FBL ......"
-conda create -n $FFBO_ENV python=3.6 nodejs scipy pandas cookiecutter git yarn -c conda-forge -y
+conda create -n $FFBO_ENV python=3.7 nodejs cookiecutter git yarn -c conda-forge -y
 
 
 # Install OpenMPI if cannot find a CUDA-aware openmpi installation
@@ -142,10 +142,14 @@ fi
 
 echo "Installing FFBO environments"
 conda activate $FFBO_ENV
-pip install jupyter jupyterlab>2.2.8 autobahn[twisted]==19.2.1 beautifulsoup4 tinydb simplejson configparser docopt sparqlwrapper python-levenshtein pyopenssl service_identity plac==0.9.6 crossbar==17.12.1 datadiff refo msgpack msgpack-numpy pyorient_native pyorient daff path.py txaio crochet autobahn-sync seaborn fastcluster networkx h5py jupyter matplotlib pycuda mpi4py
+pip install crossbar
+pip install scipy pandas
+pip install jupyter "jupyterlab>=2.2.8" autobahn[twisted] beautifulsoup4 tinydb simplejson configparser docopt sparqlwrapper python-levenshtein pyopenssl service_identity plac==0.9.6 datadiff refo msgpack msgpack-numpy pyorient_native pyorient daff path.py txaio crochet autobahn-sync seaborn fastcluster networkx h5py matplotlib pycuda mpi4py mpmath sympy nose
 
-sed -i.bak -e '100,103d' $CONDA_ROOT/envs/$FFBO_ENV/lib/python3.6/site-packages/pyorient/orient.py
-sed -i.bak -e '222d' $CONDA_ROOT/envs/$FFBO_ENV/lib/python3.6/site-packages/jupyterlab_server/process.py
+sed -i.bak -e '100,103d' $CONDA_ROOT/envs/$FFBO_ENV/lib/python3.7/site-packages/pyorient/orient.py
+sed -i.bak -e '222d' $CONDA_ROOT/envs/$FFBO_ENV/lib/python3.7/site-packages/jupyterlab_server/process.py
+#sed -i.bak -e '338,339d' $CONDA_ROOT/envs/$FFBO_ENV/lib/python3.6/site-packages/crossbar/router/session.py
+sed -i.bak -e '77d; /^    def call(.*/i \ \ \ \ @crochet.wait_for(timeout=2**31)' $CONDA_ROOT/envs/$FFBO_ENV/lib/python3.7/site-packages/autobahn_sync/session.py
 
 cd $FFBO_DIR/ffbo.processor
 python setup.py develop
@@ -172,9 +176,9 @@ wget https://cdn.jsdelivr.net/gh/flybrainlab/NeuroMynerva@master/schema/plugin.j
 sed -i -e "s+8081+$FFBO_PORT+g" $CONDA_ROOT/envs/$FFBO_ENV/share/jupyter/lab/staging/node_modules/\@flybrainlab/neuromynerva/schema/plugin.json
 conda deactivate
 
-conda create -n $NLP_ENV python=2.7 numpy -y
+conda create -n $NLP_ENV python=2.7 -y
 conda activate $NLP_ENV
-pip install autobahn[twisted]==19.2.1 configparser docopt sparqlwrapper nltk spacy==1.6.0 fuzzywuzzy python-levenshtein pyopenssl plac==0.9.6 crossbar==17.12.1
+pip install numpy autobahn[twisted] configparser docopt sparqlwrapper nltk spacy==1.6.0 fuzzywuzzy python-levenshtein pyopenssl service_identity plac==0.9.6
 cd $FFBO_DIR/ffbo.nlp_component
 python setup.py develop
 cd $FFBO_DIR/ffbo.neuroarch_nlp
@@ -185,7 +189,7 @@ python setup.py develop
 cd ../
 wget https://github.com/explosion/spaCy/releases/download/v1.6.0/en-1.1.0.tar.gz
 mkdir $CONDA_ROOT/envs/$NLP_ENV/lib/python2.7/site-packages/spacy/data
-tar zxvf en-1.1.0.tar.gz --directory $CONDA_ROOT/envs/$NLP_ENV/lib/python2.7/site-packages/spacy/data
+tar zxf en-1.1.0.tar.gz --directory $CONDA_ROOT/envs/$NLP_ENV/lib/python2.7/site-packages/spacy/data
 rm en-1.1.0.tar.gz
 conda deactivate
 
