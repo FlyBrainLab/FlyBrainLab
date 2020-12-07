@@ -13,6 +13,13 @@
 
 # End of system prerequisties.
 
+usage() { echo "Usage: $0 [--cuda-root CUDA_ROOT] [--target FFBO_DIR] [--orientdb-targe ORIENTDB_ROOT]
+    -c  configuration file
+    -r  repeat script execution this number of times
+    -h  prints this help message
+" 1>&2;}
+
+
 set -e
 
 
@@ -144,9 +151,11 @@ echo "Installing FFBO environments"
 conda activate $FFBO_ENV
 pip install crossbar
 pip install scipy pandas
-pip install jupyter "jupyterlab>=2.2.8" autobahn[twisted] beautifulsoup4 tinydb simplejson configparser docopt sparqlwrapper python-levenshtein pyopenssl service_identity plac==0.9.6 datadiff refo msgpack msgpack-numpy pyorient_native pyorient daff path.py txaio crochet autobahn-sync seaborn fastcluster networkx h5py matplotlib pycuda mpi4py mpmath sympy nose
+pip install matplotlib scipy pandas crossbar jupyter "jupyterlab>=2.2.8" autobahn[twisted] beautifulsoup4 tinydb simplejson configparser docopt sparqlwrapper python-levenshtein pyopenssl service_identity plac==0.9.6 datadiff refo msgpack msgpack-numpy pyorient_native pyorient daff path.py txaio crochet autobahn-sync seaborn fastcluster networkx h5py jupyter "mpmath>=0.19" sympy nose
+pip install pycuda mpi4py
 
 sed -i.bak -e '100,103d' $CONDA_ROOT/envs/$FFBO_ENV/lib/python3.7/site-packages/pyorient/orient.py
+sed -i.bak -e '31 a\ \ \ \ \ \ \ \ self.client.set_session_token(True)' $CONDA_ROOT/envs/$FFBO_ENV/lib/python3.7/site-packages/pyorient/ogm/graph.py && \
 sed -i.bak -e '222d' $CONDA_ROOT/envs/$FFBO_ENV/lib/python3.7/site-packages/jupyterlab_server/process.py
 #sed -i.bak -e '338,339d' $CONDA_ROOT/envs/$FFBO_ENV/lib/python3.6/site-packages/crossbar/router/session.py
 sed -i.bak -e '77d; /^    def call(.*/i \ \ \ \ @crochet.wait_for(timeout=2**31)' $CONDA_ROOT/envs/$FFBO_ENV/lib/python3.7/site-packages/autobahn_sync/session.py
@@ -172,8 +181,8 @@ python setup.py develop
 
 jupyter labextension install @flybrainlab/neuromynerva
 
-wget https://cdn.jsdelivr.net/gh/flybrainlab/NeuroMynerva@master/schema/plugin.json.local -O $CONDA_ROOT/envs/$FFBO_ENV/share/jupyter/lab/staging/node_modules/\@flybrainlab/neuromynerva/schema/plugin.json
-sed -i -e "s+8081+$FFBO_PORT+g" $CONDA_ROOT/envs/$FFBO_ENV/share/jupyter/lab/staging/node_modules/\@flybrainlab/neuromynerva/schema/plugin.json
+wget https://cdn.jsdelivr.net/gh/flybrainlab/NeuroMynerva@master/schema/plugin.json.local -O $CONDA_ROOT/envs/$FFBO_ENV/share/jupyter/lab/schemas/\@flybrainlab/neuromynerva/plugin.json
+sed -i -e "s+8081+$FFBO_PORT+g" $CONDA_ROOT/envs/$FFBO_ENV/share/jupyter/lab/schemas/\@flybrainlab/neuromynerva/plugin.json
 conda deactivate
 
 conda create -n $NLP_ENV python=2.7 -y
