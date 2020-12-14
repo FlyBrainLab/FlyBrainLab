@@ -81,14 +81,14 @@ In terminal or command line, go to the folder and execute the following commands
 
 ##### Linux:
 ```bash
-conda create -n flybrainlab python=3.7 -c conda-forge -y
+conda create -n flybrainlab python=3.7 -c conda-forge -y # make sure install python from conda-forge otherwise it may lead to an error later
 conda activate flybrainlab
 sh fbl_installer_linux.sh
 ```
 
 ##### Windows:
 ```bash
-conda create -n flybrainlab python=3.7 -c conda-forge -y
+conda create -n flybrainlab python=3.7 -c conda-forge -y # make sure install python from conda-forge otherwise it may lead to an error later
 activate flybrainlab
 conda install nodejs scipy pandas cookiecutter git yarn -c conda-forge -y
 conda install graphviz pygraphviz -c alubbock
@@ -97,7 +97,7 @@ fbl_installer.cmd
 
 ##### macOS:
 ```bash
-conda create -n flybrainlab python=3.7 -c conda-forge -y
+conda create -n flybrainlab python=3.7 -c conda-forge -y # make sure install python from conda-forge otherwise it may lead to an error later
 conda activate flybrainlab
 sh fbl_installer_mac.sh
 ```
