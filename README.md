@@ -83,6 +83,13 @@ In terminal or command line, go to the folder and execute the following commands
 ```bash
 conda create -n flybrainlab python=3.7 -c conda-forge -y # make sure install python from conda-forge otherwise it may lead to an error later
 conda activate flybrainlab
+```
+Note that the last line above can raise an error. If you do not see "(flybrainlab)" appear at the start of the current line in your terminal, execute the following line:
+```bash
+source activate flybrainlab
+```
+Finally, execute this line:
+```bash
 sh fbl_installer_linux.sh
 ```
 
@@ -99,6 +106,13 @@ fbl_installer.cmd
 ```bash
 conda create -n flybrainlab python=3.7 -c conda-forge -y # make sure install python from conda-forge otherwise it may lead to an error later
 conda activate flybrainlab
+```
+Note that the last line above can raise an error. If you do not see "(flybrainlab)" appear at the start of the current line in your terminal, execute the following line:
+```bash
+source activate flybrainlab
+```
+Finally, execute this line:
+```bash
 sh fbl_installer_mac.sh
 ```
 
