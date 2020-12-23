@@ -13,13 +13,6 @@
 
 # End of system prerequisties.
 
-usage() { echo "Usage: $0 [--cuda-root CUDA_ROOT] [--target FFBO_DIR] [--orientdb-targe ORIENTDB_ROOT]
-    -c  configuration file
-    -r  repeat script execution this number of times
-    -h  prints this help message
-" 1>&2;}
-
-
 set -e
 
 
@@ -81,19 +74,21 @@ fi
 
 #install orientdb
 echo "Installing OrientDB ......"
-wget https://s3.us-east-2.amazonaws.com/orientdb3/releases/3.0.30/orientdb-3.0.30.tar.gz
-tar zxf orientdb-3.0.30.tar.gz --directory .
-mv orientdb-3.0.30 $ORIENTDB_ROOT
-rm orientdb-3.0.30.tar.gz
+wget https://s3.us-east-2.amazonaws.com/orientdb3/releases/3.0.35/orientdb-3.0.35.tar.gz
+tar zxf orientdb-3.0.35.tar.gz --directory .
+mv orientdb-3.0.35 $ORIENTDB_ROOT
+rm orientdb-3.0.35.tar.gz
 sed -i '/<\/users>/i \
       <user resources="*" password="{PBKDF2WithHmacSHA256}CB55FC353E97910517F5E8811FC48BB89B7CDF9B66BF880C:A3664992731721A52998BEE95C1CA73BAA6093E91191FA1C:65536" name="root"/> \
       <user resources="connect,server.listDatabases,server.dblist" password="{PBKDF2WithHmacSHA256}289DE306D44BAAD7676BA04426F19A056B4CF8904BB80A71:001BFE74763F762037E7676752BF9D37F3A508A331BEB41C:65536" name="guest"/>' $ORIENTDB_ROOT/config/orientdb-server-config.xml
 
 # Set orientdb root password to root
-echo "ORIENTDB_ROOT_PASSWORD=root" | tee -a ~/.bashrc
+echo "export ORIENTDB_ROOT_PASSWORD=root" | tee -a ~/.bashrc
 # Set orientdb memory limits, minimum set to 1GB, maximum set to 32GB.
 # Change if you have less memory
-echo 'ORIENTDB_OPTS_MEMORY="-Xms1G -Xmx32G"' | tee -a ~/.bashrc
+echo 'export ORIENTDB_OPTS_MEMORY="-Xms1G -Xmx8G" # increase or decrease Xmx to fit the memory size of your machine' | tee -a ~/.bashrc
+# Set orientdb disk cache size to 10GB.
+echo "export ORIENTDB_SETTINGS=-Dstorage.diskCache.bufferSize=10240 # the amount of memory in MB used for disk cache. This plus Xmx above must be smaller than the total size of memory on your machine." | tee -a ~/.bashrc
 
 # download packages
 echo "Downloading packages"
@@ -116,6 +111,7 @@ cd ../../
 
 git clone https://github.com/FlyBrainLab/Neuroballad.git
 git clone https://github.com/FlyBrainLab/FBLClient.git
+git clone https://github.com/FlyBrainLab/NeuroMynerva.git
 git clone https://github.com/FlyBrainLab/Tutorials.git
 git clone https://github.com/FlyBrainLab/run_scripts.git
 git clone https://github.com/neurokernel/neurokernel.git
@@ -126,7 +122,7 @@ mkdir nk_tmp
 . $CONDA_ROOT/etc/profile.d/conda.sh
 
 echo "Installing FBL ......"
-conda create -n $FFBO_ENV python=3.7 nodejs cookiecutter git yarn -c conda-forge -y
+conda create -n $FFBO_ENV python=3.7 nodejs cookiecutter git yarn python-snappy -c conda-forge -y
 
 
 # Install OpenMPI if cannot find a CUDA-aware openmpi installation
@@ -151,11 +147,12 @@ echo "Installing FFBO environments"
 conda activate $FFBO_ENV
 pip install crossbar
 pip install scipy pandas
-pip install matplotlib scipy pandas crossbar jupyter "jupyterlab>=2.2.8" autobahn[twisted] beautifulsoup4 tinydb simplejson configparser docopt sparqlwrapper python-levenshtein pyopenssl service_identity plac==0.9.6 datadiff refo msgpack msgpack-numpy pyorient_native pyorient daff path.py txaio crochet autobahn-sync seaborn fastcluster networkx h5py jupyter "mpmath>=0.19" sympy nose
+pip install matplotlib scipy pandas crossbar jupyter "jupyterlab>=2.2.8" autobahn[twisted] beautifulsoup4 tinydb simplejson configparser docopt sparqlwrapper python-levenshtein pyopenssl service_identity plac==0.9.6 datadiff refo msgpack msgpack-numpy pyorient_native daff path.py txaio crochet autobahn-sync seaborn fastcluster networkx h5py jupyter "mpmath>=0.19" sympy nose tqdm
+pip install git+https://github.com/fruitflybrain/pyorient.git
 pip install pycuda mpi4py
 
-sed -i.bak -e '100,103d' $CONDA_ROOT/envs/$FFBO_ENV/lib/python3.7/site-packages/pyorient/orient.py
-sed -i.bak -e '31 a\ \ \ \ \ \ \ \ self.client.set_session_token(True)' $CONDA_ROOT/envs/$FFBO_ENV/lib/python3.7/site-packages/pyorient/ogm/graph.py && \
+#sed -i.bak -e '100,103d' $CONDA_ROOT/envs/$FFBO_ENV/lib/python3.7/site-packages/pyorient/orient.py
+#sed -i.bak -e '31 a\ \ \ \ \ \ \ \ self.client.set_session_token(True)' $CONDA_ROOT/envs/$FFBO_ENV/lib/python3.7/site-packages/pyorient/ogm/graph.py && \
 sed -i.bak -e '222d' $CONDA_ROOT/envs/$FFBO_ENV/lib/python3.7/site-packages/jupyterlab_server/process.py
 #sed -i.bak -e '338,339d' $CONDA_ROOT/envs/$FFBO_ENV/lib/python3.6/site-packages/crossbar/router/session.py
 sed -i.bak -e '77d; /^    def call(.*/i \ \ \ \ @crochet.wait_for(timeout=2**31)' $CONDA_ROOT/envs/$FFBO_ENV/lib/python3.7/site-packages/autobahn_sync/session.py
@@ -165,6 +162,8 @@ python setup.py develop
 cd $FFBO_DIR/ffbo.neuroarch_component
 python setup.py develop
 cd $FFBO_DIR/neuroarch
+python setup.py develop
+cd $FFBO_DIR/ffbo.neurokernel_component
 python setup.py develop
 cd $FFBO_DIR/neurokernel
 git checkout managerless
@@ -178,8 +177,9 @@ cd $FFBO_DIR/Neuroballad
 python setup.py develop
 cd $FFBO_DIR/FBLClient
 python setup.py develop
-
-jupyter labextension install @flybrainlab/neuromynerva
+cd $FFBO_DIR/NeuroMynerva
+jlpm && jlpm run build &&  jupyter labextension install .
+#jupyter labextension install @flybrainlab/neuromynerva
 
 wget https://cdn.jsdelivr.net/gh/flybrainlab/NeuroMynerva@master/schema/plugin.json.local -O $CONDA_ROOT/envs/$FFBO_ENV/share/jupyter/lab/schemas/\@flybrainlab/neuromynerva/plugin.json
 sed -i -e "s+8081+$FFBO_PORT+g" $CONDA_ROOT/envs/$FFBO_ENV/share/jupyter/lab/schemas/\@flybrainlab/neuromynerva/plugin.json
@@ -221,12 +221,15 @@ rm -rf $FFBO_DIR/run_scripts
 
 echo "Installation complete. Downloading databases ......"
 cd $ORIENTDB_ROOT/databases
-wget --load-cookies /tmp/cookies.txt "https://docs.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://docs.google.com/uc?export=download&id=1Nbo0C55X52OeYJtYVzB-52mo7I7H4UCc' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1Nbo0C55X52OeYJtYVzB-52mo7I7H4UCc" -O flycircuit.tar.gz && rm -rf /tmp/cookies.txt
-tar zxf flycircuit.tar.gz
-wget --load-cookies /tmp/cookies.txt "https://docs.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://docs.google.com/uc?export=download&id=1puvabvKGFBchKiD56cjlu3MFNQ-Soam1' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1puvabvKGFBchKiD56cjlu3MFNQ-Soam1" -O hemibrain.tar.gz && rm -rf /tmp/cookies.txt
-tar zxf hemibrain.tar.gz
-wget --load-cookies /tmp/cookies.txt "https://docs.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://docs.google.com/uc?export=download&id=1U4TfYXzhN7siQtwupDDmgW7sOBRXmQrL' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1U4TfYXzhN7siQtwupDDmgW7sOBRXmQrL" -O l1em.tar.gz && rm -rf /tmp/cookies.txt
-tar zxf l1em.tar.gz
+wget --load-cookies /tmp/cookies.txt "https://docs.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://docs.google.com/uc?export=download&id=1JXtWt-2X66Mb5I271YRUiMuQx3I2b43s' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1JXtWt-2X66Mb5I271YRUiMuQx3I2b43s" -O flycircuit.zip && rm -rf /tmp/cookies.txt
+../bin/console.sh "create database plocal:../databases/flycircuit admin admin; restore database ../databases/flycircuit.zip"
+rm flycircuit.zip
+wget --load-cookies /tmp/cookies.txt "https://docs.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://docs.google.com/uc?export=download&id=1Y63UpypJ-eMgOdX3bcSRO4Ct3DqmH6-X' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1Y63UpypJ-eMgOdX3bcSRO4Ct3DqmH6-X" -O hemibrain.zip && rm -rf /tmp/cookies.txt
+../bin/console.sh "create database plocal:../databases/hemibrain admin admin; restore database ../databases/hemibrain.zip"
+rm hemibrain.zip
+wget --load-cookies /tmp/cookies.txt "https://docs.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://docs.google.com/uc?export=download&id=1hYjA43poDjL8WtQ1AUBzYxKTaJ4In-GU' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1hYjA43poDjL8WtQ1AUBzYxKTaJ4In-GU" -O l1em.zip && rm -rf /tmp/cookies.txt
+../bin/console.sh "create database plocal:../databases/l1em admin admin; restore database ../databases/l1em.zip"
+rm l1em.zip
 
 echo
 
