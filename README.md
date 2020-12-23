@@ -73,7 +73,7 @@ you can download the installer directly at https://developer.apple.com/download/
 #### Installing the Latest Release Version
 
 Download the installation script for your OS to an empty folder where you want your FlyBrainLab installation to reside,
-- Linux: [`fbl_installer_linux.sh`](https://raw.githubusercontent.com/FlyBrainLab/FlyBrainLab/master/fbl_installer_ubuntu.sh)
+- Linux: [`fbl_installer_ubuntu.sh`](https://raw.githubusercontent.com/FlyBrainLab/FlyBrainLab/master/fbl_installer_ubuntu.sh)
 - Windows: [`fbl_installer.cmd`](https://raw.githubusercontent.com/FlyBrainLab/FlyBrainLab/master/fbl_installer.cmd)
 - macOS: [`fbl_installer_mac.sh`](https://raw.githubusercontent.com/FlyBrainLab/FlyBrainLab/master/fbl_installer_mac.sh)
 
@@ -83,7 +83,14 @@ In terminal or command line, go to the folder and execute the following commands
 ```bash
 conda create -n flybrainlab python=3.7 -c conda-forge -y # make sure install python from conda-forge otherwise it may lead to an error later
 conda activate flybrainlab
-sh fbl_installer_linux.sh
+```
+Note that the last line above can raise an error. If you do not see "(flybrainlab)" appear at the start of the current line in your terminal, execute the following line:
+```bash
+source activate flybrainlab
+```
+Finally, execute this line:
+```bash
+sh fbl_installer_ubuntu.sh
 ```
 
 ##### Windows:
@@ -99,6 +106,13 @@ fbl_installer.cmd
 ```bash
 conda create -n flybrainlab python=3.7 -c conda-forge -y # make sure install python from conda-forge otherwise it may lead to an error later
 conda activate flybrainlab
+```
+Note that the last line above can raise an error. If you do not see "(flybrainlab)" appear at the start of the current line in your terminal, execute the following line:
+```bash
+source activate flybrainlab
+```
+Finally, execute this line:
+```bash
 sh fbl_installer_mac.sh
 ```
 
