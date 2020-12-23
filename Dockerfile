@@ -137,8 +137,7 @@ RUN /bin/bash -c ". $HOME/miniconda/etc/profile.d/conda.sh && \
     git pull && git checkout master && git pull && \
     python setup.py develop && \
     cd /home/ffbo/ffbo/NeuroMynerva && \
-    jlpm && jlpm run build &&  jupyter labextension install . && \
-    wget https://cdn.jsdelivr.net/gh/flybrainlab/NeuroMynerva@master/schema/plugin.json.local -O /home/ffbo/miniconda/envs/ffbo/share/jupyter/lab/schemas/\@flybrainlab/neuromynerva/plugin.json" && \
+    jlpm && jlpm run build &&  jupyter labextension install ." && \
     rm -rf /home/ffbo/.cache
 
 #jupyter labextension install @flybrainlab/neuromynerva && \
@@ -176,18 +175,24 @@ RUN mkdir -p /home/ffbo/.ffbo/config && \
     git clone https://github.com/FlyBrainLab/run_scripts.git && \
     cp -r run_scripts/flybrainlab /home/ffbo/ffbo/bin && \
     cd /home/ffbo/ffbo/bin && \
-    sed -i -e "s+{FFBO_DIR}+/home/ffbo/ffbo+g; s+{FFBO_ENV}+ffbo+g" run_processor.sh && \
-    sed -i -e "s+{FFBO_DIR}+/home/ffbo/ffbo+g; s+{NLP_ENV}+ffbo_legacy+g" run_nlp.sh && \
-    sed -i -e "s+{FFBO_DIR}+/home/ffbo/ffbo+g; s+{FFBO_ENV}+ffbo+g" run_neuroarch.sh && \
-    sed -i -e "s+{FFBO_DIR}+/home/ffbo/ffbo+g; s+{FFBO_ENV}+ffbo+g" run_neurokernel.sh && \
+    sed -i -e "s+{FFBO_DIR}+/home/ffbo/ffbo+g; s+{FFBO_ENV}+ffbo+g; s+\$(conda info --base)+/home/ffbo/miniconda+g" run_processor.sh && \
+    sed -i -e "s+{FFBO_DIR}+/home/ffbo/ffbo+g; s+{NLP_ENV}+ffbo_legacy+g; s+\$(conda info --base)+/home/ffbo/miniconda+g" run_nlp.sh && \
+    sed -i -e "s+{FFBO_DIR}+/home/ffbo/ffbo+g; s+{FFBO_ENV}+ffbo+g; s+\$(conda info --base)+/home/ffbo/miniconda+g" run_neuroarch.sh && \
+    sed -i -e "s+{FFBO_DIR}+/home/ffbo/ffbo+g; s+{FFBO_ENV}+ffbo+g; s+\$(conda info --base)+/home/ffbo/miniconda+g" run_neurokernel.sh && \
     sed -i -e "s+{ORIENTDB_ROOT}+/home/ffbo/orientdb+g" run_database.sh && \
-    sed -i -e "s+{FFBO_DIR}+/home/ffbo/ffbo+g; s+{FFBO_ENV}+ffbo+g" run_fbl.sh && \
+    sed -i -e "s+{FFBO_DIR}+/home/ffbo/ffbo+g; s+{FFBO_ENV}+ffbo+g; s+\$(conda info --base)+/home/ffbo/miniconda+g" run_fbl.sh && \
     sed -i -e "s+{FFBO_DIR}+/home/ffbo/ffbo+g" start.sh && \
     sed -i -e "s+{ORIENTDB_ROOT}+/home/ffbo/orientdb+g" shutdown.sh && \
     sed -i -e "s+{FFBO_DIR}+/home/ffbo/ffbo+g" update.sh && \
     rm -rf /home/ffbo/run_scripts && \
+    wget https://raw.githubusercontent.com/FlyBrainLab/NeuroMynerva/master/schema/plugin.json.local -O /home/ffbo/miniconda/envs/ffbo/share/jupyter/lab/schemas/\@flybrainlab/neuromynerva/plugin.json && \
     echo "export ORIENTDB_ROOT_PASSWORD=root" | tee -a ~/.bashrc && \
     echo 'export ORIENTDB_OPTS_MEMORY="-Xms1G -Xmx8G" # increase or decrease Xmx to fit the memory size of your machine' | tee -a ~/.bashrc && \
     echo "export ORIENTDB_SETTINGS=-Dstorage.diskCache.bufferSize=10240 # the amount of memory in MB used for disk cache. This plus Xmx above must be smaller than the total size of memory on your machine." | tee -a ~/.bashrc
 
-CMD /home/ffbo/ffbo/bin/start.sh
+ENV ORIENTDB_ROOT_PASSWORD=root \
+    ORIENTDB_OPTS_MEMORY="-Xms1G -Xmx8G" \
+    ORIENTDB_SETTINGS=-Dstorage.diskCache.bufferSize=10240
+
+SHELL ["/bin/bash", "-c"]
+CMD /home/ffbo/ffbo/bin/download_datasets.sh /home/ffbo/orientdb && /home/ffbo/ffbo/bin/start.sh
