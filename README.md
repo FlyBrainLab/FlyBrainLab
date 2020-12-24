@@ -240,6 +240,8 @@ Download NeuroArch Databases to a folder, for example, `~/databases`.
 You can use the [`download_datasets.sh`](https://raw.githubusercontent.com/FlyBrainLab/run_scripts/main/flybrainlab/download_datasets.sh) script,
 or follow the steps below.
 
+- Go to the folder you want to install NeuroArch Databases in
+
 - FlyCircuit and Janelia Medulla 7 column datasets
 
 https://drive.google.com/file/d/1Nbo0C55X52OeYJtYVzB-52mo7I7H4UCc/view?usp=sharing (~350 MB, decompress to 2GB)
@@ -270,7 +272,7 @@ You can also download the data directly using `wget` (in Linux):
 wget --load-cookies /tmp/cookies.txt "https://docs.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://docs.google.com/uc?export=download&id=1U4TfYXzhN7siQtwupDDmgW7sOBRXmQrL' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1U4TfYXzhN7siQtwupDDmgW7sOBRXmQrL" -O l1em.tar.gz && rm -rf /tmp/cookies.txt
 ```
 
-Decompress the downloaded datasets.
+- Decompress the downloaded datasets.
 
 For usage, see [Launching FlyBrainLab from FlyBrainLab Docker Image](#launching-flybrainlab-from-flybrainlab-docker-image).
 
@@ -315,7 +317,9 @@ Default port is 8888. Go to browser with url: `localhost:8888`, and refer to [Fl
 
 #### Launching FlyBrainLab from FlyBrainLab Docker Image
 
-Assuming all GPUs will be available to the docker container,
+First, set the environment variable $database to the absolute path of the directory the NeuroArch Databases are stored in 
+
+Then, assuming all GPUs will be available to the docker container, run
 ```bash
 docker run --name fbl --gpus all -p 9999:8888 -v $database/hemibrain:/opt/orientdb/databases/hemibrain -v $database/flycircuit:/opt/orientdb/databases/flycircuit -v $database/l1em:/opt/orientdb/databases/l1em -it fruitflybrain/fbl:latest
 ```
