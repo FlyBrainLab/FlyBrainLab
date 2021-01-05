@@ -127,7 +127,7 @@ conda create -n flybrainlab python=3.7 nodejs scipy pandas cookiecutter git yarn
 # if you have conda<4.4, you may need to use `source activate flybrainlab` instead
 conda activate flybrainlab
 # Install additional package into the environment
-pip install jupyter jupyterlab>=2.2.8
+pip install jupyter "jupyterlab>=2.2.8,<3.0"
 pip install txaio twisted autobahn crochet service_identity autobahn-sync matplotlib h5py seaborn fastcluster networkx msgpack msgpack-numpy
 # If on Windows, execute the following:
 pip install pypiwin32
