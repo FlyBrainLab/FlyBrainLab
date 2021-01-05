@@ -147,7 +147,7 @@ echo "Installing FFBO environments"
 conda activate $FFBO_ENV
 pip install crossbar
 pip install scipy pandas
-pip install matplotlib scipy pandas crossbar jupyter "jupyterlab>=2.2.8" autobahn[twisted] beautifulsoup4 tinydb simplejson configparser docopt sparqlwrapper python-levenshtein pyopenssl service_identity plac==0.9.6 datadiff refo msgpack msgpack-numpy pyorient_native daff path.py txaio crochet autobahn-sync seaborn fastcluster networkx h5py jupyter "mpmath>=0.19" sympy nose tqdm
+pip install matplotlib scipy pandas crossbar jupyter "jupyterlab>=2.2.8,<3.0" autobahn[twisted] beautifulsoup4 tinydb simplejson configparser docopt sparqlwrapper python-levenshtein pyopenssl service_identity plac==0.9.6 datadiff refo msgpack msgpack-numpy pyorient_native daff path.py txaio crochet autobahn-sync seaborn fastcluster networkx h5py jupyter "mpmath>=0.19" sympy nose tqdm
 pip install git+https://github.com/fruitflybrain/pyorient.git
 pip install pycuda mpi4py
 
