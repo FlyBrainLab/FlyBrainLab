@@ -1,5 +1,5 @@
 
-pip install jupyter "jupyterlab>=2.2.8" & ^
+pip install jupyter "jupyterlab>=2.2.8,<3.0" & ^
 pip install txaio autobahn[twisted] crochet service_identity matplotlib h5py seaborn fastcluster networkx msgpack msgpack-numpy & ^
 pip install git+https://github.com/mkturkcan/autobahn-sync.git & ^
 pip install pypiwin32 & ^
