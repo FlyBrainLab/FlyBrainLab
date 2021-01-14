@@ -95,7 +95,7 @@ sh fbl_installer_ubuntu.sh
 
 ##### Windows:
 ```bash
-conda create -n flybrainlab python=3.7 -c conda-forge -y # make sure install python from conda-forge otherwise it may lead to an error later
+conda create -n flybrainlab python=3.7 -c conda-forge -y
 activate flybrainlab
 conda install nodejs scipy pandas cookiecutter git yarn -c conda-forge -y
 conda install graphviz pygraphviz -c alubbock
@@ -104,7 +104,7 @@ fbl_installer.cmd
 
 ##### macOS:
 ```bash
-conda create -n flybrainlab python=3.7 -c conda-forge -y # make sure install python from conda-forge otherwise it may lead to an error later
+conda create -n flybrainlab python=3.7 -c conda-forge -y
 conda activate flybrainlab
 ```
 Note that the last line above can raise an error. If you do not see "(flybrainlab)" appear at the start of the current line in your terminal, execute the following line:
