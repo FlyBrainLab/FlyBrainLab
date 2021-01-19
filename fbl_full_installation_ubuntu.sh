@@ -26,11 +26,16 @@ set -e
 CUDA_ROOT=/usr/local/cuda # root directory where you installed cuda
 
 # To be installed
+BASE=$HOME
 FFBO_ENV=ffbo # conda environment for main fbl
 NLP_ENV=ffbo_legacy # additional conda environment for NLP
-FFBO_DIR=$HOME/ffbo # directory to store local repositories
-ORIENTDB_ROOT=$HOME/orientdb # root directory where you want to install OrientDB
-FFBO_PORT=8081 # main port number of the FFBO processor, make sure to use an uncommon port that will not be used by other program
+FFBO_DIR=$BASE/ffbo # directory to store local repositories
+ORIENTDB_ROOT=$BASE/orientdb # root directory where you want to install OrientDB
+FFBO_PORT=9081 # main port number of the FFBO processor, make sure to use an uncommon port that will not be used by other program
+ORIENTDB_BINARY_PORT=2424 # Binary port of OrientDB, please change this if you are on running this on a multi-user machine to avoid running OrientDB on a wrong port
+ORIENTDB_HTTP_PORT=2480 # HTTP port of OrientDB, please change this if you are on running this on a multi-user machine to avoid running OrientDB on a wrong port
+DATABASE_MEMORY=8GB # maximum amount of memory you want to assign to the database for java heap
+DATABASE_DISKCACHE=10240 # amount of memory assigned to caching disk in MB
 
 # End of folder configuration.
 
@@ -42,8 +47,8 @@ then
 fi
 
 # check if directories already exist
-if [ -d "$REPO_DIR" ]; then
-    echo "$REPO_DIR already exists, please remove before continue"
+if [ -d "$FFBO_DIR" ]; then
+    echo "$FFBO_DIR already exists, please remove before continue"
     exit 1
 fi
 
@@ -81,14 +86,16 @@ rm orientdb-3.0.35.tar.gz
 sed -i '/<\/users>/i \
       <user resources="*" password="{PBKDF2WithHmacSHA256}CB55FC353E97910517F5E8811FC48BB89B7CDF9B66BF880C:A3664992731721A52998BEE95C1CA73BAA6093E91191FA1C:65536" name="root"/> \
       <user resources="connect,server.listDatabases,server.dblist" password="{PBKDF2WithHmacSHA256}289DE306D44BAAD7676BA04426F19A056B4CF8904BB80A71:001BFE74763F762037E7676752BF9D37F3A508A331BEB41C:65536" name="guest"/>' $ORIENTDB_ROOT/config/orientdb-server-config.xml
+sed -i -e "s+2424-2430+$ORIENTDB_BINARY_PORT+g" $ORIENTDB_ROOT/config/orientdb-server-config.xml
+sed -i -e "s+2480-2490+$ORIENTDB_HTTP_PORT+g" $ORIENTDB_ROOT/config/orientdb-server-config.xml
 
 # Set orientdb root password to root
 echo "export ORIENTDB_ROOT_PASSWORD=root" | tee -a ~/.bashrc
 # Set orientdb memory limits, minimum set to 1GB, maximum set to 32GB.
 # Change if you have less memory
-echo 'export ORIENTDB_OPTS_MEMORY="-Xms1G -Xmx8G" # increase or decrease Xmx to fit the memory size of your machine' | tee -a ~/.bashrc
+echo "export ORIENTDB_OPTS_MEMORY='-Xms1G -Xmx$DATABASE_MEMORY' # increase or decrease Xmx to fit the memory size of your machine" | tee -a ~/.bashrc
 # Set orientdb disk cache size to 10GB.
-echo "export ORIENTDB_SETTINGS=-Dstorage.diskCache.bufferSize=10240 # the amount of memory in MB used for disk cache. This plus Xmx above must be smaller than the total size of memory on your machine." | tee -a ~/.bashrc
+echo "export ORIENTDB_SETTINGS=-Dstorage.diskCache.bufferSize=$DATABASE_DISKCACHE # the amount of memory in MB used for disk cache. This plus Xmx above must be smaller than the total size of memory on your machine." | tee -a ~/.bashrc
 
 # download packages
 echo "Downloading packages"
@@ -224,7 +231,7 @@ cd $ORIENTDB_ROOT/databases
 wget --load-cookies /tmp/cookies.txt "https://docs.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://docs.google.com/uc?export=download&id=1JXtWt-2X66Mb5I271YRUiMuQx3I2b43s' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1JXtWt-2X66Mb5I271YRUiMuQx3I2b43s" -O flycircuit.zip && rm -rf /tmp/cookies.txt
 ../bin/console.sh "create database plocal:../databases/flycircuit admin admin; restore database ../databases/flycircuit.zip"
 rm flycircuit.zip
-wget --load-cookies /tmp/cookies.txt "https://docs.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://docs.google.com/uc?export=download&id=1Y63UpypJ-eMgOdX3bcSRO4Ct3DqmH6-X' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1Y63UpypJ-eMgOdX3bcSRO4Ct3DqmH6-X" -O hemibrain.zip && rm -rf /tmp/cookies.txt
+wget --load-cookies /tmp/cookies.txt "https://docs.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://docs.google.com/uc?export=download&id=1UguZ-9kuHVZF5_yZzlpyRAGVGrx41NHv' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1UguZ-9kuHVZF5_yZzlpyRAGVGrx41NHv" -O hemibrain.zip && rm -rf /tmp/cookies.txt
 ../bin/console.sh "create database plocal:../databases/hemibrain admin admin; restore database ../databases/hemibrain.zip"
 rm hemibrain.zip
 wget --load-cookies /tmp/cookies.txt "https://docs.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://docs.google.com/uc?export=download&id=1hYjA43poDjL8WtQ1AUBzYxKTaJ4In-GU' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1hYjA43poDjL8WtQ1AUBzYxKTaJ4In-GU" -O l1em.zip && rm -rf /tmp/cookies.txt
