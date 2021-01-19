@@ -300,11 +300,11 @@ Note that all default databases are stored in `~/databases`.
 #### Launching FlyBrainLab from User-side Only Installation
 
 ```bash
-conda activate FlyBrainLab
+conda activate flybrainlab
 jupyter lab
 ```
 
-Default port is 8888. Go to browser with url: `localhost:8888`, and refer to [FlyBrainLab User Interface](#22-flybrainlab-user-interface).
+Default port is 8888. Go to browser with url: `localhost:8888`, and refer to [FlyBrainLab User Interface](#22-flybrainlab-user-interface). Note that if you are using an environment with a different name than flybrainlab, you will need to change the first line above accordingly.
 
 #### Launching FlyBrainLab from Full Installation
 
