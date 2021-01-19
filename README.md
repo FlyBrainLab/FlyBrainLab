@@ -191,11 +191,16 @@ Then edit the following lines:
 CUDA_ROOT=/usr/local/cuda # root directory where you installed cuda
 
 # To be installed
+BASE=$HOME # base directory where the folders will be installed
 FFBO_ENV=ffbo # conda environment for main fbl
 NLP_ENV=ffbo_legacy # additional conda environment for NLP
-FFBO_DIR=$HOME/ffbo # directory to store local repositories
-ORIENTDB_ROOT=$HOME/orientdb # root directory where you want to install OrientDB
-FFBO_PORT=8081 # main port number of the FFBO processor, make sure to use an uncommon port that will not be used by other program.
+FFBO_DIR=$BASE/ffbo # directory to store local repositories
+ORIENTDB_ROOT=$BASE/orientdb # root directory where you want to install OrientDB
+FFBO_PORT=8081 # main port number of the FFBO processor, make sure to use an uncommon port that will not be used by other program
+ORIENTDB_BINARY_PORT=2424 # Binary port of OrientDB, please change this if you are on running this on a multi-user machine to avoid running OrientDB on a wrong port
+ORIENTDB_HTTP_PORT=2480 # HTTP port of OrientDB, please change this if you are on running this on a multi-user machine to avoid running OrientDB on a wrong port
+DATABASE_MEMORY=8G # maximum amount of memory you want to assign to the database for java heap in GB
+DATABASE_DISKCACHE=10240 # amount of memory assigned to caching disk in MB
 ```
 
 Then run the script in `bash`:
