@@ -184,6 +184,7 @@ RUN mkdir -p /home/ffbo/.ffbo/config && \
     sed -i -e "s+{FFBO_DIR}+/home/ffbo/ffbo+g" start.sh && \
     sed -i -e "s+{ORIENTDB_ROOT}+/home/ffbo/orientdb+g" shutdown.sh && \
     sed -i -e "s+{FFBO_DIR}+/home/ffbo/ffbo+g" update.sh && \
+    sed -i -e "s+{FFBO_DIR}+/home/ffbo/ffbo+g; s+{FFBO_ENV}+ffbo+g; s+\$(conda info --base)+/home/ffbo/miniconda+g" update_NeuroMynerva.sh && \
     rm -rf /home/ffbo/run_scripts && \
     wget https://raw.githubusercontent.com/FlyBrainLab/NeuroMynerva/master/schema/plugin.json.local -O /home/ffbo/miniconda/envs/ffbo/share/jupyter/lab/schemas/\@flybrainlab/neuromynerva/plugin.json && \
     echo "export ORIENTDB_ROOT_PASSWORD=root" | tee -a ~/.bashrc && \

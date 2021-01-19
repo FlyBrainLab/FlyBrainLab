@@ -31,10 +31,10 @@ FFBO_ENV=ffbo # conda environment for main fbl
 NLP_ENV=ffbo_legacy # additional conda environment for NLP
 FFBO_DIR=$BASE/ffbo # directory to store local repositories
 ORIENTDB_ROOT=$BASE/orientdb # root directory where you want to install OrientDB
-FFBO_PORT=9081 # main port number of the FFBO processor, make sure to use an uncommon port that will not be used by other program
+FFBO_PORT=8081 # main port number of the FFBO processor, make sure to use an uncommon port that will not be used by other program
 ORIENTDB_BINARY_PORT=2424 # Binary port of OrientDB, please change this if you are on running this on a multi-user machine to avoid running OrientDB on a wrong port
 ORIENTDB_HTTP_PORT=2480 # HTTP port of OrientDB, please change this if you are on running this on a multi-user machine to avoid running OrientDB on a wrong port
-DATABASE_MEMORY=8GB # maximum amount of memory you want to assign to the database for java heap
+DATABASE_MEMORY=8G # maximum amount of memory you want to assign to the database for java heap in GB
 DATABASE_DISKCACHE=10240 # amount of memory assigned to caching disk in MB
 
 # End of folder configuration.
@@ -218,12 +218,14 @@ cd $FFBO_DIR/bin
 sed -i -e "s+{FFBO_DIR}+$FFBO_DIR+g; s+{FFBO_ENV}+$FFBO_ENV+g" run_processor.sh
 sed -i -e "s+{FFBO_DIR}+$FFBO_DIR+g; s+{NLP_ENV}+$NLP_ENV+g" run_nlp.sh
 sed -i -e "s+{FFBO_DIR}+$FFBO_DIR+g; s+{FFBO_ENV}+$FFBO_ENV+g" run_neuroarch.sh
+sed -i -e "s+component.py+& --port $ORIENTDB_BINARY_PORT+" run_neuroarch.sh
 sed -i -e "s+{FFBO_DIR}+$FFBO_DIR+g; s+{FFBO_ENV}+$FFBO_ENV+g" run_neurokernel.sh
 sed -i -e "s+{ORIENTDB_ROOT}+$ORIENTDB_ROOT+g" run_database.sh
 sed -i -e "s+{FFBO_DIR}+$FFBO_DIR+g; s+{FFBO_ENV}+$FFBO_ENV+g" run_fbl.sh
 sed -i -e "s+{FFBO_DIR}+$FFBO_DIR+g" start.sh
 sed -i -e "s+{ORIENTDB_ROOT}+$ORIENTDB_ROOT+g" shutdown.sh
 sed -i -e "s+{FFBO_DIR}+$FFBO_DIR+g" update.sh
+sed -i -e "s+{FFBO_DIR}+$FFBO_DIR+g; s+{FFBO_ENV}+$FFBO_ENV+g" update_NeuroMynerva.sh
 rm -rf $FFBO_DIR/run_scripts
 
 echo "Installation complete. Downloading databases ......"
