@@ -26,7 +26,7 @@ set -e
 CUDA_ROOT=/usr/local/cuda # root directory where you installed cuda
 
 # To be installed
-BASE=$HOME
+BASE=$HOME # base directory where the folders will be installed
 FFBO_ENV=ffbo # conda environment for main fbl
 NLP_ENV=ffbo_legacy # additional conda environment for NLP
 FFBO_DIR=$BASE/ffbo # directory to store local repositories
