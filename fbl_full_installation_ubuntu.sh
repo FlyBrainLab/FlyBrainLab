@@ -98,7 +98,7 @@ echo "export ORIENTDB_OPTS_MEMORY='-Xms1G -Xmx$DATABASE_MEMORY' # increase or de
 echo "export ORIENTDB_SETTINGS=-Dstorage.diskCache.bufferSize=$DATABASE_DISKCACHE # the amount of memory in MB used for disk cache. This plus Xmx above must be smaller than the total size of memory on your machine." | tee -a ~/.bashrc
 
 export ORIENTDB_ROOT_PASSWORD=root
-export ORIENTDB_OPTS_MEMORY='-Xms1G -Xmx$DATABASE_MEMORY'
+export ORIENTDB_OPTS_MEMORY="'-Xms1G -Xmx$DATABASE_MEMORY'"
 export ORIENTDB_SETTINGS=-Dstorage.diskCache.bufferSize=$DATABASE_DISKCACHE
 
 # download packages
