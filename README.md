@@ -51,7 +51,7 @@ FlyBrainLab consists of backend components and user-side components. There are a
 1. [**Amazon Machine Image**](#14-amazon-machine-image): We also maintain AMI [`ami-07b76a65526478567`](https://console.aws.amazon.com/ec2/v2/home?region=us-east-1#LaunchInstanceWizard:ami=ami-07b76a65526478567) that has the FlyBrainLab fully installed. It is helpful in case you do not have a machine with NVIDIA GPU handy, but still want to try out the full installation.
 
 
-### 1.1 Installing Only User-side Components
+<h3 id="user-side">1.1 Installing Only User-side Components</h4> 
 
 #### System Requirement
 
