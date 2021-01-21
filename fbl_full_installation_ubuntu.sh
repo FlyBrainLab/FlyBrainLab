@@ -97,10 +97,6 @@ echo "export ORIENTDB_OPTS_MEMORY='-Xms1G -Xmx$DATABASE_MEMORY' # increase or de
 # Set orientdb disk cache size to 10GB.
 echo "export ORIENTDB_SETTINGS=-Dstorage.diskCache.bufferSize=$DATABASE_DISKCACHE # the amount of memory in MB used for disk cache. This plus Xmx above must be smaller than the total size of memory on your machine." | tee -a ~/.bashrc
 
-export ORIENTDB_ROOT_PASSWORD=root
-export ORIENTDB_OPTS_MEMORY="'-Xms1G -Xmx$DATABASE_MEMORY'"
-export ORIENTDB_SETTINGS=-Dstorage.diskCache.bufferSize=$DATABASE_DISKCACHE
-
 # download packages
 echo "Downloading packages"
 mkdir $FFBO_DIR
@@ -246,9 +242,10 @@ rm l1em.zip
 
 echo
 
-echo "Done! This set up only allows you to run one set of frontend/backend on your system."
+echo "Done! This set up only allows you to run one set of frontend/backend on your system"
 
 echo
+echo "Log out and back in again to before starting FlyBrainLab."
 echo "To start FlyBrainLab, run $FFBO_DIR/bin/start.sh."
 echo "Closing jupyter will not terminate the backend servers. To start jupyter again, run $FFBO_DIR/bin/run_fbl.sh."
 echo "To shutdown all FlyBrainLab processes, run $FFBO_DIR/bin/shutdown.sh."
