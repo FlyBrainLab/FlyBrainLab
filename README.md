@@ -290,13 +290,15 @@ where `$FFBO_DIR` is the directory you configured to install FlyBrainLab in.
 
 Default port is 8888. Go to browser with url: `localhost:8888`, and refer to [FlyBrainLab User Interface](#22-flybrainlab-user-interface).
 
+A set of NeuroArch databases should have been downloaded during the installation process. For more information, see the [Dataset Version Tracker](https://github.com/FlyBrainLab/datasets).
+
 #### Launching FlyBrainLab from FlyBrainLab Docker Image
 
 Assuming all GPUs will be available to the docker container, run
 ```bash
 docker run --name fbl --gpus all -p 9999:8888 -it fruitflybrain/fbl:latest
 ```
-You will be prompted to download datasets. Select to install the databases you needed.
+You will be prompted to download datasets. Select to install the databases you needed. For more information, see the [Dataset Version Tracker](https://github.com/FlyBrainLab/datasets).
 
 (**TIP**): If you would like to keep the databases after the docker container is removed, bind an empty directory on your machine when launching the container:
 ```bash
