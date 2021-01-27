@@ -241,44 +241,6 @@ Pull the [FlyBrainLab Docker Image](https://hub.docker.com/r/fruitflybrain/fbl):
 docker pull fruitflybrain/fbl:latest
 ```
 
-Download NeuroArch Databases to a folder, for example, `~/databases`.
-You can use the [`download_datasets.sh`](https://raw.githubusercontent.com/FlyBrainLab/run_scripts/main/flybrainlab/download_datasets.sh) script,
-or follow the steps below.
-
-- Go to the folder you want to install NeuroArch Databases in
-
-- FlyCircuit and Janelia Medulla 7 column datasets
-
-https://drive.google.com/file/d/1Nbo0C55X52OeYJtYVzB-52mo7I7H4UCc/view?usp=sharing (~350 MB, decompress to 2GB)
-
-You can also download the data directly using `wget` (in Linux):
-
-```
-wget --load-cookies /tmp/cookies.txt "https://docs.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://docs.google.com/uc?export=download&id=1Nbo0C55X52OeYJtYVzB-52mo7I7H4UCc' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1Nbo0C55X52OeYJtYVzB-52mo7I7H4UCc" -O flycircuit.tar.gz && rm -rf /tmp/cookies.txt
-```
-
-- Hemibrain dataset:
-
-https://drive.google.com/file/d/1puvabvKGFBchKiD56cjlu3MFNQ-Soam1/view?usp=sharing (~3GB, decompress to ~18GB)
-
-You can also download the data directly using `wget` (in Linux):
-
-```
-wget --load-cookies /tmp/cookies.txt "https://docs.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://docs.google.com/uc?export=download&id=1puvabvKGFBchKiD56cjlu3MFNQ-Soam1' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1puvabvKGFBchKiD56cjlu3MFNQ-Soam1" -O hemibrain.tar.gz && rm -rf /tmp/cookies.txt
-```
-
-- Larva L1EM CNS dataset:
-
-https://drive.google.com/file/d/1U4TfYXzhN7siQtwupDDmgW7sOBRXmQrL/view?usp=sharing (~40MB, decompress to ~400MB)
-
-You can also download the data directly using `wget` (in Linux):
-
-```
-wget --load-cookies /tmp/cookies.txt "https://docs.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://docs.google.com/uc?export=download&id=1U4TfYXzhN7siQtwupDDmgW7sOBRXmQrL' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1U4TfYXzhN7siQtwupDDmgW7sOBRXmQrL" -O l1em.tar.gz && rm -rf /tmp/cookies.txt
-```
-
-- Decompress the downloaded datasets.
-
 For usage, see [Launching FlyBrainLab from FlyBrainLab Docker Image](#launching-flybrainlab-from-flybrainlab-docker-image).
 
 
@@ -322,11 +284,15 @@ Default port is 8888. Go to browser with url: `localhost:8888`, and refer to [Fl
 
 #### Launching FlyBrainLab from FlyBrainLab Docker Image
 
-First, set the environment variable $database to the absolute path of the directory the NeuroArch Databases are stored in 
-
-Then, assuming all GPUs will be available to the docker container, run
+Assuming all GPUs will be available to the docker container, run
 ```bash
-docker run --name fbl --gpus all -p 9999:8888 -v $database/hemibrain:/opt/orientdb/databases/hemibrain -v $database/flycircuit:/opt/orientdb/databases/flycircuit -v $database/l1em:/opt/orientdb/databases/l1em -it fruitflybrain/fbl:latest
+docker run --name fbl --gpus all -p 9999:8888 -it fruitflybrain/fbl:latest
+```
+You will be prompted to download datasets. Select to install the databases you needed.
+
+(**TIP**): If you would like to keep the databases after the docker container is removed, bind an empty directory on your machine when launching the container:
+```bash
+docker run --name fbl --gpus all -p 9999:8888 -v /path/to/directory:/home/ffbo/orientdb/databases -it fruitflybrain/fbl:latest
 ```
 
 Go to browser with url: `localhost:9999`. Note that the default jupyter notebook port in the Docker container is `8888` and is mapped to `9999` on host machine. Then refer to [FlyBrainLab User Interface](#22-flybrainlab-user-interface).
