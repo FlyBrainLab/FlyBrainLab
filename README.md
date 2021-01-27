@@ -246,7 +246,7 @@ If installation complete without error, please log out and log in again (or sour
 
 Pull the [FlyBrainLab Docker Image](https://hub.docker.com/r/fruitflybrain/fbl):
 ```
-docker pull fruitflybrain/fbl:latest
+docker pull fruitflybrain/fbl:g
 ```
 
 For usage, see [Launching FlyBrainLab from FlyBrainLab Docker Image](#launching-flybrainlab-from-flybrainlab-docker-image).
@@ -261,7 +261,7 @@ https://console.aws.amazon.com/ec2/v2/home?region=us-east-1#LaunchInstanceWizard
 
 Once an instance is launched, first update the docker image by
 ```bash
-docker pull fruitflybrain/fbl:Latest
+docker pull fruitflybrain/fbl:latest
 ```
 
 Then it can be used the same way as the Docker Image installation.
