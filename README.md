@@ -170,6 +170,7 @@ After the script finishes, go to [Launching FlyBrainLab from User-side Only Inst
 - Supported OS (64-bit): Ubuntu 16.04 or later.
 - CUDA enabled GPU and [CUDA Toolkit](https://developer.nvidia.com/cuda-toolkit).
 - Minimum 30GB disk space, preferrably on SSD (including 3 default databases).
+- A machine with at least 32GB of memory is recommended. Otherwise reduce the size of `DATABASE_MEMORY` and `DATABASE_DISKCACHE` in the steps below.
 - The following ubuntu packages:
 `wget default-jre curl build-essential tar apt-transport-https tmux`.
 - [conda](https://docs.conda.io/en/latest/): See its [Installation Instructions](https://docs.conda.io/projects/conda/en/latest/user-guide/install/).
@@ -219,8 +220,14 @@ conda env remove -n $FFBO_ENV
 conda env remove -n $NLP_ENV
 ```
 where the environment variables should match the ones during installation.
+Also remove the following 3 lines in your `~/.bashrc`:
+```bash
+export ORIENTDB_ROOT_PASSWORD=root
+export ORIENTDB_OPTS_MEMORY='-Xms1G -Xmx8G' # increase or decrease Xmx to fit the memory size of your machine
+export ORIENTDB_SETTINGS=-Dstorage.diskCache.bufferSize=10240 # the amount of memory in MB used for disk cache. This plus Xmx above must be smaller than the total size of memory on your machine.
+```
 
-If installation complete without error, please go to
+If installation complete without error, please log out and log in again (or source .bashrc). Then go to
 [Launching FlyBrainLab from Full Installation](#launching-flybrainlab-from-full-installation).
 
 
@@ -233,6 +240,7 @@ If installation complete without error, please go to
 - [Docker CE](https://docs.docker.com/engine/install/ubuntu/) 19.03 or higher.
 - [NVIDIA Container Toolkit](https://github.com/NVIDIA/nvidia-docker).
 - Minimum 30GB disk space, preferrably on SSD (including 3 default databases).
+- A machine with at least 32GB of memory is recommended.
 
 #### Pull Docker Image
 
