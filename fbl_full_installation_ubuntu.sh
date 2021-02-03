@@ -150,6 +150,8 @@ else
     echo "OpenMPI installed"
 fi
 
+sleep 10s
+
 echo "Installing FFBO environments"
 conda activate $FFBO_ENV
 pip install crossbar
@@ -188,8 +190,10 @@ cd $FFBO_DIR/NeuroMynerva
 jlpm && jlpm run build &&  jupyter labextension install .
 #jupyter labextension install @flybrainlab/neuromynerva
 
-wget https://cdn.jsdelivr.net/gh/flybrainlab/NeuroMynerva@master/schema/plugin.json.local -O $CONDA_ROOT/envs/$FFBO_ENV/share/jupyter/lab/schemas/\@flybrainlab/neuromynerva/plugin.json
-sed -i -e "s+8081+$FFBO_PORT+g" $CONDA_ROOT/envs/$FFBO_ENV/share/jupyter/lab/schemas/\@flybrainlab/neuromynerva/plugin.json
+
+mkdir -p $HOME/.jupyter/lab/user-settings/@flybrainlab/neuromynerva
+wget https://cdn.jsdelivr.net/gh/flybrainlab/NeuroMynerva@master/schema/plugin.json.local -O $HOME/.jupyter/lab/user-settings/@flybrainlab/neuromynerva/plugin.jupyterlab-settings
+sed -i -e "s+8081+$FFBO_PORT+g" $HOME/.jupyter/lab/user-settings/@flybrainlab/neuromynerva/plugin.jupyterlab-settings
 conda deactivate
 
 conda create -n $NLP_ENV python=2.7 -y
@@ -222,23 +226,24 @@ sed -i -e "s+component.py+& --port $ORIENTDB_BINARY_PORT+" run_neuroarch.sh
 sed -i -e "s+{FFBO_DIR}+$FFBO_DIR+g; s+{FFBO_ENV}+$FFBO_ENV+g" run_neurokernel.sh
 sed -i -e "s+{ORIENTDB_ROOT}+$ORIENTDB_ROOT+g" run_database.sh
 sed -i -e "s+{FFBO_DIR}+$FFBO_DIR+g; s+{FFBO_ENV}+$FFBO_ENV+g" run_fbl.sh
-sed -i -e "s+{FFBO_DIR}+$FFBO_DIR+g" start.sh
-sed -i -e "s+{ORIENTDB_ROOT}+$ORIENTDB_ROOT+g" shutdown.sh
+sed -i -e "s+{FFBO_DIR}+$FFBO_DIR+g; s+{ORIENTDB_ROOT}+$ORIENTDB_ROOT+g" start.sh
+sed -i -e "s+{ORIENTDB_ROOT}+$ORIENTDB_ROOT+g; s+{ORIENTDB_BINARY_PORT}+$ORIENTDB_BINARY_PORT+g" shutdown.sh
 sed -i -e "s+{FFBO_DIR}+$FFBO_DIR+g" update.sh
 sed -i -e "s+{FFBO_DIR}+$FFBO_DIR+g; s+{FFBO_ENV}+$FFBO_ENV+g" update_NeuroMynerva.sh
 rm -rf $FFBO_DIR/run_scripts
 
 echo "Installation complete. Downloading databases ......"
-cd $ORIENTDB_ROOT/databases
-wget --load-cookies /tmp/cookies.txt "https://docs.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://docs.google.com/uc?export=download&id=1JXtWt-2X66Mb5I271YRUiMuQx3I2b43s' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1JXtWt-2X66Mb5I271YRUiMuQx3I2b43s" -O flycircuit.zip && rm -rf /tmp/cookies.txt
-../bin/console.sh "create database plocal:../databases/flycircuit admin admin; restore database ../databases/flycircuit.zip"
-rm flycircuit.zip
-wget --load-cookies /tmp/cookies.txt "https://docs.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://docs.google.com/uc?export=download&id=1UguZ-9kuHVZF5_yZzlpyRAGVGrx41NHv' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1UguZ-9kuHVZF5_yZzlpyRAGVGrx41NHv" -O hemibrain.zip && rm -rf /tmp/cookies.txt
-../bin/console.sh "create database plocal:../databases/hemibrain admin admin; restore database ../databases/hemibrain.zip"
-rm hemibrain.zip
-wget --load-cookies /tmp/cookies.txt "https://docs.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://docs.google.com/uc?export=download&id=1hYjA43poDjL8WtQ1AUBzYxKTaJ4In-GU' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1hYjA43poDjL8WtQ1AUBzYxKTaJ4In-GU" -O l1em.zip && rm -rf /tmp/cookies.txt
-../bin/console.sh "create database plocal:../databases/l1em admin admin; restore database ../databases/l1em.zip"
-rm l1em.zip
+cd $FFBO_DIR/bin
+./download_datasets.sh $ORIENTDB_ROOT
+# wget --load-cookies /tmp/cookies.txt "https://docs.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://docs.google.com/uc?export=download&id=1JXtWt-2X66Mb5I271YRUiMuQx3I2b43s' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1JXtWt-2X66Mb5I271YRUiMuQx3I2b43s" -O flycircuit.zip && rm -rf /tmp/cookies.txt
+# ../bin/console.sh "create database plocal:../databases/flycircuit admin admin; restore database ../databases/flycircuit.zip"
+# rm flycircuit.zip
+# wget --load-cookies /tmp/cookies.txt "https://docs.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://docs.google.com/uc?export=download&id=1UguZ-9kuHVZF5_yZzlpyRAGVGrx41NHv' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1UguZ-9kuHVZF5_yZzlpyRAGVGrx41NHv" -O hemibrain.zip && rm -rf /tmp/cookies.txt
+# ../bin/console.sh "create database plocal:../databases/hemibrain admin admin; restore database ../databases/hemibrain.zip"
+# rm hemibrain.zip
+# wget --load-cookies /tmp/cookies.txt "https://docs.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://docs.google.com/uc?export=download&id=1hYjA43poDjL8WtQ1AUBzYxKTaJ4In-GU' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1hYjA43poDjL8WtQ1AUBzYxKTaJ4In-GU" -O l1em.zip && rm -rf /tmp/cookies.txt
+# ../bin/console.sh "create database plocal:../databases/l1em admin admin; restore database ../databases/l1em.zip"
+# rm l1em.zip
 
 echo
 

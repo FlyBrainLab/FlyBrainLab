@@ -5,7 +5,7 @@ FROM nvidia/cuda:10.2-devel-ubuntu18.04
 
 LABEL maintainer="Fruit Fly Brain Observatory Team <http://fruitflybrain.org>"
 
-RUN apt-get update && apt-get install -y openssh-server emacs sudo tmux git default-jre curl vim wget dialog net-tools build-essential tar apt-transport-https whois && \
+RUN apt-get update && apt-get upgrade -y && apt-get install -y openssh-server emacs sudo tmux git default-jre curl vim wget dialog net-tools build-essential tar apt-transport-https whois && \
     mkdir /var/run/sshd && \
     echo 'root:kfj8734KJFhu28fDFuhuew9,2481' | chpasswd && \
     sed -i 's/PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config && \
@@ -78,7 +78,7 @@ RUN wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -
     conda activate ffbo && \
     #export PATH=/usr/local/bin:/usr/local/cuda/bin:$PATH && \
     #export LD_LIBRARY_PATH=/usr/local/lib:/usr/local/cuda/lib64:$LD_LIBRARY_PATH && \
-    pip install numpy matplotlib scipy pandas crossbar jupyter 'jupyterlab>=2.2.8' autobahn[twisted] beautifulsoup4 tinydb simplejson configparser docopt sparqlwrapper python-levenshtein pyopenssl service_identity plac==0.9.6 datadiff refo msgpack msgpack-numpy pyorient_native daff path.py txaio crochet autobahn-sync seaborn fastcluster networkx h5py jupyter 'mpmath>=0.19' sympy nose tqdm && \
+    pip install numpy matplotlib scipy pandas crossbar jupyter 'jupyterlab>=2.2.8,<3.0' autobahn[twisted] beautifulsoup4 tinydb simplejson configparser docopt sparqlwrapper python-levenshtein pyopenssl service_identity plac==0.9.6 datadiff refo msgpack msgpack-numpy pyorient_native daff path.py txaio crochet autobahn-sync seaborn fastcluster networkx h5py jupyter 'mpmath>=0.19' sympy nose tqdm && \
     pip install git+https://github.com/fruitflybrain/pyorient.git && \
     pip install pycuda mpi4py" && \
     cd /home/ffbo/ && \
@@ -181,12 +181,13 @@ RUN mkdir -p /home/ffbo/.ffbo/config && \
     sed -i -e "s+{FFBO_DIR}+/home/ffbo/ffbo+g; s+{FFBO_ENV}+ffbo+g; s+\$(conda info --base)+/home/ffbo/miniconda+g" run_neurokernel.sh && \
     sed -i -e "s+{ORIENTDB_ROOT}+/home/ffbo/orientdb+g" run_database.sh && \
     sed -i -e "s+{FFBO_DIR}+/home/ffbo/ffbo+g; s+{FFBO_ENV}+ffbo+g; s+\$(conda info --base)+/home/ffbo/miniconda+g" run_fbl.sh && \
-    sed -i -e "s+{FFBO_DIR}+/home/ffbo/ffbo+g" start.sh && \
-    sed -i -e "s+{ORIENTDB_ROOT}+/home/ffbo/orientdb+g" shutdown.sh && \
+    sed -i -e "s+{FFBO_DIR}+/home/ffbo/ffbo+g; s+{ORIENTDB_ROOT}+/home/ffbo/orientdb+g" start.sh && \
+    sed -i -e "s+{ORIENTDB_ROOT}+/home/ffbo/orientdb+g; s+{ORIENTDB_BINARY_PORT}+2424+g; " shutdown.sh && \
     sed -i -e "s+{FFBO_DIR}+/home/ffbo/ffbo+g" update.sh && \
     sed -i -e "s+{FFBO_DIR}+/home/ffbo/ffbo+g; s+{FFBO_ENV}+ffbo+g; s+\$(conda info --base)+/home/ffbo/miniconda+g" update_NeuroMynerva.sh && \
     rm -rf /home/ffbo/run_scripts && \
-    wget https://raw.githubusercontent.com/FlyBrainLab/NeuroMynerva/master/schema/plugin.json.local -O /home/ffbo/miniconda/envs/ffbo/share/jupyter/lab/schemas/\@flybrainlab/neuromynerva/plugin.json && \
+    mkdir -p /home/ffbo/.jupyter/lab/user-settings/@flybrainlab/neuromynerva && \
+    wget https://raw.githubusercontent.com/FlyBrainLab/NeuroMynerva/master/schema/plugin.json.local -O /home/ffbo/.jupyter/lab/user-settings/@flybrainlab/neuromynerva/plugin.jupyterlab-settings && \
     echo "export ORIENTDB_ROOT_PASSWORD=root" | tee -a ~/.bashrc && \
     echo 'export ORIENTDB_OPTS_MEMORY="-Xms1G -Xmx8G" # increase or decrease Xmx to fit the memory size of your machine' | tee -a ~/.bashrc && \
     echo "export ORIENTDB_SETTINGS=-Dstorage.diskCache.bufferSize=10240 # the amount of memory in MB used for disk cache. This plus Xmx above must be smaller than the total size of memory on your machine." | tee -a ~/.bashrc
