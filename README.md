@@ -17,7 +17,7 @@
     </a>
 </p>
 <p align="center">
-  <a href="https://github.com/FlyBrainLab/FlyBrainLab/wiki">Wiki</a> | <a href="https://github.com/FlyBrainLab/FlyBrainLab/wiki/Troubleshooting">Troubleshooting</a>
+  <a href="https://github.com/FlyBrainLab/FlyBrainLab/wiki">Wiki</a> | <a href="https://github.com/FlyBrainLab/Tutorials/">Tutorials</a> | <a href="https://github.com/FlyBrainLab/FlyBrainLab/wiki/Troubleshooting">Troubleshooting</a> 
 </p>
 
 FlyBrainLab is an interactive computing platform for studying the function of executable circuits constructed from fruit fly brain data. FlyBrainLab is designed with three main capabilities in mind: (i) 3D exploration and visualization of fruit fly brain data, (ii) creation of executable circuits directly from the explored and visualized fly brain data, and (iii) interactive exploration of the functional logic of the devised executable circuits.
@@ -279,7 +279,7 @@ conda activate flybrainlab
 jupyter lab
 ```
 
-Default port is 8888. Go to browser with url: `localhost:8888`, and refer to [FlyBrainLab User Interface](#22-flybrainlab-user-interface). Note that if you are using an environment with a different name than flybrainlab, you will need to change the first line above accordingly.
+Default port is 8888. Go to browser with url: `localhost:8888`, and refer to [FlyBrainLab User Interface](#22-flybrainlab-user-interface). Note that if you are using an environment with a different name than flybrainlab, you will need to change the first line above accordingly. After installation, to learn more about how to use FlyBrainLab, check out the tutorials at the [Tutorials](https://github.com/FlyBrainLab/Tutorials) repository.
 
 #### Launching FlyBrainLab from Full Installation
 
@@ -290,7 +290,7 @@ where `$FFBO_DIR` is the directory you configured to install FlyBrainLab in.
 
 Default port is 8888. Go to browser with url: `localhost:8888`, and refer to [FlyBrainLab User Interface](#22-flybrainlab-user-interface).
 
-A set of NeuroArch databases should have been downloaded during the installation process. For more information, see the [Dataset Version Tracker](https://github.com/FlyBrainLab/datasets).
+A set of NeuroArch databases should have been downloaded during the installation process. For more information, see the [Dataset Version Tracker](https://github.com/FlyBrainLab/datasets). After installation, to learn more about how to use FlyBrainLab, check out the tutorials at the [Tutorials](https://github.com/FlyBrainLab/Tutorials) repository.
 
 #### Launching FlyBrainLab from FlyBrainLab Docker Image
 
