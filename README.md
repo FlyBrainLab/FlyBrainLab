@@ -246,7 +246,7 @@ If installation complete without error, please log out and log in again (or sour
 
 Pull the [FlyBrainLab Docker Image](https://hub.docker.com/r/fruitflybrain/fbl):
 ```
-docker pull fruitflybrain/fbl:g
+docker pull fruitflybrain/fbl:latest
 ```
 
 For usage, see [Launching FlyBrainLab from FlyBrainLab Docker Image](#launching-flybrainlab-from-flybrainlab-docker-image).
