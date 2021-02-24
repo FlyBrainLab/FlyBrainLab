@@ -109,7 +109,6 @@ sh fbl_installer_ubuntu.sh
 ```bash
 conda create -n flybrainlab python=3.7 -y
 activate flybrainlab
-conda install nodejs scipy pandas cookiecutter git yarn -c conda-forge -y
 conda install graphviz pygraphviz -c alubbock -y
 fbl_installer.cmd
 ```
