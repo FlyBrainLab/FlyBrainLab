@@ -155,16 +155,26 @@ python setup.py develop
 cd ../FBLClient
 python setup.py develop
 cd ../NeuroMynerva
-jlpm
-jlpm run build
-
-# Execute this if you are a user
-jupyter labextension install .
+# If you're a user using JupyterLab 3.x
+pip install .
 jupyter lab
 
-# Execute this if you are a developer
-jupyter labextension link .
-jupyter lab --watch
+# If you're a user using Jupyter Lab 2.x
+# jlpm
+# jupyter labextension install .
+# jupyter lab
+
+# If you're a developer using JupyterLab 3.x
+# pip install -e .
+# jupyter labextension develop . --overwrite
+# jlpm run watch
+# jupyter lab  # in separate terminal
+
+# If you're a developer using JupyterLab 2.x
+# jlpm
+# jupyter labextension link .
+# jlpm run watch:src 
+# jupyter lab --watch  # in separate terminal
 ```
 You may be prompted. On Windows, you will only need to write "activate neuromynerva" instead of "source activate neuromynerva".
 
