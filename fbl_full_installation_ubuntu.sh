@@ -15,7 +15,6 @@
 
 set -e
 
-
 # STEP 2: folder configuration.
 # List cuda directory.
 # Choose the conda environments name and where you want to put the ffbo repositories.
@@ -38,6 +37,42 @@ DATABASE_MEMORY=8G # maximum amount of memory you want to assign to the database
 DATABASE_DISKCACHE=10240 # amount of memory assigned to caching disk in MB
 
 # End of folder configuration.
+
+echo "The following are the prerequisites that requires sudo to install:"
+echo 
+echo "-----------------------------------------------------"
+echo
+echo "sudo apt install -y wget default-jre curl build-essential tar apt-transport-https tmux"
+echo
+echo "-----------------------------------------------------"
+echo
+echo "Please make sure that they are installed before continuing."
+echo
+
+read -p "continue? (Y/n)" -n 1 -r
+if [[ $REPLY =~ ^[Nn]$ ]]
+then
+    echo
+    exit 0
+fi
+
+# check if java exists
+if ! command -v java &> /dev/null
+then
+    echo "java runtime environment is not installed. Please view step 1 in this script for a list of prerequisites."
+fi
+
+# check if tmux exists
+if ! command -v tmux &> /dev/null
+then
+    echo "tmux is not installed. Please view step 1 in this script for a list of prerequisites."
+fi
+
+# check if java exists
+if ! command -v wget &> /dev/null
+then
+    echo "wget is not installed. Please view step 1 in this script for a list of prerequisites."
+fi
 
 # check if CUDA exists
 if ! command -v $CUDA_ROOT/bin/nvcc &> /dev/null
@@ -175,10 +210,8 @@ python setup.py develop
 cd $FFBO_DIR/ffbo.neurokernel_component
 python setup.py develop
 cd $FFBO_DIR/neurokernel
-git checkout managerless
 python setup.py develop
 cd $FFBO_DIR/neurodriver
-git checkout fbl
 python setup.py develop
 cd $FFBO_DIR/retina
 python setup.py develop
@@ -204,7 +237,6 @@ python setup.py develop
 cd $FFBO_DIR/ffbo.neuroarch_nlp
 python setup.py develop
 cd $FFBO_DIR/quepy
-git checkout apps
 python setup.py develop
 cd ../
 wget https://github.com/explosion/spaCy/releases/download/v1.6.0/en-1.1.0.tar.gz
@@ -254,3 +286,4 @@ echo "Log out and back in again to before starting FlyBrainLab."
 echo "To start FlyBrainLab, run $FFBO_DIR/bin/start.sh."
 echo "Closing jupyter will not terminate the backend servers. To start jupyter again, run $FFBO_DIR/bin/run_fbl.sh."
 echo "To shutdown all FlyBrainLab processes, run $FFBO_DIR/bin/shutdown.sh."
+echo

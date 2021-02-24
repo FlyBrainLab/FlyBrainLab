@@ -25,11 +25,13 @@ FlyBrainLab is an interactive computing platform for studying the function of ex
 FlyBrainLab provides an environment where computational researchers can present configurable, executable neural circuits, and experimental scientists can interactively explore circuit structure and function ultimately leading to biological validation.
 
 More details about FlyBrainLab can be found in the following publication:
-- Aurel A. Lazar, Tingkai Liu, Mehmet K. Turkcan, and Yiyin Zhou, [FlyBrainLab: Accelerating the Discovery of the Functional Logic of the Fruit Fly Brain in the Connectomic/Synaptomic Era](https://doi.org/10.1101/2020.06.23.168161), bioRxiv, June 2020.
+
+- Aurel A. Lazar, Tingkai Liu, Mehmet K. Turkcan, and Yiyin Zhou, [Accelerating with FlyBrainLab the Discovery of the Functional Logic of the Drosophila Brain in the Connectomic EraFlyBrainLa](https://dx.doi.org/10.7554/eLife.62362), eLife, February, 2021.
 
 This repository serves as the entry point for FlyBrainLab, where documentation and installation scripts can be found.
 
 ### Content
+
 1. [Installation](#1-installation)
   - 1.1 [Installing Only User-side Components](#11-installing-only-user-side-components)
   - 1.2 [Full Installation](#12-full-installation)
@@ -45,11 +47,11 @@ This repository serves as the entry point for FlyBrainLab, where documentation a
 ## 1. Installation
 
 FlyBrainLab consists of backend components and user-side components. There are a few options for installation.
+
 1. [**Installing only User-side Components**](#11-installing-only-user-side-components): provides instructions for installing a copy of all FlyBrainLab user-side components that, by default, connect to backend servers hosted by the Fruit Fly Brain Observatory Team. If you only need to visualize and explore the biological data, this will be the fastest way to install. However, the public backend servers do not provide capabilities for executing neural circuits on GPUs using [Neurokernel](https://neurokernel.github.io). It may also be helpful to visit [BrainMapsViz](http://www.fruitflybrain.org/#/brainmapsviz) where you can directly interact with the NeuroNLP web application without any installation.
 1. [**Full Installation**](#12-full-installation): provides instructions for installing both the user-side and backend components on the same machine. By default, FlyBrainLab will connect to the backend servers locally hosted.
 1. [**Docker Image**](#13-docker-image): We maintain [this Docker image](https://hub.docker.com/r/fruitflybrain/fbl) with a full FlyBrainLab installation. If you are set up with Docker with GPU support, this will be the easiest way to try FlyBrainLab that runs locally.
 1. [**Amazon Machine Image**](#14-amazon-machine-image): We also maintain AMI [`ami-07b76a65526478567`](https://console.aws.amazon.com/ec2/v2/home?region=us-east-1#LaunchInstanceWizard:ami=ami-07b76a65526478567) that has the FlyBrainLab fully installed. It is helpful in case you do not have a machine with NVIDIA GPU handy, but still want to try out the full installation.
-
 
 <h3 id="user-side">1.1 Installing Only User-side Components</h4> 
 
@@ -60,14 +62,19 @@ FlyBrainLab consists of backend components and user-side components. There are a
 - [conda](https://docs.conda.io/en/latest/): See its [Installation Instructions](https://docs.conda.io/projects/conda/en/latest/user-guide/install/).
 
 Additional requirement for macOS:
+
 - Xcode Command Line Tools: use the following command to install:
+
 ```zsh
 xcode-select --install
 ```
+
 If you encounter error:
+
 ```
 Can’t install the software because it is not currently available from the Software Update server.
 ```
+
 you can download the installer directly at https://developer.apple.com/download/more/ (Apple ID Login required), and select the latest stable version. If you encounter further error, you can try installing Xcode and then the Command Line Tools again.
 
 #### Installing the Latest Release Version
@@ -80,22 +87,27 @@ Download the installation script for your OS to an empty folder where you want y
 In terminal or command line, go to the folder and execute the following commands line by line (you can change `flybrainlab` to a different name of your choice for the environment name):
 
 ##### Linux:
+
 ```bash
-conda create -n flybrainlab python=3.7 -c conda-forge -y # make sure install python from conda-forge otherwise it may lead to an error later
+conda create -n flybrainlab python=3.7 -y
 conda activate flybrainlab
 ```
+
 Note that the last line above can raise an error. If you do not see "(flybrainlab)" appear at the start of the current line in your terminal, execute the following line:
+
 ```bash
 source activate flybrainlab
 ```
+
 Finally, execute this line:
+
 ```bash
 sh fbl_installer_ubuntu.sh
 ```
 
 ##### Windows:
 ```bash
-conda create -n flybrainlab python=3.7 -c conda-forge -y
+conda create -n flybrainlab python=3.7 -y
 activate flybrainlab
 conda install nodejs scipy pandas cookiecutter git yarn -c conda-forge -y
 conda install graphviz pygraphviz -c alubbock -y
@@ -104,7 +116,7 @@ fbl_installer.cmd
 
 ##### macOS:
 ```bash
-conda create -n flybrainlab python=3.7 -c conda-forge -y
+conda create -n flybrainlab python=3.7 -y
 conda activate flybrainlab
 ```
 Note that the last line above can raise an error. If you do not see "(flybrainlab)" appear at the start of the current line in your terminal, execute the following line:
@@ -126,11 +138,6 @@ conda create -n flybrainlab python=3.7 nodejs scipy pandas cookiecutter git yarn
 # activate the flybrainlab environment just created
 # if you have conda<4.4, you may need to use `source activate flybrainlab` instead
 conda activate flybrainlab
-# Install additional package into the environment
-pip install jupyter "jupyterlab>=2.2.8,<3.0"
-pip install txaio twisted autobahn crochet service_identity autobahn-sync matplotlib h5py seaborn fastcluster networkx msgpack msgpack-numpy
-# If on Windows, execute the following:
-pip install pypiwin32
 
 # Create a preferred installation directory and go into that directory, For example:
 # mkdir ~/MyFBL
@@ -141,6 +148,7 @@ git clone https://github.com/FlyBrainLab/Neuroballad.git
 git clone https://github.com/FlyBrainLab/FBLClient.git
 git clone https://github.com/FlyBrainLab/NeuroMynerva.git
 
+pip install git+https://github.com/mkturkcan/autobahn-sync.git
 # Install all relevant packages
 cd ./Neuroballad
 python setup.py develop
@@ -152,7 +160,6 @@ jlpm run build
 
 # Execute this if you are a user
 jupyter labextension install .
-jupyter lab build
 jupyter lab
 
 # Execute this if you are a developer
@@ -180,6 +187,7 @@ After the script finishes, go to [Launching FlyBrainLab from User-side Only Inst
 Download the installation script [`fbl_full_installation_ubuntu.sh`](https://raw.githubusercontent.com/FlyBrainLab/FlyBrainLab/master/fbl_full_installation_ubuntu.sh).
 
 Uncomment the following code in the script if you have not installed all required Ubuntu packages (requires sudo privilege):
+
 ```bash
 #echo "Installing prerequisites"
 #sudo apt update
@@ -187,6 +195,7 @@ Uncomment the following code in the script if you have not installed all require
 ```
 
 Then edit the following lines:
+
 ```bash
 # existing directories
 CUDA_ROOT=/usr/local/cuda # root directory where you installed cuda
@@ -205,6 +214,7 @@ DATABASE_DISKCACHE=10240 # amount of memory assigned to caching disk in MB
 ```
 
 Then run the script in `bash`:
+
 ```bash
 bash fbl_full_installation_ubuntu.sh
 ```
@@ -212,6 +222,7 @@ bash fbl_full_installation_ubuntu.sh
 If installation fails, and you want to reinstall, please remove the previous (perhaps partial) installation.
 
 To cleanly remove the FlyBrainLab full installation:
+
 ```bash
 rm -rf $FFBO_DIR
 rm -rf $ORIENTDB_ROOT
@@ -219,8 +230,10 @@ rm -rf ~/.ffbo
 conda env remove -n $FFBO_ENV
 conda env remove -n $NLP_ENV
 ```
+
 where the environment variables should match the ones during installation.
 Also remove the following 3 lines in your `~/.bashrc`:
+
 ```bash
 export ORIENTDB_ROOT_PASSWORD=root
 export ORIENTDB_OPTS_MEMORY='-Xms1G -Xmx8G' # increase or decrease Xmx to fit the memory size of your machine
@@ -245,6 +258,7 @@ If installation complete without error, please log out and log in again (or sour
 #### Pull Docker Image
 
 Pull the [FlyBrainLab Docker Image](https://hub.docker.com/r/fruitflybrain/fbl):
+
 ```
 docker pull fruitflybrain/fbl:latest
 ```
@@ -260,6 +274,7 @@ You can launch a GPU instance directly using the following link:
 https://console.aws.amazon.com/ec2/v2/home?region=us-east-1#LaunchInstanceWizard:ami=ami-07b76a65526478567
 
 Once an instance is launched, first update the docker image by
+
 ```bash
 docker pull fruitflybrain/fbl:latest
 ```
@@ -286,6 +301,7 @@ Default port is 8888. Go to browser with url: `localhost:8888`, and refer to [Fl
 ```bash
 $FFBO_DIR/bin/start.sh
 ````
+
 where `$FFBO_DIR` is the directory you configured to install FlyBrainLab in.
 
 Default port is 8888. Go to browser with url: `localhost:8888`, and refer to [FlyBrainLab User Interface](#22-flybrainlab-user-interface).
@@ -295,12 +311,15 @@ A set of NeuroArch databases should have been downloaded during the installation
 #### Launching FlyBrainLab from FlyBrainLab Docker Image
 
 Assuming all GPUs will be available to the docker container, run
+
 ```bash
 docker run --name fbl --gpus all -p 9999:8888 -it fruitflybrain/fbl:latest
 ```
+
 You will be prompted to download datasets. Select to install the databases you needed. For more information, see the [Dataset Version Tracker](https://github.com/FlyBrainLab/datasets).
 
 (**TIP**): If you would like to keep the databases after the docker container is removed, bind an empty directory on your machine when launching the container:
+
 ```bash
 docker run --name fbl --gpus all -p 9999:8888 -v /path/to/directory:/home/ffbo/orientdb/databases -it fruitflybrain/fbl:latest
 ```
@@ -353,14 +372,14 @@ You can also report bugs and get help in this [Issue Tracker](https://github.com
 ## Citing FlyBrainLab
 
 To cite FlyBrainLab:
+
 ```
-@article {Lazar2020.06.23.168161,
+@article {Lazar2021eLife,
 	author = {Lazar, Aurel A. and Liu, Tingkai and Turkcan, Mehmet Kerem and Zhou, Yiyin},
-	title = {FlyBrainLab: Accelerating the Discovery of the Functional Logic of the Drosophila Brain in the Connectomic/Synaptomic Era},
-	year = {2020},
-	doi = {10.1101/2020.06.23.168161},
-	publisher = {Cold Spring Harbor Laboratory},
-	journal = {bioRxiv}
+	title = {Accelerating with FlyBrainLab the Discovery of the Functional Logic of the Drosophila Brain in the Connectomic Era},
+	year = {2021},
+	doi = {10.7554/eLife.62362},
+	journal = {eLife}
 }
 ```
 

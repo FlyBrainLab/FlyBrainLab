@@ -105,7 +105,7 @@ RUN /bin/bash -c ". $HOME/miniconda/etc/profile.d/conda.sh && \
     git pull && git checkout master && git pull && \
     python setup.py develop && \
     cd /home/ffbo/ffbo/quepy && \
-    git pull && git checkout apps && git pull && \
+    git pull && git checkout master && git pull && \
     python setup.py develop && \
     conda deactivate && \
     conda activate ffbo && \
@@ -122,10 +122,10 @@ RUN /bin/bash -c ". $HOME/miniconda/etc/profile.d/conda.sh && \
     git pull && git checkout master && git pull && \
     python setup.py develop && \
     cd /home/ffbo/ffbo/neurokernel && \
-    git pull && git checkout managerless && git pull && \
+    git pull && git checkout master && git pull && \
     python setup.py develop && \
     cd /home/ffbo/ffbo/neurodriver && \
-    git pull && git checkout fbl && git pull && \
+    git pull && git checkout master && git pull && \
     python setup.py develop && \
     cd /home/ffbo/ffbo/retina && \
     git pull && git checkout master && git pull && \
@@ -137,7 +137,7 @@ RUN /bin/bash -c ". $HOME/miniconda/etc/profile.d/conda.sh && \
     git pull && git checkout master && git pull && \
     python setup.py develop && \
     cd /home/ffbo/ffbo/NeuroMynerva && \
-    jlpm && jlpm run build &&  jupyter labextension install ." && \
+    jlpm && jlpm run build && jupyter labextension install ." && \
     rm -rf /home/ffbo/.cache
 
 #jupyter labextension install @flybrainlab/neuromynerva && \
