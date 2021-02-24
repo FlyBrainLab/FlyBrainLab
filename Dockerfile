@@ -40,18 +40,15 @@ RUN wget https://s3.us-east-2.amazonaws.com/orientdb3/releases/3.0.35/orientdb-3
     mv /home/ffbo/orientdb-3.0.35 /home/ffbo/orientdb && \
     rm orientdb-3.0.35.tar.gz
 
-RUN wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh && \
+RUN wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh &&  \
     sh miniconda.sh -b -p /home/ffbo/miniconda && \
     echo ". $HOME/miniconda/etc/profile.d/conda.sh" | tee -a ~/.bashrc && \
     rm miniconda.sh && \
     mkdir /home/ffbo/ffbo && \
     cd /home/ffbo/ffbo && \
     git clone https://github.com/fruitflybrain/ffbo.nlp_component.git && \
-    git clone https://github.com/fruitflybrain/ffbo.neuroarch_nlp.git && \
-    git clone https://github.com/fruitflybrain/quepy.git && \
     git clone https://github.com/fruitflybrain/ffbo.processor.git && \
     git clone https://github.com/fruitflybrain/ffbo.neuroarch_component.git && \
-    git clone https://github.com/fruitflybrain/neuroarch.git && \
     git clone https://github.com/fruitflybrain/ffbo.neurokernel_component.git && \
     git clone https://github.com/fruitflybrain/ffbo.neuronlp.git  && \
     cd ffbo.neuronlp && \
@@ -61,32 +58,29 @@ RUN wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -
     git checkout hemibrain && \
     cd ../../ && \
     mkdir -p /home/ffbo/ffbo/ffbo.neuronlp/img/flycircuit && \
-    git clone https://github.com/FlyBrainLab/Neuroballad.git && \
-    git clone https://github.com/FlyBrainLab/FBLClient.git && \
-    git clone https://github.com/FlyBrainLab/NeuroMynerva.git && \
     git clone https://github.com/FlyBrainLab/Tutorials.git && \
-    git clone https://github.com/neurokernel/neurokernel.git && \
-    git clone https://github.com/neurokernel/neurodriver.git && \
-    git clone https://github.com/neurokernel/retina.git && \
     mkdir nk_tmp && \
     /bin/bash -c ". $HOME/miniconda/etc/profile.d/conda.sh && \
     conda create -n ffbo_legacy python=2.7 numpy -y && \
     conda activate ffbo_legacy && \
     pip install autobahn[twisted] configparser docopt sparqlwrapper nltk spacy==1.6.0 fuzzywuzzy python-levenshtein pyopenssl plac==0.9.6 service_identity && \
     conda deactivate && \
-    conda create -n ffbo python=3.7 nodejs cookiecutter git yarn python-snappy -c conda-forge -y && \
+    conda create -n ffbo python=3.7 nodejs cookiecutter git yarn python-snappy numpy matplotlib scipy pandas h5py -c conda-forge -y && \
     conda activate ffbo && \
     #export PATH=/usr/local/bin:/usr/local/cuda/bin:$PATH && \
     #export LD_LIBRARY_PATH=/usr/local/lib:/usr/local/cuda/lib64:$LD_LIBRARY_PATH && \
-    pip install numpy matplotlib scipy pandas crossbar jupyter 'jupyterlab>=2.2.8,<3.0' autobahn[twisted] beautifulsoup4 tinydb simplejson configparser docopt sparqlwrapper python-levenshtein pyopenssl service_identity plac==0.9.6 datadiff refo msgpack msgpack-numpy pyorient_native daff path.py txaio crochet autobahn-sync seaborn fastcluster networkx h5py jupyter 'mpmath>=0.19' sympy nose tqdm && \
-    pip install git+https://github.com/fruitflybrain/pyorient.git && \
-    pip install pycuda mpi4py" && \
+    pip install crossbar autobahn[twisted] beautifulsoup4 tinydb simplejson configparser docopt sparqlwrapper python-levenshtein pyopenssl service_identity plac==0.9.6 datadiff refo msgpack msgpack-numpy pyorient_native daff path.py txaio crochet autobahn-sync seaborn fastcluster networkx 'mpmath>=0.19' sympy nose tqdm && \
+    pip install git+https://github.com/fruitflybrain/pyorient.git&& \
+    echo 'installing pycuda and mpi4py' && \
+    pip install pycuda mpi4py && \
+    echo 'installing neurokernel' && \
+    pip install neurokernel neurodriver neuroarch git+https://github.com/FlyBrainLab/Neuroballad.git flybrainlab neuromynerva" && \
     cd /home/ffbo/ && \
     wget https://github.com/explosion/spaCy/releases/download/v1.6.0/en-1.1.0.tar.gz && \
     mkdir /home/ffbo/miniconda/envs/ffbo_legacy/lib/python2.7/site-packages/spacy/data && \
     tar zxf en-1.1.0.tar.gz --directory /home/ffbo/miniconda/envs/ffbo_legacy/lib/python2.7/site-packages/spacy/data && \
     rm en-1.1.0.tar.gz && \
-    sed -i.bak -e '222d' /home/ffbo/miniconda/envs/ffbo/lib/python3.7/site-packages/jupyterlab_server/process.py && \
+    #sed -i.bak -e '222d' /home/ffbo/miniconda/envs/ffbo/lib/python3.7/site-packages/jupyterlab_server/process.py && \
     sed -i.bak -e '77d; /^    def call(.*/i \ \ \ \ @crochet.wait_for(timeout=2**31)' /home/ffbo/miniconda//envs/ffbo/lib/python3.7/site-packages/autobahn_sync/session.py && \
     rm -rf /home/ffbo/.cache
 
@@ -95,78 +89,35 @@ RUN wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -
 #sed -i.bak -e '100,103d' /home/ffbo/miniconda/envs/ffbo/lib/python3.7/site-packages/pyorient/orient.py && \
 #sed -i.bak -e '31 a\ \ \ \ \ \ \ \ self.client.set_session_token(True)' /home/ffbo/miniconda/envs/ffbo/lib/python3.7/site-packages/pyorient/ogm/graph.py && \
 
+ARG FLYBRAINLAB_DOCKER_VER=unknown
 
 RUN /bin/bash -c ". $HOME/miniconda/etc/profile.d/conda.sh && \
     conda activate ffbo_legacy && \
     cd /home/ffbo/ffbo/ffbo.nlp_component && \
-    git pull && git checkout master && git pull && \
-    python setup.py develop && \
-    cd /home/ffbo/ffbo/ffbo.neuroarch_nlp && \
-    git pull && git checkout master && git pull && \
-    python setup.py develop && \
-    cd /home/ffbo/ffbo/quepy && \
-    git pull && git checkout master && git pull && \
     python setup.py develop && \
     conda deactivate && \
     conda activate ffbo && \
+    pip install neurokernel neurodriver neuroarch flybrainlab neuromynerva --upgrade && \
     cd /home/ffbo/ffbo/ffbo.processor && \
-    git pull && git checkout master && git pull && \
     python setup.py develop && \
     cd /home/ffbo/ffbo/ffbo.neuroarch_component && \
-    git pull && git checkout master && git pull && \
-    python setup.py develop && \
-    cd /home/ffbo/ffbo/neuroarch && \
-    git pull && git checkout master && git pull && \
     python setup.py develop && \
     cd /home/ffbo/ffbo/ffbo.neurokernel_component && \
-    git pull && git checkout master && git pull && \
-    python setup.py develop && \
-    cd /home/ffbo/ffbo/neurokernel && \
-    git pull && git checkout master && git pull && \
-    python setup.py develop && \
-    cd /home/ffbo/ffbo/neurodriver && \
-    git pull && git checkout master && git pull && \
-    python setup.py develop && \
-    cd /home/ffbo/ffbo/retina && \
-    git pull && git checkout master && git pull && \
-    python setup.py develop && \
-    cd /home/ffbo/ffbo/Neuroballad && \
-    git pull && git checkout master && git pull && \
-    python setup.py develop && \
-    cd /home/ffbo/ffbo/FBLClient && \
-    git pull && git checkout master && git pull && \
-    python setup.py develop && \
-    cd /home/ffbo/ffbo/NeuroMynerva && \
-    jlpm && jlpm run build && jupyter labextension install ." && \
+    python setup.py develop" && \
     rm -rf /home/ffbo/.cache
 
 #jupyter labextension install @flybrainlab/neuromynerva && \
 
-ARG FLYBRAINLAB_DOCKER_VER=unknown
-
 RUN cd /home/ffbo/ffbo/ffbo.nlp_component && \
-    git pull && \
-    cd /home/ffbo/ffbo/ffbo.neuroarch_nlp && \
     git pull && \
     cd /home/ffbo/ffbo/ffbo.processor && \
     git pull && \
     cd /home/ffbo/ffbo/ffbo.neuroarch_component && \
     git pull && \
-    cd /home/ffbo/ffbo/neuroarch && \
-    git pull && \
-    cd /home/ffbo/ffbo/neurokernel && \
-    git pull && \
-    cd /home/ffbo/ffbo/neurodriver && \
-    git pull && \
-    cd /home/ffbo/ffbo/retina && \
-    git pull && \
-    cd /home/ffbo/ffbo/Neuroballad && \
-    git pull && \
-    cd /home/ffbo/ffbo/FBLClient && \
+    cd /home/ffbo/ffbo/ffbo.neurokernel_component && \
     git pull && \
     cd /home/ffbo/ffbo/Tutorials && \
     git fetch && git pull && \
-    git checkout master && git pull && \
     rm -rf /tmp/*.*
 
 RUN mkdir -p /home/ffbo/.ffbo/config && \
@@ -183,8 +134,7 @@ RUN mkdir -p /home/ffbo/.ffbo/config && \
     sed -i -e "s+{FFBO_DIR}+/home/ffbo/ffbo+g; s+{FFBO_ENV}+ffbo+g; s+\$(conda info --base)+/home/ffbo/miniconda+g" run_fbl.sh && \
     sed -i -e "s+{FFBO_DIR}+/home/ffbo/ffbo+g; s+{ORIENTDB_ROOT}+/home/ffbo/orientdb+g" start.sh && \
     sed -i -e "s+{ORIENTDB_ROOT}+/home/ffbo/orientdb+g; s+{ORIENTDB_BINARY_PORT}+2424+g; " shutdown.sh && \
-    sed -i -e "s+{FFBO_DIR}+/home/ffbo/ffbo+g" update.sh && \
-    sed -i -e "s+{FFBO_DIR}+/home/ffbo/ffbo+g; s+{FFBO_ENV}+ffbo+g; s+\$(conda info --base)+/home/ffbo/miniconda+g" update_NeuroMynerva.sh && \
+    sed -i -e "s+{FFBO_DIR}+/home/ffbo/ffbo+g; s+{FFBO_ENV}+ffbo+g; s+{NLP_ENV}+ffbo_legacy+g; s+\$(conda info --base)+/home/ffbo/miniconda+g" update.sh && \
     rm -rf /home/ffbo/run_scripts && \
     mkdir -p /home/ffbo/.jupyter/lab/user-settings/@flybrainlab/neuromynerva && \
     wget https://raw.githubusercontent.com/FlyBrainLab/NeuroMynerva/master/schema/plugin.json.local -O /home/ffbo/.jupyter/lab/user-settings/@flybrainlab/neuromynerva/plugin.jupyterlab-settings && \

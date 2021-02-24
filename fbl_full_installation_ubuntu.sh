@@ -137,11 +137,8 @@ echo "Downloading packages"
 mkdir $FFBO_DIR
 cd $FFBO_DIR
 git clone https://github.com/fruitflybrain/ffbo.nlp_component.git
-git clone https://github.com/fruitflybrain/ffbo.neuroarch_nlp.git
-git clone https://github.com/fruitflybrain/quepy.git
 git clone https://github.com/fruitflybrain/ffbo.processor.git
 git clone https://github.com/fruitflybrain/ffbo.neuroarch_component.git
-git clone https://github.com/fruitflybrain/neuroarch.git
 git clone https://github.com/fruitflybrain/ffbo.neurokernel_component.git
 git clone https://github.com/fruitflybrain/ffbo.neuronlp.git
 cd ffbo.neuronlp
@@ -151,20 +148,14 @@ cd lib
 git checkout hemibrain
 cd ../../
 
-git clone https://github.com/FlyBrainLab/Neuroballad.git
-git clone https://github.com/FlyBrainLab/FBLClient.git
-git clone https://github.com/FlyBrainLab/NeuroMynerva.git
 git clone https://github.com/FlyBrainLab/Tutorials.git
 git clone https://github.com/FlyBrainLab/run_scripts.git
-git clone https://github.com/neurokernel/neurokernel.git
-git clone https://github.com/neurokernel/neurodriver.git
-git clone https://github.com/neurokernel/retina.git
 mkdir nk_tmp
 
 . $CONDA_ROOT/etc/profile.d/conda.sh
 
 echo "Installing FBL ......"
-conda create -n $FFBO_ENV python=3.7 nodejs cookiecutter git yarn python-snappy -c conda-forge -y
+conda create -n $FFBO_ENV python=3.7 nodejs cookiecutter git yarn python-snappy numpy matplotlib scipy pandas h5py -c conda-forge -y
 
 
 # Install OpenMPI if cannot find a CUDA-aware openmpi installation
@@ -189,54 +180,37 @@ sleep 10s
 
 echo "Installing FFBO environments"
 conda activate $FFBO_ENV
-pip install crossbar
-pip install scipy pandas
-pip install matplotlib scipy pandas crossbar jupyter "jupyterlab>=2.2.8,<3.0" autobahn[twisted] beautifulsoup4 tinydb simplejson configparser docopt sparqlwrapper python-levenshtein pyopenssl service_identity plac==0.9.6 datadiff refo msgpack msgpack-numpy pyorient_native daff path.py txaio crochet autobahn-sync seaborn fastcluster networkx h5py jupyter "mpmath>=0.19" sympy nose tqdm
+pip install crossbar autobahn[twisted] beautifulsoup4 tinydb simplejson \
+            configparser docopt sparqlwrapper python-levenshtein pyopenssl \
+            service_identity plac==0.9.6 datadiff refo msgpack msgpack-numpy \
+            pyorient_native daff path.py txaio crochet autobahn-sync seaborn \
+            fastcluster networkx "mpmath>=0.19" sympy nose tqdm
 pip install git+https://github.com/fruitflybrain/pyorient.git
 pip install pycuda mpi4py
 
 #sed -i.bak -e '100,103d' $CONDA_ROOT/envs/$FFBO_ENV/lib/python3.7/site-packages/pyorient/orient.py
 #sed -i.bak -e '31 a\ \ \ \ \ \ \ \ self.client.set_session_token(True)' $CONDA_ROOT/envs/$FFBO_ENV/lib/python3.7/site-packages/pyorient/ogm/graph.py && \
-sed -i.bak -e '222d' $CONDA_ROOT/envs/$FFBO_ENV/lib/python3.7/site-packages/jupyterlab_server/process.py
+#sed -i.bak -e '222d' $CONDA_ROOT/envs/$FFBO_ENV/lib/python3.7/site-packages/jupyterlab_server/process.py
 #sed -i.bak -e '338,339d' $CONDA_ROOT/envs/$FFBO_ENV/lib/python3.6/site-packages/crossbar/router/session.py
 sed -i.bak -e '77d; /^    def call(.*/i \ \ \ \ @crochet.wait_for(timeout=2**31)' $CONDA_ROOT/envs/$FFBO_ENV/lib/python3.7/site-packages/autobahn_sync/session.py
 
+pip install pip install neurokernel neurodriver neuroarch git+https://github.com/FlyBrainLab/Neuroballad.git flybrainlab neuromynerva
 cd $FFBO_DIR/ffbo.processor
 python setup.py develop
 cd $FFBO_DIR/ffbo.neuroarch_component
 python setup.py develop
-cd $FFBO_DIR/neuroarch
-python setup.py develop
 cd $FFBO_DIR/ffbo.neurokernel_component
 python setup.py develop
-cd $FFBO_DIR/neurokernel
-python setup.py develop
-cd $FFBO_DIR/neurodriver
-python setup.py develop
-cd $FFBO_DIR/retina
-python setup.py develop
-cd $FFBO_DIR/Neuroballad
-python setup.py develop
-cd $FFBO_DIR/FBLClient
-python setup.py develop
-cd $FFBO_DIR/NeuroMynerva
-jlpm && jlpm run build &&  jupyter labextension install .
-#jupyter labextension install @flybrainlab/neuromynerva
-
 
 mkdir -p $HOME/.jupyter/lab/user-settings/@flybrainlab/neuromynerva
 wget https://cdn.jsdelivr.net/gh/flybrainlab/NeuroMynerva@master/schema/plugin.json.local -O $HOME/.jupyter/lab/user-settings/@flybrainlab/neuromynerva/plugin.jupyterlab-settings
 sed -i -e "s+8081+$FFBO_PORT+g" $HOME/.jupyter/lab/user-settings/@flybrainlab/neuromynerva/plugin.jupyterlab-settings
 conda deactivate
 
-conda create -n $NLP_ENV python=2.7 -y
+conda create -n $NLP_ENV python=2.7 numpy -y
 conda activate $NLP_ENV
-pip install numpy autobahn[twisted] configparser docopt sparqlwrapper nltk spacy==1.6.0 fuzzywuzzy python-levenshtein pyopenssl service_identity plac==0.9.6
+pip install autobahn[twisted] configparser docopt sparqlwrapper nltk spacy==1.6.0 fuzzywuzzy python-levenshtein pyopenssl service_identity plac==0.9.6
 cd $FFBO_DIR/ffbo.nlp_component
-python setup.py develop
-cd $FFBO_DIR/ffbo.neuroarch_nlp
-python setup.py develop
-cd $FFBO_DIR/quepy
 python setup.py develop
 cd ../
 wget https://github.com/explosion/spaCy/releases/download/v1.6.0/en-1.1.0.tar.gz
@@ -260,8 +234,7 @@ sed -i -e "s+{ORIENTDB_ROOT}+$ORIENTDB_ROOT+g" run_database.sh
 sed -i -e "s+{FFBO_DIR}+$FFBO_DIR+g; s+{FFBO_ENV}+$FFBO_ENV+g" run_fbl.sh
 sed -i -e "s+{FFBO_DIR}+$FFBO_DIR+g; s+{ORIENTDB_ROOT}+$ORIENTDB_ROOT+g" start.sh
 sed -i -e "s+{ORIENTDB_ROOT}+$ORIENTDB_ROOT+g; s+{ORIENTDB_BINARY_PORT}+$ORIENTDB_BINARY_PORT+g" shutdown.sh
-sed -i -e "s+{FFBO_DIR}+$FFBO_DIR+g" update.sh
-sed -i -e "s+{FFBO_DIR}+$FFBO_DIR+g; s+{FFBO_ENV}+$FFBO_ENV+g" update_NeuroMynerva.sh
+sed -i -e "s+{FFBO_DIR}+$FFBO_DIR+g; s+{NLP_ENV}+$NLP_ENV+g; s+{FFBO_ENV}+$FFBO_ENV+g" update.sh
 rm -rf $FFBO_DIR/run_scripts
 
 echo "Installation complete. Downloading databases ......"
