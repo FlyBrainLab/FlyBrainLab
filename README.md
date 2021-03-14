@@ -277,10 +277,10 @@ For usage, see [Launching FlyBrainLab from FlyBrainLab Docker Image](#launching-
 
 ### 1.4 Amazon Machine image
 
-We provide an Amazon Machine Image (AMI) that has the FlyBrainLab Docker Image built in and meets all its requirements. The AMI ID is `ami-07b76a65526478567` in `us-east-1` region. It must be launched using a GPU instance (a Tesla GPU is recommended).
+We provide an Amazon Machine Image (AMI) that has the FlyBrainLab Docker Image built in and meets all its requirements. The AMI ID is `ami-0e7d25297242fda33` in `us-east-1` region. It must be launched using a GPU instance (a Tesla GPU is recommended).
 You can launch a GPU instance directly using the following link:
 
-https://console.aws.amazon.com/ec2/v2/home?region=us-east-1#LaunchInstanceWizard:ami=ami-07b76a65526478567
+https://console.aws.amazon.com/ec2/v2/home?region=us-east-1#LaunchInstanceWizard:ami=ami-0e7d25297242fda33
 
 Once an instance is launched, first update the docker image by
 
