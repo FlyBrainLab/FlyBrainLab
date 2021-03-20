@@ -69,7 +69,7 @@ RUN wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -
     conda activate ffbo && \
     #export PATH=/usr/local/bin:/usr/local/cuda/bin:$PATH && \
     #export LD_LIBRARY_PATH=/usr/local/lib:/usr/local/cuda/lib64:$LD_LIBRARY_PATH && \
-    pip install crossbar autobahn[twisted] beautifulsoup4 tinydb simplejson configparser docopt sparqlwrapper python-levenshtein pyopenssl service_identity plac==0.9.6 datadiff refo msgpack msgpack-numpy pyorient_native daff path.py txaio crochet autobahn-sync seaborn fastcluster networkx 'mpmath>=0.19' sympy nose tqdm && \
+    pip install crossbar autobahn[twisted] beautifulsoup4 tinydb simplejson configparser docopt sparqlwrapper python-levenshtein pyopenssl service_identity plac==0.9.6 datadiff refo msgpack msgpack-numpy pyorient_native daff path.py txaio crochet autobahn-sync seaborn fastcluster networkx 'mpmath>=0.19' sympy nose tqdm jedi==0.17.2 && \
     pip install git+https://github.com/fruitflybrain/pyorient.git&& \
     echo 'installing pycuda and mpi4py' && \
     pip install pycuda mpi4py && \
