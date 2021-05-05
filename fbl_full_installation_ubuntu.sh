@@ -198,7 +198,7 @@ python -m pip install git+https://github.com/fruitflybrain/pyorient.git \
                       git+https://github.com/FlyBrainLab/Neuroballad.git \
                       git+https://github.com/palash1992/GEM.git \
                       git+https://github.com/mkturkcan/nxcontrol
-python -m pip install pip install neurokernel neurodriver neuroarch flybrainlab[full] neuromynerva
+python -m pip install neurokernel neurodriver neuroarch flybrainlab[full] neuromynerva
 cd $FFBO_DIR/ffbo.neuroarch_component
 python -m pip install -e .
 cd $FFBO_DIR/ffbo.neurokernel_component
