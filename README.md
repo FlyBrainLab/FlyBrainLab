@@ -33,15 +33,19 @@ This repository serves as the entry point for FlyBrainLab, where documentation a
 ### Content
 
 1. [Installation](#1-installation)
-  - 1.1 [Installing Only User-side Components](#11-installing-only-user-side-components)
-  - 1.2 [Full Installation](#12-full-installation)
-  - 1.3 [Docker Image](#13-docker-image)
-  - 1.4 [Amazon Machine Image](#14-amazon-machine-image)
+
+- 1.1 [Installing Only User-side Components](#11-installing-only-user-side-components)
+- 1.2 [Full Installation](#12-full-installation)
+- 1.3 [Docker Image](#13-docker-image)
+- 1.4 [Amazon Machine Image](#14-amazon-machine-image)
+
 2. [Basic Usage](#2-basic-usage)
-  - 2.1 [Launching FlyBrainLab](#21-launching-flybrainlab)
-  - 2.2 [FlyBrainLab User Interface](#22-flybrainlab-user-interface)
-  - 2.3 [Configuring Backend Servers](#23-configuring-backend-servers)
-  - 2.4 [Getting Started Tutorials](#24-getting-started-tutorials)
+
+- 2.1 [Launching FlyBrainLab](#21-launching-flybrainlab)
+- 2.2 [FlyBrainLab User Interface](#22-flybrainlab-user-interface)
+- 2.3 [Configuring Backend Servers](#23-configuring-backend-servers)
+- 2.4 [Getting Started Tutorials](#24-getting-started-tutorials)
+
 3. [Troubleshooting](#3-troubleshooting)
 
 ## 1. Installation
@@ -79,64 +83,34 @@ you can download the installer directly at https://developer.apple.com/download/
 
 #### Installing the Latest Release Version
 
-Download the installation script for your OS to an empty folder where you want your FlyBrainLab installation to reside,
-- Linux: [`fbl_installer_ubuntu.sh`](https://raw.githubusercontent.com/FlyBrainLab/FlyBrainLab/master/fbl_installer_ubuntu.sh)
-- Windows: [`fbl_installer.cmd`](https://raw.githubusercontent.com/FlyBrainLab/FlyBrainLab/master/fbl_installer.cmd)
-- macOS: [`fbl_installer_mac.sh`](https://raw.githubusercontent.com/FlyBrainLab/FlyBrainLab/master/fbl_installer_mac.sh)
-
-In terminal or command line, go to the folder and execute the following commands line by line (you can change `flybrainlab` to a different name of your choice for the environment name):
-
-##### Linux:
+##### Linux/macOS/Windows
 
 ```bash
 conda create -n flybrainlab python=3.7 -y
 conda activate flybrainlab
+# For Windows, use `activate flybrainlab` instead
+python -m pip install git+https://github.com/mkturkcan/autobahn-sync.git \
+                      git+https://github.com/FlyBrainLab/Neuroballad.git \
+                      git+https://github.com/palash1992/GEM.git \
+                      git+https://github.com/mkturkcan/nxcontrol \
+                      flybrainlab\[full\]
+                      neuromynerva
 ```
 
-Note that the last line above can raise an error. If you do not see "(flybrainlab)" appear at the start of the current line in your terminal, execute the following line:
+Note that the line `conda activate flybrainlab` above can raise an error. You should use `source activate flybrainlab` instead.
 
-```bash
-source activate flybrainlab
-```
 
-Finally, execute this line:
-
-```bash
-sh fbl_installer_ubuntu.sh
-```
-
-##### Windows:
-```bash
-conda create -n flybrainlab python=3.7 -y
-activate flybrainlab
-conda install graphviz pygraphviz -c alubbock -y
-fbl_installer.cmd
-```
-
-##### macOS:
-```bash
-conda create -n flybrainlab python=3.7 -y
-conda activate flybrainlab
-```
-Note that the last line above can raise an error. If you do not see "(flybrainlab)" appear at the start of the current line in your terminal, execute the following line:
-```bash
-source activate flybrainlab
-```
-Finally, execute this line:
-```bash
-sh fbl_installer_mac.sh
-```
-
-After the script finishes, go to [Launching FlyBrainLab from User-side Only Installation](#launching-flybrainlab-from-user-side-only-installation).
+After installation finishes, go to [Launching FlyBrainLab from User-side Only Installation](#launching-flybrainlab-from-user-side-only-installation).
 
 #### Build from Source Step-by-step
 If you want to use the latest development code instead of the release, you can build FlyBrainLab using the following command line code:
 ```bash
 # create anaconda environment called flybrainlab with appropriate packages installed
-conda create -n flybrainlab python=3.7 nodejs scipy pandas cookiecutter git yarn -c conda-forge -y
+conda create -n flybrainlab python=3.7 -c conda-forge -y
 # activate the flybrainlab environment just created
-# if you have conda<4.4, you may need to use `source activate flybrainlab` instead
 conda activate flybrainlab
+# if you have conda<4.4, you may need to use `source activate flybrainlab` instead
+# If you are on Windows, use `activate flybrainlab` instead.
 
 # Create a preferred installation directory and go into that directory, For example:
 # mkdir ~/MyFBL
@@ -147,37 +121,44 @@ git clone https://github.com/FlyBrainLab/Neuroballad.git
 git clone https://github.com/FlyBrainLab/FBLClient.git
 git clone https://github.com/FlyBrainLab/NeuroMynerva.git
 
-pip install git+https://github.com/mkturkcan/autobahn-sync.git
-# Install all relevant packages
-cd ./Neuroballad
-python setup.py develop
-cd ../FBLClient
-python setup.py develop
+# Install FBLClient
+# If you are a user 
+python -m pip install ./Neuroballad
+python -m pip install ./FBLClient\[full\]
+
+# If you are a developer
+# python -m pip install -e ./Neuroballad
+# python -m pip install -e ./FBLClient[full]
+
+# Install NeuroMynerva
 cd ../NeuroMynerva
 # If you're a user using JupyterLab 3.x
-pip install .
+python -m pip install .
 jupyter lab
 
 # If you're a user using Jupyter Lab 2.x
+# conda install nodejs cookiecutter git yarn -c conda-forge -y
 # jlpm
 # jupyter labextension install .
 # jupyter lab
 
 # If you're a developer using JupyterLab 3.x
-# pip install -e .
+# python -m pip install -e .
 # jupyter labextension develop . --overwrite
 # jlpm run watch
 # jupyter lab  # in separate terminal
 
 # If you're a developer using JupyterLab 2.x
+# conda install nodejs cookiecutter git yarn -c conda-forge -y
 # jlpm
 # jupyter labextension link .
 # jlpm run watch:src 
 # jupyter lab --watch  # in separate terminal
 ```
-You may be prompted. On Windows, you will only need to write "activate neuromynerva" instead of "source activate neuromynerva".
 
-After the script finishes, go to [Launching FlyBrainLab from User-side Only Installation](#launching-flybrainlab-from-user-side-only-installation).
+You may be prompted.
+
+After installation, go to [Launching FlyBrainLab from User-side Only Installation](#launching-flybrainlab-from-user-side-only-installation).
 
 ### 1.2 Full Installation
 
@@ -200,7 +181,7 @@ Uncomment the following code in the script if you have not installed all require
 ```bash
 #echo "Installing prerequisites"
 #sudo apt update
-#sudo apt install -y wget default-jre curl build-essential tar apt-transport-https tmux
+#sudo apt install -y wget default-jre curl build-essential tar apt-transport-https tmux sendmail graphviz graphviz-dev
 ```
 
 Then edit the following lines:
@@ -211,6 +192,7 @@ CUDA_ROOT=/usr/local/cuda # root directory where you installed cuda
 
 # To be installed
 BASE=$HOME # base directory where the folders will be installed
+CROSSBAR_ENV=crossbar # conda environment for crossbar/ffbo processor
 FFBO_ENV=ffbo # conda environment for main fbl
 NLP_ENV=ffbo_legacy # additional conda environment for NLP
 FFBO_DIR=$BASE/ffbo # directory to store local repositories
@@ -238,6 +220,7 @@ rm -rf $ORIENTDB_ROOT
 rm -rf ~/.ffbo
 conda env remove -n $FFBO_ENV
 conda env remove -n $NLP_ENV
+conda env remove -n $CROSSBAR_ENV
 ```
 
 where the environment variables should match the ones during installation.

@@ -9,7 +9,7 @@
 
 #echo "Installing prerequisites"
 #sudo apt update
-#sudo apt install -y wget default-jre curl build-essential tar apt-transport-https tmux sendmail graphviz graphviz-dev
+#sudo apt install -y wget default-jre curl build-essential tar apt-transport-https tmux sendmail
 
 # End of system prerequisties.
 
@@ -43,7 +43,7 @@ echo "The following are the prerequisites that requires sudo to install:"
 echo 
 echo "-----------------------------------------------------"
 echo
-echo "sudo apt install -y wget default-jre curl build-essential tar apt-transport-https tmux sendmail graphviz graphviz-dev"
+echo "sudo apt install -y wget default-jre curl build-essential tar apt-transport-https tmux sendmail"
 echo
 echo "-----------------------------------------------------"
 echo
@@ -138,8 +138,11 @@ echo "Downloading packages"
 mkdir $FFBO_DIR
 cd $FFBO_DIR
 git clone https://github.com/fruitflybrain/ffbo.nlp_component.git
+git clone https://github.com/fruitflybrain/ffbo.neuroarch_nlp.git
+git clone https://github.com/fruitflybrain/quepy.git
 git clone https://github.com/fruitflybrain/ffbo.processor.git
 git clone https://github.com/fruitflybrain/ffbo.neuroarch_component.git
+git clone https://github.com/fruitflybrain/neuroarch.git
 git clone https://github.com/fruitflybrain/ffbo.neurokernel_component.git
 git clone https://github.com/fruitflybrain/ffbo.neuronlp.git
 cd ffbo.neuronlp
@@ -149,8 +152,13 @@ cd lib
 git checkout hemibrain
 cd ../../
 
+git clone https://github.com/FlyBrainLab/Neuroballad.git
+git clone https://github.com/FlyBrainLab/FBLClient.git
+git clone https://github.com/FlyBrainLab/NeuroMynerva.git
 git clone https://github.com/FlyBrainLab/Tutorials.git
 git clone https://github.com/FlyBrainLab/run_scripts.git
+git clone https://github.com/neurokernel/neurokernel.git
+git clone https://github.com/neurokernel/neurodriver.git
 mkdir nk_tmp
 
 . $CONDA_ROOT/etc/profile.d/conda.sh
@@ -163,13 +171,12 @@ echo
 conda create -n $CROSSBAR_ENV python=3.7 numpy pandas -c conda-forge -y
 conda activate $CROSSBAR_ENV
 cd $FFBO_DIR/ffbo.processor
-python -m pip install -e .
+python setup.py develop
 conda deactivate
-
 
 echo "Installing FFBO environments"
 echo 
-conda create -n $FFBO_ENV python=3.7 python-snappy numpy matplotlib scipy pandas h5py -c conda-forge -y
+conda create -n $FFBO_ENV python=3.7 python-snappy numpy matplotlib scipy pandas h5py nodejs cookiecutter yarn -c conda-forge -y
 
 # Install OpenMPI if cannot find a CUDA-aware openmpi installation
 if ((command -v ompi_info &> /dev/null) && (ompi_info -a | grep "xtensions" | grep -q "cuda"))
@@ -193,32 +200,54 @@ sleep 10s
 
 conda activate $FFBO_ENV
 
-python -m pip install git+https://github.com/fruitflybrain/pyorient.git \
-                      git+https://github.com/mkturkcan/autobahn-sync.git \
-                      git+https://github.com/FlyBrainLab/Neuroballad.git \
-                      git+https://github.com/palash1992/GEM.git \
-                      git+https://github.com/mkturkcan/nxcontrol
-python -m pip install pip install neurokernel neurodriver neuroarch flybrainlab[full] neuromynerva
+# python -m pip install git+https://github.com/fruitflybrain/pyorient.git \
+#                       git+https://github.com/mkturkcan/autobahn-sync.git \
+#                       git+https://github.com/palash1992/GEM.git \
+#                       git+https://github.com/mkturkcan/nxcontrol
+
+#sed -i.bak -e '100,103d' $CONDA_ROOT/envs/$FFBO_ENV/lib/python3.7/site-packages/pyorient/orient.py
+#sed -i.bak -e '31 a\ \ \ \ \ \ \ \ self.client.set_session_token(True)' $CONDA_ROOT/envs/$FFBO_ENV/lib/python3.7/site-packages/pyorient/ogm/graph.py && \
+# sed -i.bak -e '222d' $CONDA_ROOT/envs/$FFBO_ENV/lib/python3.7/site-packages/jupyterlab_server/process.py
+#sed -i.bak -e '338,339d' $CONDA_ROOT/envs/$FFBO_ENV/lib/python3.6/site-packages/crossbar/router/session.py
+# sed -i.bak -e '77d; /^    def call(.*/i \ \ \ \ @crochet.wait_for(timeout=2**31)' $CONDA_ROOT/envs/$FFBO_ENV/lib/python3.7/site-packages/autobahn_sync/session.py
+
+cd $FFBO_DIR/neuroarch
+python -m pip install -e .
 cd $FFBO_DIR/ffbo.neuroarch_component
+python -m pip install -e .
+
+cd $FFBO_DIR/neurokernel
+python -m pip install -e .
+cd $FFBO_DIR/neurodriver
 python -m pip install -e .
 cd $FFBO_DIR/ffbo.neurokernel_component
 python -m pip install -e .
 
-#sed -i.bak -e '100,103d' $CONDA_ROOT/envs/$FFBO_ENV/lib/python3.7/site-packages/pyorient/orient.py
-#sed -i.bak -e '31 a\ \ \ \ \ \ \ \ self.client.set_session_token(True)' $CONDA_ROOT/envs/$FFBO_ENV/lib/python3.7/site-packages/pyorient/ogm/graph.py && \
-#sed -i.bak -e '222d' $CONDA_ROOT/envs/$FFBO_ENV/lib/python3.7/site-packages/jupyterlab_server/process.py
-#sed -i.bak -e '338,339d' $CONDA_ROOT/envs/$FFBO_ENV/lib/python3.6/site-packages/crossbar/router/session.py
-# sed -i.bak -e '77d; /^    def call(.*/i \ \ \ \ @crochet.wait_for(timeout=2**31)' $CONDA_ROOT/envs/$FFBO_ENV/lib/python3.7/site-packages/autobahn_sync/session.py
+cd $FFBO_DIR/Neuroballad
+python -m pip install -e .
+cd $FFBO_DIR/FBLClient
+python -m pip install -e .[full]
+cd $FFBO_DIR/NeuroMynerva
+python -m pip install -e .
+jupyter labextension develop . --overwrite
+jlpm run build
 
 mkdir -p $HOME/.jupyter/lab/user-settings/@flybrainlab/neuromynerva
 wget https://cdn.jsdelivr.net/gh/flybrainlab/NeuroMynerva@master/schema/plugin.json.local -O $HOME/.jupyter/lab/user-settings/@flybrainlab/neuromynerva/plugin.jupyterlab-settings
 sed -i -e "s+8081+$FFBO_PORT+g" $HOME/.jupyter/lab/user-settings/@flybrainlab/neuromynerva/plugin.jupyterlab-settings
 conda deactivate
 
+echo "Installing NLP environments"
 conda create -n $NLP_ENV python=2.7 numpy -y
 conda activate $NLP_ENV
+
 cd $FFBO_DIR/ffbo.nlp_component
-pip install -r requirements.txt
+python -m pip install -r requirements.txt
+cd $FFBO_DIR/quepy
+python -m pip install -e .
+cd $FFBO_DIR/ffbo.neuroarch_nlp
+python -m pip install -e .
+cd $FFBO_DIR/ffbo.nlp_component
 python -m pip install -e .
 
 cd $FFBO_DIR
@@ -243,8 +272,8 @@ sed -i -e "s+{ORIENTDB_ROOT}+$ORIENTDB_ROOT+g" run_database.sh
 sed -i -e "s+{FFBO_DIR}+$FFBO_DIR+g; s+{FFBO_ENV}+$FFBO_ENV+g" run_fbl.sh
 sed -i -e "s+{FFBO_DIR}+$FFBO_DIR+g; s+{ORIENTDB_ROOT}+$ORIENTDB_ROOT+g" start.sh
 sed -i -e "s+{ORIENTDB_ROOT}+$ORIENTDB_ROOT+g; s+{ORIENTDB_BINARY_PORT}+$ORIENTDB_BINARY_PORT+g" shutdown.sh
-sed -i -e "s+{FFBO_DIR}+$FFBO_DIR+g; s+{NLP_ENV}+$NLP_ENV+g; s+{FFBO_ENV}+$FFBO_ENV+g; s+{CROSSBAR_ENV}+$CROSSBAR_ENV+g" update.sh
-rm update_local_repo.sh
+sed -i -e "s+{FFBO_DIR}+$FFBO_DIR+g; s+{NLP_ENV}+$NLP_ENV+g; s+{FFBO_ENV}+$FFBO_ENV+g; s+{CROSSBAR_ENV}+$CROSSBAR_ENV+g" update_local_repo.sh
+rm update.sh
 rm -rf $FFBO_DIR/run_scripts
 
 echo "Installation complete. Downloading databases ......"
