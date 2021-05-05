@@ -273,7 +273,7 @@ sed -i -e "s+{FFBO_DIR}+$FFBO_DIR+g; s+{FFBO_ENV}+$FFBO_ENV+g" run_fbl.sh
 sed -i -e "s+{FFBO_DIR}+$FFBO_DIR+g; s+{ORIENTDB_ROOT}+$ORIENTDB_ROOT+g" start.sh
 sed -i -e "s+{ORIENTDB_ROOT}+$ORIENTDB_ROOT+g; s+{ORIENTDB_BINARY_PORT}+$ORIENTDB_BINARY_PORT+g" shutdown.sh
 sed -i -e "s+{FFBO_DIR}+$FFBO_DIR+g; s+{NLP_ENV}+$NLP_ENV+g; s+{FFBO_ENV}+$FFBO_ENV+g; s+{CROSSBAR_ENV}+$CROSSBAR_ENV+g" update_local_repo.sh
-rm update.sh
+mv update_local_repo.sh update.sh
 rm -rf $FFBO_DIR/run_scripts
 
 echo "Installation complete. Downloading databases ......"
