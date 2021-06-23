@@ -229,6 +229,7 @@ cd $FFBO_DIR/FBLClient
 python -m pip install -e .[full]
 cd $FFBO_DIR/NeuroMynerva
 python -m pip install -e .
+python -m pip install jupyter_packaging
 jupyter labextension develop . --overwrite
 jlpm run build
 
