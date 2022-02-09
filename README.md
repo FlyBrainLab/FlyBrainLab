@@ -83,12 +83,11 @@ you can download the installer directly at https://developer.apple.com/download/
 
 #### Installing the Latest Release Version
 
-##### Linux/macOS/Windows
+##### Linux/macOS
 
 ```bash
 conda create -n flybrainlab python=3.7 -y
 conda activate flybrainlab
-# For Windows, use `activate flybrainlab` instead
 python -m pip install git+https://github.com/mkturkcan/autobahn-sync.git \
                       git+https://github.com/FlyBrainLab/Neuroballad.git \
                       git+https://github.com/palash1992/GEM.git \
@@ -97,7 +96,20 @@ python -m pip install git+https://github.com/mkturkcan/autobahn-sync.git \
                       neuromynerva
 ```
 
-Note that the line `conda activate flybrainlab` above can raise an error. You should use `source activate flybrainlab` instead.
+Note that the line `conda activate flybrainlab` above can raise an error. If that happens, you should use `source activate flybrainlab` instead.
+
+
+After installation finishes, go to [Launching FlyBrainLab from User-side Only Installation](#launching-flybrainlab-from-user-side-only-installation).
+
+##### Windows
+
+```bash
+conda create -n flybrainlab python=3.7 -y
+activate flybrainlab
+python -m pip install git+https://github.com/mkturkcan/autobahn-sync.git git+https://github.com/FlyBrainLab/Neuroballad.git git+https://github.com/palash1992/GEM.git git+https://github.com/mkturkcan/nxcontrol flybrainlab[full] neuromynerva
+```
+
+Note that the line `conda activate flybrainlab` above can raise an error. If that happens, you should use `source activate flybrainlab` instead.
 
 
 After installation finishes, go to [Launching FlyBrainLab from User-side Only Installation](#launching-flybrainlab-from-user-side-only-installation).
