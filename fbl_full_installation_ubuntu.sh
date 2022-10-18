@@ -116,7 +116,7 @@ fi
 echo "Installing OrientDB ......"
 wget https://repo1.maven.org/maven2/com/orientechnologies/orientdb-community/3.1.17/orientdb-community-3.1.17.tar.gz
 tar zxf orientdb-community-3.1.17.tar.gz --directory .
-mv /home/ffbo/orientdb-community-3.1.17 $ORIENTDB_ROOT
+mv orientdb-community-3.1.17 $ORIENTDB_ROOT
 rm orientdb-community-3.1.17.tar.gz
 sed -i -e '146i \ \ \ \ \ \ \ \ <entry name="network.token.expireTimeout" value="144000000"/>' $ORIENTDB_ROOT/config/orientdb-server-config.xml
 sed -i '/<\/users>/i \
@@ -147,7 +147,7 @@ git checkout hemibrain
 git clone https://github.com/fruitflybrain/ffbo.lib.git lib
 cd ../
 git clone https://github.com/flybrainlab/NeuGFX
-mkdir -p /home/ffbo/ffbo/ffbo.neuronlp/img/flycircuit
+mkdir -p ffbo.neuronlp/img/flycircuit
 git clone https://github.com/FlyBrainLab/Tutorials.git
 git clone https://github.com/FlyBrainLab/run_scripts.git
 mkdir nk_tmp
@@ -187,7 +187,7 @@ python -m pip install git+https://github.com/mkturkcan/autobahn-sync.git \
                       git+https://github.com/mkturkcan/nxcontrol.git \
                       flybrainlab\[full\] \
                       neuromynerva && \
-cd /home/ffbo/ffbo/NeuGFX && \
+cd $FFBO_DIR/NeuGFX && \
 git checkout local_files && \
 npm install --legacy-peer-deps && \
 npm install webpack@latest --legacy-peer-deps && \
