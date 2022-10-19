@@ -66,18 +66,18 @@ RUN /bin/bash -c ". $HOME/miniconda/etc/profile.d/conda.sh && \
     conda activate ffbo && \
     python -m pip install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu113 && \
     python -m pip install numba && \
+    cd /home/ffbo/ffbo/ffbo.nlp_component && \
+    python -m pip install -e .[drosobot] && \
     cd /home/ffbo/ffbo/DrosoBOT && \
     python -m pip install -e . && \
     cd /home/ffbo/ffbo/quepy && \
     python -m pip install -e . && \
     cd /home/ffbo/ffbo/ffbo.neuroarch_nlp && \
     python -m pip install -e . && \
-    cd /home/ffbo/ffbo/ffbo.nlp_component && \
-    python -m pip install -e .[drosobot] && \
     python -m spacy download en_core_web_sm && \
-    cd /home/ffbo/ffbo/pyorient && \
-    python -m pip install -e . && \
     cd /home/ffbo/ffbo/neuroarch && \
+    python -m pip install -e . && \
+    cd /home/ffbo/ffbo/pyorient && \
     python -m pip install -e . && \
     cd /home/ffbo/ffbo/ffbo.neuroarch_component && \
     python -m pip install -e . && \
@@ -167,8 +167,8 @@ RUN mkdir -p /home/ffbo/.ffbo/config && \
     echo 'export ORIENTDB_OPTS_MEMORY="-Xms1G -Xmx8G" # increase or decrease Xmx to fit the memory size of your machine' | tee -a ~/.bashrc && \
     echo "export ORIENTDB_SETTINGS=-Dstorage.diskCache.bufferSize=10240 # the amount of memory in MB used for disk cache. This plus Xmx above must be smaller than the total size of memory on your machine." | tee -a ~/.bashrc && \
     echo "export PATH=/usr/local/bin:/usr/local/cuda/bin:/usr/bin:/usr/sbin:$PATH" | tee -a ~/.bashrc && \
-    echo "LD_LIBRARY_PATH=/usr/local/lib:/usr/local/cuda/lib64:/usr/lib:/usr/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH" | tee -a ~/.bashrc && \
-    echo "OMPI_MCA_opal_cuda_support=true" | tee -a ~/.bashrc
+    echo "export LD_LIBRARY_PATH=/usr/local/lib:/usr/local/cuda/lib64:/usr/lib:/usr/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH" | tee -a ~/.bashrc && \
+    echo "export OMPI_MCA_opal_cuda_support=true" | tee -a ~/.bashrc
 
 ENV ORIENTDB_ROOT_PASSWORD=root \
     ORIENTDB_OPTS_MEMORY="-Xms1G -Xmx8G" \
