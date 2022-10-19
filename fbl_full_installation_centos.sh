@@ -55,12 +55,21 @@ echo
 echo "Please make sure that they are installed before continuing."
 echo
 
-read -p "continue? (Y/n)" -n 1 -r
-if [[ $REPLY =~ ^[Nn]$ ]]
-then
-    echo
-    exit 0
-fi
+while true
+do
+    read -p "continue? (Y/n) " -r
+    case $REPLY in
+        [Yy]* ) break
+                ;;
+        [Nn]* ) echo
+                exit 0
+                ;;
+        "" )    break
+                ;;
+        * ) echo "Please answer yes or no. "
+            ;;
+    esac
+done
 
 # check if java exists
 if ! command -v java &> /dev/null
@@ -86,6 +95,8 @@ then
     echo "CUDA installation cannot be found. Please make sure to use the correct CUDA directory. If you don't have CUDA installed, go to https://developer.nvidia.com/cuda-downloads"
     exit
 fi
+
+CUDA_VERSION=$(nvcc --version | grep "Cuda compilation tools" | cut -d\, -f2 | cut -d\  -f3)
 
 # check if directories already exist
 if [ -d "$FFBO_DIR" ]; then
@@ -122,7 +133,7 @@ fi
 echo "Installing OrientDB ......"
 wget https://repo1.maven.org/maven2/com/orientechnologies/orientdb-community/3.1.17/orientdb-community-3.1.17.tar.gz
 tar zxf orientdb-community-3.1.17.tar.gz --directory .
-mv /home/ffbo/orientdb-community-3.1.17 $ORIENTDB_ROOT
+mv orientdb-community-3.1.17 $ORIENTDB_ROOT
 rm orientdb-community-3.1.17.tar.gz
 sed -i -e '146i \ \ \ \ \ \ \ \ <entry name="network.token.expireTimeout" value="144000000"/>' $ORIENTDB_ROOT/config/orientdb-server-config.xml
 sed -i '/<\/users>/i \
@@ -153,7 +164,7 @@ git checkout hemibrain
 git clone https://github.com/fruitflybrain/ffbo.lib.git lib
 cd ../
 git clone https://github.com/flybrainlab/NeuGFX
-mkdir -p /home/ffbo/ffbo/ffbo.neuronlp/img/flycircuit
+mkdir -p $FFBO_DIR/ffbo.neuronlp/img/flycircuit
 git clone https://github.com/FlyBrainLab/Tutorials.git
 git clone https://github.com/FlyBrainLab/run_scripts.git
 mkdir nk_tmp
@@ -174,17 +185,47 @@ conda deactivate
 
 echo "Installing FFBO environments"
 echo 
-conda create -n $FFBO_ENV python=3.9 python-snappy numpy matplotlib scipy pandas h5py openmpi mpi4py nodejs cookiecutter yarn -c conda-forge -y
+conda create -n $FFBO_ENV python=3.9 python-snappy numpy matplotlib scipy pandas h5py nodejs cookiecutter yarn -c conda-forge -y
+
+# Install OpenMPI if cannot find a CUDA-aware openmpi installation
+if ((command -v ompi_info &> /dev/null) && (ompi_info -a | grep "xtensions" | grep -q "cuda"))
+then
+    echo "Found OpenMPI with CUDA support, skipping OpenMPI installation."
+else
+    echo "Installing OpenMPI ......"
+    conda activate $FFBO_ENV
+    conda install openmpi mpi4py -c conda-forge -y
+    conda env config vars set OMPI_MCA_opal_cuda_support=true
+    conda deactivate
+    # wget https://download.open-mpi.org/release/open-mpi/v4.0/openmpi-4.0.3.tar.gz
+    # tar xzf openmpi-4.0.3.tar.gz
+    # rm -rf openmpi-4.0.3.tar.gz
+    # cd openmpi-4.0.3
+    # ./configure --with-cuda=$CUDA_ROOT --disable-mpi-fortran --enable-shared --prefix=$CONDA_ROOT/envs/$FFBO_ENV
+    # make -j8
+    # make install
+    # cd ../
+    # rm -rf openmpi-4.0.3
+    echo "OpenMPI installed"
+fi
+sleep 10s
+
 conda activate $FFBO_ENV
-python -m pip install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu113 && \
-python -m pip install numba && \
-cd $FFBO_DIR/ffbo.nlp_component && \
-python -m pip install -e .[drosobot] && \
-python -m spacy download en_core_web_sm && \
-cd $FFBO_DIR/ffbo.neuroarch_component && \
-python -m pip install -e . && \
-cd $FFBO_DIR/ffbo.neurokernel_component && \
-python -m pip install -e . && \
+if (( $(echo "$CUDA_VERSION < 11" |bc -l) )); then
+    python -m pip install torch torchvision torchaudio
+elif (( $(echo "$CUDA_VERSION < 11.4" |bc -l) )); then
+    python -m pip install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu113
+else
+    python -m pip install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu116
+fi
+python -m pip install numba
+cd $FFBO_DIR/ffbo.nlp_component
+python -m pip install -e .[drosobot]
+python -m spacy download en_core_web_sm
+cd $FFBO_DIR/ffbo.neuroarch_component
+python -m pip install -e .
+cd $FFBO_DIR/ffbo.neurokernel_component
+python -m pip install -e .
 python -m pip install git+https://github.com/fruitflybrain/pyorient_native git+https://github.com/fruitflybrain/pyorient
 
 python -m pip install git+https://github.com/mkturkcan/autobahn-sync.git \
@@ -192,21 +233,21 @@ python -m pip install git+https://github.com/mkturkcan/autobahn-sync.git \
                       git+https://github.com/jernsting/nxt_gem.git \
                       git+https://github.com/mkturkcan/nxcontrol.git \
                       flybrainlab\[full\] \
-                      neuromynerva && \
-cd /home/ffbo/ffbo/NeuGFX && \
-git checkout local_files && \
-npm install --legacy-peer-deps && \
-npm install webpack@latest --legacy-peer-deps && \
-npm update --legacy-peer-deps && \
-npm install util --legacy-peer-deps && \
-npm i --save-dev process --legacy-peer-deps && \
-npm run build --legacy-peer-deps && \
+                      neuromynerva
+cd $FFBO_DIR/NeuGFX
+git checkout local_files
+npm install --legacy-peer-deps
+npm install webpack@latest --legacy-peer-deps
+npm update --legacy-peer-deps
+npm install util --legacy-peer-deps
+npm i --save-dev process --legacy-peer-deps
+npm run build --legacy-peer-deps
 conda deactivate
 
 mkdir -p $HOME/.jupyter/lab/user-settings/@flybrainlab/neuromynerva
 wget https://cdn.jsdelivr.net/gh/flybrainlab/NeuroMynerva@master/schema/plugin.json.local -O $HOME/.jupyter/lab/user-settings/@flybrainlab/neuromynerva/plugin.jupyterlab-settings
 sed -i -e "s+8081+$FFBO_PORT+g" $HOME/.jupyter/lab/user-settings/@flybrainlab/neuromynerva/plugin.jupyterlab-settings
-conda deactivate
+
 
 mkdir -p ~/.ffbo/config
 cp $FFBO_DIR/ffbo.processor/config.ini ~/.ffbo/config/config.ini
