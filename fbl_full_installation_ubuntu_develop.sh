@@ -28,7 +28,6 @@ CUDA_ROOT=/usr/local/cuda # root directory where you installed cuda
 BASE=$HOME # base directory where the folders will be installed
 CROSSBAR_ENV=crossbar # conda environment for crossbar/ffbo processor
 FFBO_ENV=ffbo # conda environment for main fbl
-NLP_ENV=ffbo_legacy # additional conda environment for NLP
 FFBO_DIR=$BASE/ffbo # directory to store local repositories
 ORIENTDB_ROOT=$BASE/orientdb # root directory where you want to install OrientDB
 FFBO_PORT=8081 # main port number of the FFBO processor, make sure to use an uncommon port that will not be used by other program
@@ -43,19 +42,28 @@ echo "The following are the prerequisites that requires sudo to install:"
 echo 
 echo "-----------------------------------------------------"
 echo
-echo "sudo apt install -y wget default-jre curl build-essential tar apt-transport-https tmux sendmail"
+echo "sudo apt install -y wget default-jre curl build-essential tar apt-transport-https tmux sendmail graphviz graphviz-dev"
 echo
 echo "-----------------------------------------------------"
 echo
 echo "Please make sure that they are installed before continuing."
 echo
 
-read -p "continue? (Y/n)" -n 1 -r
-if [[ $REPLY =~ ^[Nn]$ ]]
-then
-    echo
-    exit 0
-fi
+while true
+do
+    read -p "continue? (Y/n) " -r
+    case $REPLY in
+        [Yy]* ) break
+                ;;
+        [Nn]* ) echo
+                exit 0
+                ;;
+        "" )    break
+                ;;
+        * ) echo "Please answer yes or no. "
+            ;;
+    esac
+done
 
 # check if java exists
 if ! command -v java &> /dev/null
@@ -107,18 +115,19 @@ if [ -d "$CONDA_ROOT/envs/$FFBO_ENV" ]; then
     exit 1
 fi
 
-if [ -d "$CONDA_ROOT/envs/$NLP_ENV" ]; then
-    echo "conda environment $NLP_ENV already exists, please remove or use a different name"
+if [ -d "$CONDA_ROOT/envs/$CROSSBAR_ENV" ]; then
+    echo "conda environment $CROSSBAR_ENV already exists, please remove or use a different name"
     exit 1
 fi
 
 
 #install orientdb
 echo "Installing OrientDB ......"
-wget https://s3.us-east-2.amazonaws.com/orientdb3/releases/3.0.35/orientdb-3.0.35.tar.gz
-tar zxf orientdb-3.0.35.tar.gz --directory .
-mv orientdb-3.0.35 $ORIENTDB_ROOT
-rm orientdb-3.0.35.tar.gz
+wget https://repo1.maven.org/maven2/com/orientechnologies/orientdb-community/3.1.17/orientdb-community-3.1.17.tar.gz
+tar zxf orientdb-community-3.1.17.tar.gz --directory .
+mv orientdb-community-3.1.17 $ORIENTDB_ROOT
+rm orientdb-community-3.1.17.tar.gz
+sed -i -e '146i \ \ \ \ \ \ \ \ <entry name="network.token.expireTimeout" value="144000000"/>' $ORIENTDB_ROOT/config/orientdb-server-config.xml
 sed -i '/<\/users>/i \
       <user resources="*" password="{PBKDF2WithHmacSHA256}CB55FC353E97910517F5E8811FC48BB89B7CDF9B66BF880C:A3664992731721A52998BEE95C1CA73BAA6093E91191FA1C:65536" name="root"/> \
       <user resources="connect,server.listDatabases,server.dblist" password="{PBKDF2WithHmacSHA256}289DE306D44BAAD7676BA04426F19A056B4CF8904BB80A71:001BFE74763F762037E7676752BF9D37F3A508A331BEB41C:65536" name="guest"/>' $ORIENTDB_ROOT/config/orientdb-server-config.xml
@@ -137,28 +146,29 @@ echo "export ORIENTDB_SETTINGS=-Dstorage.diskCache.bufferSize=$DATABASE_DISKCACH
 echo "Downloading packages"
 mkdir $FFBO_DIR
 cd $FFBO_DIR
-git clone https://github.com/fruitflybrain/ffbo.nlp_component.git
-git clone https://github.com/fruitflybrain/ffbo.neuroarch_nlp.git
-git clone https://github.com/fruitflybrain/quepy.git
 git clone https://github.com/fruitflybrain/ffbo.processor.git
 git clone https://github.com/fruitflybrain/ffbo.neuroarch_component.git
 git clone https://github.com/fruitflybrain/neuroarch.git
-git clone https://github.com/fruitflybrain/ffbo.neurokernel_component.git
+git clone https://github.com/fruitflybrain/pyorient.git
+git clone https://github.com/fruitflybrain/ffbo.nlp_component.git
+git clone https://github.com/fruitflybrain/quepy.git
+git clone https://github.com/fruitflybrain/ffbo.neuroarch_nlp.git
+git clone https://github.com/fruitflybrain/DrosoBOT.git
 git clone https://github.com/fruitflybrain/ffbo.neuronlp.git
 cd ffbo.neuronlp
 git checkout hemibrain
 git clone https://github.com/fruitflybrain/ffbo.lib.git lib
-cd lib
-git checkout hemibrain
-cd ../../
-
-git clone https://github.com/FlyBrainLab/Neuroballad.git
-git clone https://github.com/FlyBrainLab/FBLClient.git
-git clone https://github.com/FlyBrainLab/NeuroMynerva.git
-git clone https://github.com/FlyBrainLab/Tutorials.git
-git clone https://github.com/FlyBrainLab/run_scripts.git
+cd ../
+mkdir -p $FFBO_DIR/ffbo.neuronlp/img/flycircuit
+git clone https://github.com/fruitflybrain/ffbo.neurokernel_component.git
 git clone https://github.com/neurokernel/neurokernel.git
 git clone https://github.com/neurokernel/neurodriver.git
+git clone https://github.com/FlyBrainLab/FBLClient.git
+git clone https://github.com/FlyBrainLab/Neuroballad.git
+git clone https://github.com/FlyBrainLab/NeuroMynerva.git
+git clone https://github.com/FlyBrainLab/Tutorials.git
+git clone https://github.com/fruitflybrain/neu3d.git
+git clone https://github.com/flybrainlab/NeuGFX.git
 mkdir nk_tmp
 
 . $CONDA_ROOT/etc/profile.d/conda.sh
@@ -168,15 +178,15 @@ echo
 echo "Installing crossbar environment for the ffbo.processor"
 echo
 
-conda create -n $CROSSBAR_ENV python=3.7 numpy pandas -c conda-forge -y
+conda create -n $CROSSBAR_ENV python=3.9 numpy pandas -c conda-forge -y
 conda activate $CROSSBAR_ENV
 cd $FFBO_DIR/ffbo.processor
-python setup.py develop
+python -m pip install -e .
 conda deactivate
 
 echo "Installing FFBO environments"
 echo 
-conda create -n $FFBO_ENV python=3.7 python-snappy numpy matplotlib scipy pandas h5py nodejs cookiecutter yarn -c conda-forge -y
+conda create -n $FFBO_ENV python=3.9 python-snappy numpy matplotlib scipy pandas h5py nodejs cookiecutter yarn -c conda-forge -y
 
 # Install OpenMPI if cannot find a CUDA-aware openmpi installation
 if ((command -v ompi_info &> /dev/null) && (ompi_info -a | grep "xtensions" | grep -q "cuda"))
@@ -184,38 +194,48 @@ then
     echo "Found OpenMPI with CUDA support, skipping OpenMPI installation."
 else
     echo "Installing OpenMPI ......"
-    wget https://download.open-mpi.org/release/open-mpi/v4.0/openmpi-4.0.3.tar.gz
-    tar xzf openmpi-4.0.3.tar.gz
-    rm -rf openmpi-4.0.3.tar.gz
-    cd openmpi-4.0.3
-    ./configure --with-cuda=$CUDA_ROOT --disable-mpi-fortran --enable-shared --prefix=$CONDA_ROOT/envs/$FFBO_ENV
-    make -j8
-    make install
-    cd ../
-    rm -rf openmpi-4.0.3
+    conda activate $FFBO_ENV
+    conda install openmpi mpi4py -c conda-forge -y
+    conda env config vars set OMPI_MCA_opal_cuda_support=true
+    conda deactivate
+    # wget https://download.open-mpi.org/release/open-mpi/v4.0/openmpi-4.0.3.tar.gz
+    # tar xzf openmpi-4.0.3.tar.gz
+    # rm -rf openmpi-4.0.3.tar.gz
+    # cd openmpi-4.0.3
+    # ./configure --with-cuda=$CUDA_ROOT --disable-mpi-fortran --enable-shared --prefix=$CONDA_ROOT/envs/$FFBO_ENV
+    # make -j8
+    # make install
+    # cd ../
+    # rm -rf openmpi-4.0.3
     echo "OpenMPI installed"
 fi
 
 sleep 10s
 
 conda activate $FFBO_ENV
-
-# python -m pip install git+https://github.com/fruitflybrain/pyorient.git \
-#                       git+https://github.com/mkturkcan/autobahn-sync.git \
-#                       git+https://github.com/palash1992/GEM.git \
-#                       git+https://github.com/mkturkcan/nxcontrol
-
-#sed -i.bak -e '100,103d' $CONDA_ROOT/envs/$FFBO_ENV/lib/python3.7/site-packages/pyorient/orient.py
-#sed -i.bak -e '31 a\ \ \ \ \ \ \ \ self.client.set_session_token(True)' $CONDA_ROOT/envs/$FFBO_ENV/lib/python3.7/site-packages/pyorient/ogm/graph.py && \
-# sed -i.bak -e '222d' $CONDA_ROOT/envs/$FFBO_ENV/lib/python3.7/site-packages/jupyterlab_server/process.py
-#sed -i.bak -e '338,339d' $CONDA_ROOT/envs/$FFBO_ENV/lib/python3.6/site-packages/crossbar/router/session.py
-# sed -i.bak -e '77d; /^    def call(.*/i \ \ \ \ @crochet.wait_for(timeout=2**31)' $CONDA_ROOT/envs/$FFBO_ENV/lib/python3.7/site-packages/autobahn_sync/session.py
-
+if (( $(echo "$CUDA_VERSION < 11" |bc -l) )); then
+    python -m pip install torch torchvision torchaudio
+elif (( $(echo "$CUDA_VERSION < 11.4" |bc -l) )); then
+    python -m pip install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu113
+else
+    python -m pip install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu116
+fi
+python -m pip install numba
+cd $FFBO_DIR/ffbo.nlp_component
+python -m pip install -e .[drosobot]
+cd $FFBO_DIR/DrosoBOT
+python -m pip install -e .
+cd $FFBO_DIR/ffbo.neuroarch_nlp
+python -m pip install -e .
+cd $FFBO_DIR/quepy
+python -m pip install -e .
+python -m spacy download en_core_web_sm
 cd $FFBO_DIR/neuroarch
+python -m pip install -e .
+cd $FFBO_DIR/pyorient
 python -m pip install -e .
 cd $FFBO_DIR/ffbo.neuroarch_component
 python -m pip install -e .
-
 cd $FFBO_DIR/neurokernel
 python -m pip install -e .
 cd $FFBO_DIR/neurodriver
@@ -227,53 +247,50 @@ cd $FFBO_DIR/Neuroballad
 python -m pip install -e .
 cd $FFBO_DIR/FBLClient
 python -m pip install -e .[full]
+cd $FFBO_DIR/neu3d
+git checkout dev
+npm install
+npm run build
 cd $FFBO_DIR/NeuroMynerva
 python -m pip install -e .
-python -m pip install jupyter_packaging
 jupyter labextension develop . --overwrite
 jlpm run build
+cd $FFBO_DIR/neu3d
+jlpm link
+cd $FFBO_DIR/NeuroMynerva
+jlpm link 'neu3d' 
+jlpm run build
+cd $FFBO_DIR/NeuGFX
+git checkout local_files
+npm install --legacy-peer-deps
+npm install webpack@latest --legacy-peer-deps
+npm update --legacy-peer-deps
+npm install util --legacy-peer-deps
+npm i --save-dev process --legacy-peer-deps
+npm run build --legacy-peer-deps
+conda deactivate
 
 mkdir -p $HOME/.jupyter/lab/user-settings/@flybrainlab/neuromynerva
 wget https://cdn.jsdelivr.net/gh/flybrainlab/NeuroMynerva@master/schema/plugin.json.local -O $HOME/.jupyter/lab/user-settings/@flybrainlab/neuromynerva/plugin.jupyterlab-settings
 sed -i -e "s+8081+$FFBO_PORT+g" $HOME/.jupyter/lab/user-settings/@flybrainlab/neuromynerva/plugin.jupyterlab-settings
-conda deactivate
 
-echo "Installing NLP environments"
-conda create -n $NLP_ENV python=2.7 numpy -y
-conda activate $NLP_ENV
-
-cd $FFBO_DIR/ffbo.nlp_component
-python -m pip install -r requirements.txt
-cd $FFBO_DIR/quepy
-python -m pip install -e .
-cd $FFBO_DIR/ffbo.neuroarch_nlp
-python -m pip install -e .
-cd $FFBO_DIR/ffbo.nlp_component
-python -m pip install -e .
-
-cd $FFBO_DIR
-wget https://github.com/explosion/spaCy/releases/download/v1.6.0/en-1.1.0.tar.gz
-mkdir $CONDA_ROOT/envs/$NLP_ENV/lib/python2.7/site-packages/spacy/data
-tar zxf en-1.1.0.tar.gz --directory $CONDA_ROOT/envs/$NLP_ENV/lib/python2.7/site-packages/spacy/data
-rm en-1.1.0.tar.gz
-conda deactivate
 
 mkdir -p ~/.ffbo/config
 cp $FFBO_DIR/ffbo.processor/config.ini ~/.ffbo/config/config.ini
-sed -i -e "11,15d; 26,29d; s+8081+$FFBO_PORT+g" ~/.ffbo/config/config.ini
+sed -i -e "11,15d; 26,29d; s+8081+$FFBO_PORT+g; s+2424+$ORIENTDB_BINARY_PORT+g; s+2480+$ORIENTDB_HTTP_PORT+g" ~/.ffbo/config/config.ini
 
 cp -r $FFBO_DIR/run_scripts/flybrainlab $FFBO_DIR/bin
 cd $FFBO_DIR/bin
 sed -i -e "s+{FFBO_DIR}+$FFBO_DIR+g; s+{FFBO_ENV}+$FFBO_ENV+g; s+{CROSSBAR_ENV}+$CROSSBAR_ENV+g" run_processor.sh
-sed -i -e "s+{FFBO_DIR}+$FFBO_DIR+g; s+{NLP_ENV}+$NLP_ENV+g" run_nlp.sh
+sed -i -e "s+{FFBO_DIR}+$FFBO_DIR+g; s+{FFBO_ENV}+$FFBO_ENV+g" run_nlp.sh
 sed -i -e "s+{FFBO_DIR}+$FFBO_DIR+g; s+{FFBO_ENV}+$FFBO_ENV+g" run_neuroarch.sh
-sed -i -e "s+component.py+& --port $ORIENTDB_BINARY_PORT+" run_neuroarch.sh
+# sed -i -e "s+component.py+& --port $ORIENTDB_BINARY_PORT+" run_neuroarch.sh
 sed -i -e "s+{FFBO_DIR}+$FFBO_DIR+g; s+{FFBO_ENV}+$FFBO_ENV+g" run_neurokernel.sh
 sed -i -e "s+{ORIENTDB_ROOT}+$ORIENTDB_ROOT+g" run_database.sh
 sed -i -e "s+{FFBO_DIR}+$FFBO_DIR+g; s+{FFBO_ENV}+$FFBO_ENV+g" run_fbl.sh
 sed -i -e "s+{FFBO_DIR}+$FFBO_DIR+g; s+{ORIENTDB_ROOT}+$ORIENTDB_ROOT+g" start.sh
 sed -i -e "s+{ORIENTDB_ROOT}+$ORIENTDB_ROOT+g; s+{ORIENTDB_BINARY_PORT}+$ORIENTDB_BINARY_PORT+g" shutdown.sh
-sed -i -e "s+{FFBO_DIR}+$FFBO_DIR+g; s+{NLP_ENV}+$NLP_ENV+g; s+{FFBO_ENV}+$FFBO_ENV+g; s+{CROSSBAR_ENV}+$CROSSBAR_ENV+g" update_local_repo.sh
+sed -i -e "s+{FFBO_DIR}+$FFBO_DIR+g; s+{FFBO_ENV}+$FFBO_ENV+g; s+{CROSSBAR_ENV}+$CROSSBAR_ENV+g" update_local_repo.sh
 mv update_local_repo.sh update.sh
 rm -rf $FFBO_DIR/run_scripts
 
