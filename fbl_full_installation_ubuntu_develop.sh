@@ -169,6 +169,7 @@ git clone https://github.com/FlyBrainLab/NeuroMynerva.git
 git clone https://github.com/FlyBrainLab/Tutorials.git
 git clone https://github.com/fruitflybrain/neu3d.git
 git clone https://github.com/flybrainlab/NeuGFX.git
+git clone https://github.com/FlyBrainLab/run_scripts.git
 mkdir nk_tmp
 
 . $CONDA_ROOT/etc/profile.d/conda.sh
