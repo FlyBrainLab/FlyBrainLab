@@ -211,12 +211,12 @@ fi
 sleep 10s
 
 conda activate $FFBO_ENV
-if (( $(echo "$CUDA_VERSION < 11" |bc -l) )); then
-    python -m pip install torch torchvision torchaudio
-elif (( $(echo "$CUDA_VERSION < 11.4" |bc -l) )); then
-    python -m pip install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu113
+if (( $(echo "$CUDA_VERSION < 11.3" |bc -l) )); then
+    python -m pip install torch==1.12.0+cu102 torchvision==0.13.0+cu102 torchaudio==0.12.0 --extra-index-url https://download.pytorch.org/whl/cu102
+elif (( $(echo "$CUDA_VERSION < 11.6" |bc -l) )); then
+    python -m pip install torch==1.12.0+cu113 torchvision==0.13.0+cu113 torchaudio==0.12.0 --extra-index-url https://download.pytorch.org/whl/cu113
 else
-    python -m pip install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu116
+    python -m pip install torch==1.12.0+cu116 torchvision==0.13.0+cu116 torchaudio==0.12.0 --extra-index-url https://download.pytorch.org/whl/cu116
 fi
 python -m pip install numba
 cd $FFBO_DIR/ffbo.nlp_component
@@ -266,6 +266,7 @@ sed -i -e "s+{ORIENTDB_ROOT}+$ORIENTDB_ROOT+g; s+{ORIENTDB_BINARY_PORT}+$ORIENTD
 sed -i -e "s+{FFBO_DIR}+$FFBO_DIR+g; s+{FFBO_ENV}+$FFBO_ENV+g; s+{CROSSBAR_ENV}+$CROSSBAR_ENV+g" update.sh
 rm update_local_repo.sh
 rm -rf $FFBO_DIR/run_scripts
+$FFBO_DIR/bin/download_drosobot_data.sh $FFBO_DIR/ffbo.nlp_component/nlp_component/data
 
 echo "Installation complete. Downloading databases ......"
 cd $FFBO_DIR/bin
