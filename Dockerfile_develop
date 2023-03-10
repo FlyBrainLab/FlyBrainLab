@@ -22,8 +22,8 @@ RUN wget https://repo1.maven.org/maven2/com/orientechnologies/orientdb-community
     sed -i -e '146i \ \ \ \ \ \ \ \ <entry name="network.token.expireTimeout" value="144000000"/>' /home/ffbo/orientdb/config/orientdb-server-config.xml && \
     mkdir /home/ffbo/ffbo
 
-RUN wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh && \
-    sh miniconda.sh -b -p /home/ffbo/miniconda && \
+RUN wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh && \
+    bash miniconda.sh -b -p /home/ffbo/miniconda && \
     echo ". $HOME/miniconda/etc/profile.d/conda.sh" | tee -a ~/.bashrc && \
     rm miniconda.sh && \
     cd /home/ffbo/ffbo && \
@@ -64,7 +64,7 @@ RUN /bin/bash -c ". $HOME/miniconda/etc/profile.d/conda.sh && \
 RUN /bin/bash -c ". $HOME/miniconda/etc/profile.d/conda.sh && \
     conda create -n ffbo python=3.9 python-snappy numpy matplotlib scipy pandas h5py openmpi mpi4py nodejs cookiecutter yarn -c conda-forge -y && \
     conda activate ffbo && \
-    python -m pip install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu113 && \
+    python -m pip install torch==1.12.0+cu113 torchvision==0.13.0+cu113 torchaudio==0.12.0 --extra-index-url https://download.pytorch.org/whl/cu113 && \
     python -m pip install numba && \
     cd /home/ffbo/ffbo/ffbo.nlp_component && \
     python -m pip install -e .[drosobot] && \
@@ -161,6 +161,7 @@ RUN mkdir -p /home/ffbo/.ffbo/config && \
     sed -i -e "s+{FFBO_DIR}+/home/ffbo/ffbo+g; s+{FFBO_ENV}+ffbo+g; s+{CROSSBAR_ENV}+crossbar+g; s+\$(conda info --base)+/home/ffbo/miniconda+g" update_local_repo.sh && \
     mv update_local_repo.sh update.sh && \
     rm -rf /home/ffbo/run_scripts && \
+    /home/ffbo/ffbo/bin/download_drosobot_data.sh /home/ffbo/ffbo/ffbo.nlp_component/nlp_component/data && \
     mkdir -p /home/ffbo/.jupyter/lab/user-settings/@flybrainlab/neuromynerva && \
     wget https://raw.githubusercontent.com/FlyBrainLab/NeuroMynerva/master/schema/plugin.json.local -O /home/ffbo/.jupyter/lab/user-settings/@flybrainlab/neuromynerva/plugin.jupyterlab-settings && \
     echo "export ORIENTDB_ROOT_PASSWORD=root" | tee -a ~/.bashrc && \
