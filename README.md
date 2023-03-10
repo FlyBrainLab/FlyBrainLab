@@ -90,7 +90,7 @@ conda create -n flybrainlab python=3.9 -y
 conda activate flybrainlab
 python -m pip install git+https://github.com/mkturkcan/autobahn-sync.git \
                       git+https://github.com/FlyBrainLab/Neuroballad.git \
-                      git+https://github.com/jernsting/nxt_gem.git \
+                      nxt_gem==2.0.1 \
                       git+https://github.com/mkturkcan/nxcontrol \
                       flybrainlab\[full\] \
                       neuromynerva
@@ -104,9 +104,9 @@ After installation finishes, go to [Launching FlyBrainLab from User-side Only In
 ##### Windows
 
 ```bash
-conda create -n flybrainlab python=3.7 -y
+conda create -n flybrainlab python=3.9 -y
 activate flybrainlab
-python -m pip install git+https://github.com/mkturkcan/autobahn-sync.git git+https://github.com/FlyBrainLab/Neuroballad.git git+https://github.com/jernsting/nxt_gem.git git+https://github.com/mkturkcan/nxcontrol flybrainlab[full] neuromynerva
+python -m pip install git+https://github.com/mkturkcan/autobahn-sync.git git+https://github.com/FlyBrainLab/Neuroballad.git nxt_gem==2.0.1 git+https://github.com/mkturkcan/nxcontrol flybrainlab[full] neuromynerva
 ```
 
 Note that the line `conda activate flybrainlab` above can raise an error. If that happens, you should use `source activate flybrainlab` instead.

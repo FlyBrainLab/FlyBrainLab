@@ -67,7 +67,7 @@ RUN /bin/bash -c ". $HOME/miniconda/etc/profile.d/conda.sh && \
     conda activate ffbo && \
     python -m pip install git+https://github.com/mkturkcan/autobahn-sync.git \
                           git+https://github.com/FlyBrainLab/Neuroballad.git \
-                          git+https://github.com/jernsting/nxt_gem.git \
+                          nxt_gem==2.0.1 \
                           git+https://github.com/mkturkcan/nxcontrol.git \
                           flybrainlab\[full\] \
                           neuromynerva && \

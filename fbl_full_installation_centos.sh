@@ -230,7 +230,7 @@ python -m pip install git+https://github.com/fruitflybrain/pyorient_native git+h
 
 python -m pip install git+https://github.com/mkturkcan/autobahn-sync.git \
                       git+https://github.com/FlyBrainLab/Neuroballad.git \
-                      git+https://github.com/jernsting/nxt_gem.git \
+                      nxt_gem==2.0.1 \
                       git+https://github.com/mkturkcan/nxcontrol.git \
                       flybrainlab\[full\] \
                       neuromynerva
