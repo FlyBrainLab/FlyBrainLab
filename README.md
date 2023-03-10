@@ -118,7 +118,7 @@ After installation finishes, go to [Launching FlyBrainLab from User-side Only In
 If you want to use the latest development code instead of the release, you can build FlyBrainLab using the following command line code:
 ```bash
 # create anaconda environment called flybrainlab with appropriate packages installed
-conda create -n flybrainlab python=3.7 -c conda-forge -y
+conda create -n flybrainlab python=3.9 -c conda-forge -y
 # activate the flybrainlab environment just created
 conda activate flybrainlab
 # if you have conda<4.4, you may need to use `source activate flybrainlab` instead
