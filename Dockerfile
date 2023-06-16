@@ -45,6 +45,10 @@ RUN /bin/bash -c ". $HOME/miniconda/etc/profile.d/conda.sh && \
     conda activate crossbar && \
     cd /home/ffbo/ffbo/ffbo.processor && \
     python -m pip install -e . && \
+    python -m pip install eth_abi==3.0.1 && \
+    python -m pip install web3==5.31.3 && \
+    python -m pip install py-ecc==5.2.0 && \
+    python -m pip install cryptography==40.0.2 && \
     conda deactivate" && \
     rm -rf /home/ffbo/.cache
 
@@ -63,11 +67,11 @@ RUN /bin/bash -c ". $HOME/miniconda/etc/profile.d/conda.sh && \
     python -m pip install git+https://github.com/fruitflybrain/pyorient_native git+https://github.com/fruitflybrain/pyorient" && \
     rm -rf /home/ffbo/.cache
 
+# needed to install one-by-one three crossbar dependencies for bug related to eth_abi 4.0.0.
 RUN /bin/bash -c ". $HOME/miniconda/etc/profile.d/conda.sh && \
     conda activate ffbo && \
     python -m pip install git+https://github.com/mkturkcan/autobahn-sync.git \
                           git+https://github.com/FlyBrainLab/Neuroballad.git \
-                          nxt_gem==2.0.1 \
                           git+https://github.com/mkturkcan/nxcontrol.git \
                           flybrainlab\[full\] \
                           neuromynerva && \
