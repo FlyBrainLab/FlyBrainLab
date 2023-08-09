@@ -174,6 +174,10 @@ conda create -n $CROSSBAR_ENV python=3.9 numpy pandas -c conda-forge -y
 conda activate $CROSSBAR_ENV
 cd $FFBO_DIR/ffbo.processor
 python -m pip install -e .
+python -m pip install eth_abi==3.0.1
+python -m pip install web3==5.31.3
+python -m pip install py-ecc==5.2.0
+python -m pip install cryptography==40.0.2
 conda deactivate
 
 
