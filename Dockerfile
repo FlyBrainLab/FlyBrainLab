@@ -15,10 +15,10 @@ ENV PATH /usr/local/bin:/usr/local/cuda/bin:/usr/bin:/usr/sbin:$PATH
 ENV LD_LIBRARY_PATH /usr/local/lib:/usr/local/cuda/lib64:/usr/lib:/usr/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH
 ENV OMPI_MCA_opal_cuda_support true
 
-RUN wget https://repo1.maven.org/maven2/com/orientechnologies/orientdb-community/3.1.17/orientdb-community-3.1.17.tar.gz && \
-    tar zxf orientdb-community-3.1.17.tar.gz --directory /home/ffbo/ && \
-    mv /home/ffbo/orientdb-community-3.1.17 /home/ffbo/orientdb && \
-    rm orientdb-community-3.1.17.tar.gz && \
+RUN wget https://repo1.maven.org/maven2/com/orientechnologies/orientdb-community/3.1.20/orientdb-community-3.1.20.tar.gz && \
+    tar zxf orientdb-community-3.1.20.tar.gz --directory /home/ffbo/ && \
+    mv /home/ffbo/orientdb-community-3.1.20 /home/ffbo/orientdb && \
+    rm orientdb-community-3.1.20.tar.gz && \
     sed -i -e '146i \ \ \ \ \ \ \ \ <entry name="network.token.expireTimeout" value="144000000"/>' /home/ffbo/orientdb/config/orientdb-server-config.xml && \
     mkdir /home/ffbo/ffbo
 
