@@ -127,9 +127,9 @@ fi
 echo "Installing OrientDB ......"
 wget https://repo1.maven.org/maven2/com/orientechnologies/orientdb-community/3.1.20/orientdb-community-3.1.20.tar.gz
 tar zxf orientdb-community-3.1.20.tar.gz --directory .
-mv /home/ffbo/orientdb-community-3.1.20 $ORIENTDB_ROOT
+mv orientdb-community-3.1.20 $ORIENTDB_ROOT
 rm orientdb-community-3.1.20.tar.gz
-sed -i -e '146i \ \ \ \ \ \ \ \ <entry name="network.token.expireTimeout" value="144000000"/>' /home/ffbo/orientdb/config/orientdb-server-config.xml
+sed -i -e '146i \ \ \ \ \ \ \ \ <entry name="network.token.expireTimeout" value="144000000"/>' $ORIENTDB_ROOT/config/orientdb-server-config.xml
 sed -i '/<\/users>/i \
       <user resources="*" password="{PBKDF2WithHmacSHA256}CB55FC353E97910517F5E8811FC48BB89B7CDF9B66BF880C:A3664992731721A52998BEE95C1CA73BAA6093E91191FA1C:65536" name="root"/> \
       <user resources="connect,server.listDatabases,server.dblist" password="{PBKDF2WithHmacSHA256}289DE306D44BAAD7676BA04426F19A056B4CF8904BB80A71:001BFE74763F762037E7676752BF9D37F3A508A331BEB41C:65536" name="guest"/>' $ORIENTDB_ROOT/config/orientdb-server-config.xml
