@@ -86,7 +86,7 @@ you can download the installer directly at https://developer.apple.com/download/
 ##### Linux/macOS
 
 ```bash
-conda create -n flybrainlab python=3.9 -y
+conda create -n flybrainlab python=3.9 git -y
 conda activate flybrainlab
 python -m pip install git+https://github.com/mkturkcan/autobahn-sync.git \
                       git+https://github.com/FlyBrainLab/Neuroballad.git \
@@ -104,7 +104,7 @@ After installation finishes, go to [Launching FlyBrainLab from User-side Only In
 ##### Windows
 
 ```bash
-conda create -n flybrainlab python=3.9 -y
+conda create -n flybrainlab python=3.9 git -y
 activate flybrainlab
 python -m pip install git+https://github.com/mkturkcan/autobahn-sync.git git+https://github.com/FlyBrainLab/Neuroballad.git nxt_gem==2.0.1 git+https://github.com/mkturkcan/nxcontrol flybrainlab[full] neuromynerva
 ```
@@ -118,7 +118,7 @@ After installation finishes, go to [Launching FlyBrainLab from User-side Only In
 If you want to use the latest development code instead of the release, you can build FlyBrainLab using the following command line code:
 ```bash
 # create anaconda environment called flybrainlab with appropriate packages installed
-conda create -n flybrainlab python=3.9 -c conda-forge -y
+conda create -n flybrainlab python=3.9 git -c conda-forge -y
 # activate the flybrainlab environment just created
 conda activate flybrainlab
 # if you have conda<4.4, you may need to use `source activate flybrainlab` instead
