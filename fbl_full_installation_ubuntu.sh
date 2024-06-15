@@ -245,6 +245,7 @@ npm update --legacy-peer-deps
 npm install util --legacy-peer-deps
 npm i --save-dev process --legacy-peer-deps
 npm run build --legacy-peer-deps
+python -m pip install gdown
 conda deactivate
 
 mkdir -p $HOME/.jupyter/lab/user-settings/@flybrainlab/neuromynerva
@@ -258,6 +259,7 @@ sed -i -e "11,15d; 26,29d; s+8081+$FFBO_PORT+g; s+2424+$ORIENTDB_BINARY_PORT+g; 
 
 cp -r $FFBO_DIR/run_scripts/flybrainlab $FFBO_DIR/bin
 cd $FFBO_DIR/bin
+sed -i -e "s+{FFBO_DIR}+$FFBO_DIR+g; s+{FFBO_ENV}+$FFBO_ENV+g;" download_datasets.sh
 sed -i -e "s+{FFBO_DIR}+$FFBO_DIR+g; s+{FFBO_ENV}+$FFBO_ENV+g; s+{CROSSBAR_ENV}+$CROSSBAR_ENV+g" run_processor.sh
 sed -i -e "s+{FFBO_DIR}+$FFBO_DIR+g; s+{FFBO_ENV}+$FFBO_ENV+g" run_nlp.sh
 sed -i -e "s+{FFBO_DIR}+$FFBO_DIR+g; s+{FFBO_ENV}+$FFBO_ENV+g" run_neuroarch.sh
