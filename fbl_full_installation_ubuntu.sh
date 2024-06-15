@@ -35,6 +35,7 @@ ORIENTDB_BINARY_PORT=2424 # Binary port of OrientDB, please change this if you a
 ORIENTDB_HTTP_PORT=2480 # HTTP port of OrientDB, please change this if you are on running this on a multi-user machine to avoid running OrientDB on a wrong port
 DATABASE_MEMORY=8G # maximum amount of memory you want to assign to the database for java heap in GB
 DATABASE_DISKCACHE=10240 # amount of memory assigned to caching disk in MB
+PYTHON_VERSION=3.10 # specify python version (tested on python<=3.10)
 
 # End of folder configuration.
 
@@ -171,7 +172,7 @@ echo
 echo "Installing crossbar environment for the ffbo.processor"
 echo
 
-conda create -n $CROSSBAR_ENV python=3.9 numpy pandas -c conda-forge -y
+conda create -n $CROSSBAR_ENV python=$PYTHON_VERSION numpy pandas -c conda-forge -y
 conda activate $CROSSBAR_ENV
 cd $FFBO_DIR/crossbar
 python -m pip install .
@@ -186,7 +187,7 @@ conda deactivate
 
 echo "Installing FFBO environments"
 echo 
-conda create -n $FFBO_ENV python=3.9 python-snappy numpy matplotlib scipy pandas h5py nodejs cookiecutter yarn -c conda-forge -y
+conda create -n $FFBO_ENV python=$PYTHON_VERSION python-snappy numpy matplotlib scipy pandas h5py nodejs cookiecutter yarn -c conda-forge -y
 
 # Install OpenMPI if cannot find a CUDA-aware openmpi installation
 if ((command -v ompi_info &> /dev/null) && (ompi_info -a | grep "xtensions" | grep -q "cuda"))
