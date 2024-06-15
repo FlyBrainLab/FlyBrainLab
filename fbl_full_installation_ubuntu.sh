@@ -261,6 +261,7 @@ sed -i -e "11,15d; 26,29d; s+8081+$FFBO_PORT+g; s+2424+$ORIENTDB_BINARY_PORT+g; 
 cp -r $FFBO_DIR/run_scripts/flybrainlab $FFBO_DIR/bin
 cd $FFBO_DIR/bin
 sed -i -e "s+{FFBO_DIR}+$FFBO_DIR+g; s+{FFBO_ENV}+$FFBO_ENV+g;" download_datasets.sh
+sed -i -e "s+{FFBO_DIR}+$FFBO_DIR+g; s+{FFBO_ENV}+$FFBO_ENV+g;" download_drosobot_data.sh
 sed -i -e "s+{FFBO_DIR}+$FFBO_DIR+g; s+{FFBO_ENV}+$FFBO_ENV+g; s+{CROSSBAR_ENV}+$CROSSBAR_ENV+g" run_processor.sh
 sed -i -e "s+{FFBO_DIR}+$FFBO_DIR+g; s+{FFBO_ENV}+$FFBO_ENV+g" run_nlp.sh
 sed -i -e "s+{FFBO_DIR}+$FFBO_DIR+g; s+{FFBO_ENV}+$FFBO_ENV+g" run_neuroarch.sh
