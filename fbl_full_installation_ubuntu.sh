@@ -150,6 +150,7 @@ mkdir $FFBO_DIR
 cd $FFBO_DIR
 git clone https://github.com/fruitflybrain/ffbo.nlp_component.git
 git clone https://github.com/fruitflybrain/ffbo.processor.git
+git clone https://github.com/fruitflybrain/crossbar.git
 git clone https://github.com/fruitflybrain/ffbo.neuroarch_component.git
 git clone https://github.com/fruitflybrain/ffbo.neurokernel_component.git
 git clone https://github.com/fruitflybrain/ffbo.neuronlp.git
@@ -172,12 +173,14 @@ echo
 
 conda create -n $CROSSBAR_ENV python=3.9 numpy pandas -c conda-forge -y
 conda activate $CROSSBAR_ENV
+cd $FFBO_DIR/crossbar
+python -m pip install .
 cd $FFBO_DIR/ffbo.processor
 python -m pip install -e .
-python -m pip install eth_abi==3.0.1
-python -m pip install web3==5.31.3
-python -m pip install py-ecc==5.2.0
-python -m pip install cryptography==40.0.2
+#python -m pip install eth_abi==3.0.1
+#python -m pip install web3==5.31.3
+#python -m pip install py-ecc==5.2.0
+#python -m pip install cryptography==40.0.2
 conda deactivate
 
 
@@ -209,6 +212,7 @@ fi
 sleep 10s
 
 conda activate $FFBO_ENV
+python -m pip install git+https://github.com/crossbario/autobahn-python.git@master#egg=autobahn[twisted,encryption,compress,serialization,scram]
 if (( $(echo "$CUDA_VERSION < 11.3" |bc -l) )); then
     python -m pip install torch==1.12.0+cu102 torchvision==0.13.0+cu102 torchaudio==0.12.0 --extra-index-url https://download.pytorch.org/whl/cu102
 elif (( $(echo "$CUDA_VERSION < 11.6" |bc -l) )); then
