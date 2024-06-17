@@ -41,6 +41,7 @@ ORIENTDB_BINARY_PORT=2424 # Binary port of OrientDB, please change this if you a
 ORIENTDB_HTTP_PORT=2480 # HTTP port of OrientDB, please change this if you are on running this on a multi-user machine to avoid running OrientDB on a wrong port
 DATABASE_MEMORY=8G # maximum amount of memory you want to assign to the database for java heap in GB
 DATABASE_DISKCACHE=10240 # amount of memory assigned to caching disk in MB
+PYTHON_VERSION=3.10 # specify python version (tested on python<=3.10)
 
 # End of folder configuration.
 
@@ -48,7 +49,7 @@ echo "The following are the prerequisites that requires sudo to install:"
 echo 
 echo "-----------------------------------------------------"
 echo
-echo "sudo apt install -y wget default-jre curl build-essential tar apt-transport-https tmux sendmail graphviz graphviz-dev"
+echo "sudo yum install -y wget default-jre curl build-essential tar apt-transport-https tmux sendmail graphviz graphviz-dev"
 echo
 echo "-----------------------------------------------------"
 echo
@@ -156,6 +157,7 @@ mkdir $FFBO_DIR
 cd $FFBO_DIR
 git clone https://github.com/fruitflybrain/ffbo.nlp_component.git
 git clone https://github.com/fruitflybrain/ffbo.processor.git
+git clone https://github.com/fruitflybrain/crossbar.git
 git clone https://github.com/fruitflybrain/ffbo.neuroarch_component.git
 git clone https://github.com/fruitflybrain/ffbo.neurokernel_component.git
 git clone https://github.com/fruitflybrain/ffbo.neuronlp.git
@@ -176,20 +178,18 @@ echo
 echo "Installing crossbar environment for the ffbo.processor"
 echo
 
-conda create -n $CROSSBAR_ENV python=3.9 numpy pandas -c conda-forge -y
+conda create -n $CROSSBAR_ENV python=$PYTHON_VERSION numpy pandas -c conda-forge -y
 conda activate $CROSSBAR_ENV
+cd $FFBO_DIR/crossbar
+python -m pip install .
 cd $FFBO_DIR/ffbo.processor
 python -m pip install -e .
-python -m pip install eth_abi==3.0.1
-python -m pip install web3==5.31.3
-python -m pip install py-ecc==5.2.0
-python -m pip install cryptography==40.0.2
 conda deactivate
 
 
 echo "Installing FFBO environments"
 echo 
-conda create -n $FFBO_ENV python=3.9 python-snappy numpy matplotlib scipy pandas h5py nodejs cookiecutter yarn -c conda-forge -y
+conda create -n $FFBO_ENV python=$PYTHON_VERSION python-snappy numpy matplotlib scipy pandas h5py nodejs cookiecutter yarn gdown -c conda-forge -y
 
 # Install OpenMPI if cannot find a CUDA-aware openmpi installation
 if ((command -v ompi_info &> /dev/null) && (ompi_info -a | grep "xtensions" | grep -q "cuda"))
@@ -259,6 +259,8 @@ sed -i -e "11,15d; 26,29d; s+8081+$FFBO_PORT+g; s+2424+$ORIENTDB_BINARY_PORT+g; 
 
 cp -r $FFBO_DIR/run_scripts/flybrainlab $FFBO_DIR/bin
 cd $FFBO_DIR/bin
+sed -i -e "s+{FFBO_DIR}+$FFBO_DIR+g; s+{FFBO_ENV}+$FFBO_ENV+g;" download_datasets.sh
+sed -i -e "s+{FFBO_DIR}+$FFBO_DIR+g; s+{FFBO_ENV}+$FFBO_ENV+g;" download_drosobot_data.sh
 sed -i -e "s+{FFBO_DIR}+$FFBO_DIR+g; s+{FFBO_ENV}+$FFBO_ENV+g; s+{CROSSBAR_ENV}+$CROSSBAR_ENV+g" run_processor.sh
 sed -i -e "s+{FFBO_DIR}+$FFBO_DIR+g; s+{FFBO_ENV}+$FFBO_ENV+g" run_nlp.sh
 sed -i -e "s+{FFBO_DIR}+$FFBO_DIR+g; s+{FFBO_ENV}+$FFBO_ENV+g" run_neuroarch.sh

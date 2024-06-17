@@ -187,7 +187,7 @@ conda deactivate
 
 echo "Installing FFBO environments"
 echo 
-conda create -n $FFBO_ENV python=$PYTHON_VERSION python-snappy numpy matplotlib scipy pandas h5py nodejs cookiecutter yarn -c conda-forge -y
+conda create -n $FFBO_ENV python=$PYTHON_VERSION python-snappy numpy matplotlib scipy pandas h5py nodejs cookiecutter yarn gdown -c conda-forge -y
 
 # Install OpenMPI if cannot find a CUDA-aware openmpi installation
 if ((command -v ompi_info &> /dev/null) && (ompi_info -a | grep "xtensions" | grep -q "cuda"))
@@ -246,7 +246,6 @@ npm update --legacy-peer-deps
 npm install util --legacy-peer-deps
 npm i --save-dev process --legacy-peer-deps
 npm run build --legacy-peer-deps
-python -m pip install gdown
 conda deactivate
 
 mkdir -p $HOME/.jupyter/lab/user-settings/@flybrainlab/neuromynerva

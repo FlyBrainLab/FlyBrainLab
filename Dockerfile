@@ -29,6 +29,7 @@ RUN wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -
     cd /home/ffbo/ffbo && \
     git clone https://github.com/fruitflybrain/ffbo.nlp_component.git && \
     git clone https://github.com/fruitflybrain/ffbo.processor.git && \
+    git clone https://github.com/fruitflybrain/crossbar.git && \
     git clone https://github.com/fruitflybrain/ffbo.neuroarch_component.git && \
     git clone https://github.com/fruitflybrain/ffbo.neuronlp.git && \
     cd ffbo.neuronlp && \
@@ -41,19 +42,17 @@ RUN wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -
     mkdir nk_tmp
 
 RUN /bin/bash -c ". $HOME/miniconda/etc/profile.d/conda.sh && \
-    conda create -n crossbar python=3.9 numpy pandas -c conda-forge -y && \
+    conda create -n crossbar python=3.10 numpy pandas -c conda-forge -y && \
     conda activate crossbar && \
+    cd /home/ffbo/ffbo/crossbar && \
+    python -m pip install . && \
     cd /home/ffbo/ffbo/ffbo.processor && \
     python -m pip install -e . && \
-    python -m pip install eth_abi==3.0.1 && \
-    python -m pip install web3==5.31.3 && \
-    python -m pip install py-ecc==5.2.0 && \
-    python -m pip install cryptography==40.0.2 && \
     conda deactivate" && \
     rm -rf /home/ffbo/.cache
 
 RUN /bin/bash -c ". $HOME/miniconda/etc/profile.d/conda.sh && \
-    conda create -n ffbo python=3.9 python-snappy numpy matplotlib scipy pandas h5py openmpi mpi4py nodejs cookiecutter yarn -c conda-forge -y && \
+    conda create -n ffbo python=3.10 python-snappy numpy matplotlib scipy pandas h5py openmpi mpi4py nodejs cookiecutter yarn gdown -c conda-forge -y && \
     conda activate ffbo && \
     python -m pip install torch==1.12.0+cu113 torchvision==0.13.0+cu113 torchaudio==0.12.0 --extra-index-url https://download.pytorch.org/whl/cu113 && \
     python -m pip install numba && \
@@ -121,6 +120,8 @@ RUN mkdir -p /home/ffbo/.ffbo/config && \
     git clone https://github.com/FlyBrainLab/run_scripts.git && \
     cp -r run_scripts/flybrainlab /home/ffbo/ffbo/bin && \
     cd /home/ffbo/ffbo/bin && \
+    sed -i -e "s+{FFBO_DIR}+/home/ffbo/ffbo+g; s+{FFBO_ENV}+ffbo+g;" download_datasets.sh && \
+    sed -i -e "s+{FFBO_DIR}+/home/ffbo/ffbo+g; s+{FFBO_ENV}+ffbo+g;" download_drosobot_data.sh && \
     sed -i -e "s+{FFBO_DIR}+/home/ffbo/ffbo+g; s+{FFBO_ENV}+ffbo+g; s+{CROSSBAR_ENV}+crossbar+g; s+\$(conda info --base)+/home/ffbo/miniconda+g" run_processor.sh && \
     sed -i -e "s+{FFBO_DIR}+/home/ffbo/ffbo+g; s+{FFBO_ENV}+ffbo+g; s+\$(conda info --base)+/home/ffbo/miniconda+g" run_nlp.sh && \
     sed -i -e "s+{FFBO_DIR}+/home/ffbo/ffbo+g; s+{FFBO_ENV}+ffbo+g; s+\$(conda info --base)+/home/ffbo/miniconda+g" run_neuroarch.sh && \
