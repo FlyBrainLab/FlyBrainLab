@@ -120,8 +120,8 @@ RUN mkdir -p /home/ffbo/.ffbo/config && \
     git clone https://github.com/FlyBrainLab/run_scripts.git && \
     cp -r run_scripts/flybrainlab /home/ffbo/ffbo/bin && \
     cd /home/ffbo/ffbo/bin && \
-    sed -i -e "s+{FFBO_DIR}+/home/ffbo/ffbo+g; s+{FFBO_ENV}+ffbo+g;" download_datasets.sh && \
-    sed -i -e "s+{FFBO_DIR}+/home/ffbo/ffbo+g; s+{FFBO_ENV}+ffbo+g;" download_drosobot_data.sh && \
+    sed -i -e "s+{FFBO_DIR}+/home/ffbo/ffbo+g; s+{FFBO_ENV}+ffbo+g; s+\$(conda info --base)+/home/ffbo/miniconda+g" download_datasets.sh && \
+    sed -i -e "s+{FFBO_DIR}+/home/ffbo/ffbo+g; s+{FFBO_ENV}+ffbo+g; s+\$(conda info --base)+/home/ffbo/miniconda+g" download_drosobot_data.sh && \
     sed -i -e "s+{FFBO_DIR}+/home/ffbo/ffbo+g; s+{FFBO_ENV}+ffbo+g; s+{CROSSBAR_ENV}+crossbar+g; s+\$(conda info --base)+/home/ffbo/miniconda+g" run_processor.sh && \
     sed -i -e "s+{FFBO_DIR}+/home/ffbo/ffbo+g; s+{FFBO_ENV}+ffbo+g; s+\$(conda info --base)+/home/ffbo/miniconda+g" run_nlp.sh && \
     sed -i -e "s+{FFBO_DIR}+/home/ffbo/ffbo+g; s+{FFBO_ENV}+ffbo+g; s+\$(conda info --base)+/home/ffbo/miniconda+g" run_neuroarch.sh && \
@@ -133,7 +133,7 @@ RUN mkdir -p /home/ffbo/.ffbo/config && \
     sed -i -e "s+{FFBO_DIR}+/home/ffbo/ffbo+g; s+{FFBO_ENV}+ffbo+g; s+{CROSSBAR_ENV}+crossbar+g; s+\$(conda info --base)+/home/ffbo/miniconda+g" update_local_repo.sh && \
     mv update_local_repo.sh update.sh && \
     rm -rf /home/ffbo/run_scripts && \
-    /home/ffbo/ffbo/bin/download_drosobot_data.sh /home/ffbo/ffbo/ffbo.nlp_component/nlp_component/data && \
+    bash /home/ffbo/ffbo/bin/download_drosobot_data.sh /home/ffbo/ffbo/ffbo.nlp_component/nlp_component/data && \
     mkdir -p /home/ffbo/.jupyter/lab/user-settings/@flybrainlab/neuromynerva && \
     wget https://raw.githubusercontent.com/FlyBrainLab/NeuroMynerva/master/schema/plugin.json.local -O /home/ffbo/.jupyter/lab/user-settings/@flybrainlab/neuromynerva/plugin.jupyterlab-settings && \
     echo "export ORIENTDB_ROOT_PASSWORD=root" | tee -a ~/.bashrc && \
