@@ -148,8 +148,8 @@ echo "Downloading packages"
 mkdir $FFBO_DIR
 cd $FFBO_DIR
 git clone https://github.com/fruitflybrain/ffbo.processor.git
-git clone https://github.com/fruitflybrain/crossbar.git
-git clone --branch pinned https://github.com/fruitflybrain/autobahn-python.git
+# git clone https://github.com/fruitflybrain/crossbar.git
+# git clone --branch pinned https://github.com/fruitflybrain/autobahn-python.git
 git clone https://github.com/fruitflybrain/ffbo.neuroarch_component.git
 git clone https://github.com/fruitflybrain/neuroarch.git
 git clone https://github.com/fruitflybrain/pyorient.git
@@ -184,11 +184,12 @@ echo
 
 conda create -n $CROSSBAR_ENV python=$PYTHON_VERSION numpy pandas -c conda-forge -y
 conda activate $CROSSBAR_ENV
-cd $FFBO_DIR/autobahn-python
-python -m pip install --no-cache .[twisted,encryption,compress,serialization,scram]
-python -m pip install --no-cache web3
-cd $FFBO_DIR/crossbar
-python -m pip install .
+# cd $FFBO_DIR/autobahn-python
+# python -m pip install --no-cache .[twisted,encryption,compress,serialization,scram]
+# cd $FFBO_DIR/crossbar
+# python -m pip install .
+pip install "autobahn[twisted,encryption,compress,serialization,scram] @ git+https://github.com/fruitflybrain/autobahn-python.git@pinned#egg=autobahn==23.6.2"
+pip install "crossbar @ git+https://github.com/fruitflybrain/crossbar.git#egg=crossbar==23.1.2"
 cd $FFBO_DIR/ffbo.processor
 python -m pip install -e .
 conda deactivate
@@ -257,7 +258,7 @@ python -m pip install -e .
 cd $FFBO_DIR/FBLClient
 python -m pip install -e .[full]
 cd $FFBO_DIR/neu3d
-git checkout dev
+git checkout v1.1.4
 npm install
 npm run build
 cd $FFBO_DIR/NeuroMynerva
@@ -280,7 +281,9 @@ npm run build --legacy-peer-deps
 conda deactivate
 
 mkdir -p $HOME/.jupyter/lab/user-settings/@flybrainlab/neuromynerva
-wget https://cdn.jsdelivr.net/gh/flybrainlab/NeuroMynerva@master/schema/plugin.json.local -O $HOME/.jupyter/lab/user-settings/@flybrainlab/neuromynerva/plugin.jupyterlab-settings
+# wget https://cdn.jsdelivr.net/gh/flybrainlab/NeuroMynerva@master/schema/plugin.json.local -O $HOME/.jupyter/lab/user-settings/@flybrainlab/neuromynerva/plugin.jupyterlab-settings
+CONDA_ROOT=$(conda info --base)
+cp $CONDA_ROOT/envs/$FFBO_ENV/share/jupyter/labextensions/@flybrainlab/neuromynerva/schemas/@flybrainlab/neuromynerva/plugin.json.local ~/.jupyter/lab/user-settings/@flybrainlab/neuromynerva/plugin.jupyterlab-settings
 sed -i -e "s+8081+$FFBO_PORT+g" $HOME/.jupyter/lab/user-settings/@flybrainlab/neuromynerva/plugin.jupyterlab-settings
 
 

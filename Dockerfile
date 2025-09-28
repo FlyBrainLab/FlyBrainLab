@@ -26,10 +26,11 @@ RUN wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -
     bash miniconda.sh -b -p /home/ffbo/miniconda && \
     echo ". $HOME/miniconda/etc/profile.d/conda.sh" | tee -a ~/.bashrc && \
     rm miniconda.sh && \
+    conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/main && \
+    conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/r && \
     cd /home/ffbo/ffbo && \
     git clone https://github.com/fruitflybrain/ffbo.nlp_component.git && \
     git clone https://github.com/fruitflybrain/ffbo.processor.git && \
-    git clone https://github.com/fruitflybrain/crossbar.git && \
     git clone https://github.com/fruitflybrain/ffbo.neuroarch_component.git && \
     git clone https://github.com/fruitflybrain/ffbo.neuronlp.git && \
     cd ffbo.neuronlp && \
@@ -44,8 +45,8 @@ RUN wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -
 RUN /bin/bash -c ". $HOME/miniconda/etc/profile.d/conda.sh && \
     conda create -n crossbar python=3.10 numpy pandas -c conda-forge -y && \
     conda activate crossbar && \
-    cd /home/ffbo/ffbo/crossbar && \
-    python -m pip install . && \
+    pip install 'autobahn[twisted,encryption,compress,serialization,scram] @ git+https://github.com/fruitflybrain/autobahn-python.git@pinned#egg=autobahn==23.6.2' && \
+    pip install 'crossbar @ git+https://github.com/fruitflybrain/crossbar.git#egg=crossbar==23.1.2' && \
     cd /home/ffbo/ffbo/ffbo.processor && \
     python -m pip install -e . && \
     conda deactivate" && \
@@ -135,12 +136,13 @@ RUN mkdir -p /home/ffbo/.ffbo/config && \
     rm -rf /home/ffbo/run_scripts && \
     bash /home/ffbo/ffbo/bin/download_drosobot_data.sh /home/ffbo/ffbo/ffbo.nlp_component/nlp_component/data && \
     mkdir -p /home/ffbo/.jupyter/lab/user-settings/@flybrainlab/neuromynerva && \
-    wget https://raw.githubusercontent.com/FlyBrainLab/NeuroMynerva/master/schema/plugin.json.local -O /home/ffbo/.jupyter/lab/user-settings/@flybrainlab/neuromynerva/plugin.jupyterlab-settings && \
+    # wget https://raw.githubusercontent.com/FlyBrainLab/NeuroMynerva/master/schema/plugin.json.local -O /home/ffbo/.jupyter/lab/user-settings/@flybrainlab/neuromynerva/plugin.jupyterlab-settings && \
+    cp /home/ffbo/miniconda/envs/ffbo/share/jupyter/labextensions/@flybrainlab/neuromynerva/schemas/@flybrainlab/neuromynerva/plugin.json.local ~/.jupyter/lab/user-settings/@flybrainlab/neuromynerva/plugin.jupyterlab-settings && \
     echo "export ORIENTDB_ROOT_PASSWORD=root" | tee -a ~/.bashrc && \
     echo 'export ORIENTDB_OPTS_MEMORY="-Xms1G -Xmx8G" # increase or decrease Xmx to fit the memory size of your machine' | tee -a ~/.bashrc && \
     echo "export ORIENTDB_SETTINGS=-Dstorage.diskCache.bufferSize=10240 # the amount of memory in MB used for disk cache. This plus Xmx above must be smaller than the total size of memory on your machine." | tee -a ~/.bashrc && \
-    echo "export PATH=/usr/local/bin:/usr/local/cuda/bin:/usr/bin:/usr/sbin:$PATH" | tee -a ~/.bashrc && \
-    echo "export LD_LIBRARY_PATH=/usr/local/lib:/usr/local/cuda/lib64:/usr/lib:/usr/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH" | tee -a ~/.bashrc && \
+    #echo "export PATH=/usr/local/cuda/bin:$PATH" | tee -a ~/.bashrc && \
+    #echo "export LD_LIBRARY_PATH=/usr/local/lib:/usr/local/cuda/lib64:/usr/lib:/usr/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH" | tee -a ~/.bashrc && \
     echo "export OMPI_MCA_opal_cuda_support=true" | tee -a ~/.bashrc
 
 ENV ORIENTDB_ROOT_PASSWORD=root \
@@ -149,3 +151,4 @@ ENV ORIENTDB_ROOT_PASSWORD=root \
 
 SHELL ["/bin/bash", "-c"]
 CMD /home/ffbo/ffbo/bin/download_datasets.sh /home/ffbo/orientdb && /home/ffbo/ffbo/bin/start.sh
+
