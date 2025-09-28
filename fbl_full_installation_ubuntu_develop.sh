@@ -43,7 +43,7 @@ echo "The following are the prerequisites that requires sudo to install:"
 echo 
 echo "-----------------------------------------------------"
 echo
-echo "sudo apt install -y wget default-jre curl build-essential tar apt-transport-https tmux sendmail graphviz graphviz-dev"
+echo "sudo apt install -y wget openjdk-11-jre curl build-essential tar apt-transport-https tmux sendmail graphviz graphviz-dev"
 echo
 echo "-----------------------------------------------------"
 echo
@@ -149,6 +149,7 @@ mkdir $FFBO_DIR
 cd $FFBO_DIR
 git clone https://github.com/fruitflybrain/ffbo.processor.git
 git clone https://github.com/fruitflybrain/crossbar.git
+git clone --branch pinned https://github.com/fruitflybrain/autobahn-python.git
 git clone https://github.com/fruitflybrain/ffbo.neuroarch_component.git
 git clone https://github.com/fruitflybrain/neuroarch.git
 git clone https://github.com/fruitflybrain/pyorient.git
@@ -183,6 +184,9 @@ echo
 
 conda create -n $CROSSBAR_ENV python=$PYTHON_VERSION numpy pandas -c conda-forge -y
 conda activate $CROSSBAR_ENV
+cd $FFBO_DIR/autobahn-python
+python -m pip install --no-cache .[twisted,encryption,compress,serialization,scram]
+python -m pip install --no-cache web3
 cd $FFBO_DIR/crossbar
 python -m pip install .
 cd $FFBO_DIR/ffbo.processor
