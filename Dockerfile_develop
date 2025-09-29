@@ -1,7 +1,7 @@
 # Build Docker for FlyBrainLab
 # docker build -f Dockerfile_develop --build-arg FLYBRAINLAB_DOCKER_VER=$(date +%Y%m%d-%H%M%S) -t fruitflybrain/fbl:FLYBRAINLAB_DOCKER_VER .
 
-FROM fruitflybrain/base_os:ubuntu20.04-cuda11.3.1
+FROM fruitflybrain/base_os:ubuntu24.04-cuda12.9.1
 
 LABEL maintainer="Fruit Fly Brain Observatory Team <http://fruitflybrain.org>"
 
@@ -11,9 +11,9 @@ EXPOSE 22
 USER ffbo
 WORKDIR /home/ffbo
 
-ENV PATH /usr/local/bin:/usr/local/cuda/bin:/usr/bin:/usr/sbin:$PATH
-ENV LD_LIBRARY_PATH /usr/local/lib:/usr/local/cuda/lib64:/usr/lib:/usr/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH
-ENV OMPI_MCA_opal_cuda_support true
+ENV PATH=/usr/local/bin:/usr/local/cuda/bin:/usr/bin:/usr/sbin:$PATH
+ENV LD_LIBRARY_PATH=/usr/local/lib:/usr/local/cuda/lib64:/usr/lib:/usr/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH
+ENV OMPI_MCA_opal_cuda_support=true
 
 RUN wget https://repo1.maven.org/maven2/com/orientechnologies/orientdb-community/3.1.20/orientdb-community-3.1.20.tar.gz && \
     tar zxf orientdb-community-3.1.20.tar.gz --directory /home/ffbo/ && \
@@ -26,8 +26,6 @@ RUN wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -
     bash miniconda.sh -b -p /home/ffbo/miniconda && \
     echo ". $HOME/miniconda/etc/profile.d/conda.sh" | tee -a ~/.bashrc && \
     rm miniconda.sh && \
-    conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/main && \
-    conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/r && \
     cd /home/ffbo/ffbo && \
     git clone https://github.com/fruitflybrain/ffbo.processor.git && \
     git clone https://github.com/fruitflybrain/ffbo.neuroarch_component.git && \
@@ -57,10 +55,12 @@ RUN wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -
 
 # needed to install one-by-one three crossbar dependencies for bug related to eth_abi 4.0.0.
 RUN /bin/bash -c ". $HOME/miniconda/etc/profile.d/conda.sh && \
+    conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/main && \
+    conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/r && \
     conda create -n crossbar python=3.10 numpy pandas -c conda-forge -y && \
     conda activate crossbar && \
-    pip install 'autobahn[twisted,encryption,compress,serialization,scram] @ git+https://github.com/fruitflybrain/autobahn-python.git@pinned#egg=autobahn==23.6.2' && \
-    pip install 'crossbar @ git+https://github.com/fruitflybrain/crossbar.git#egg=crossbar==23.1.2' && \
+    pip install 'autobahn[twisted,encryption,compress,serialization,scram] @ git+https://github.com/fruitflybrain/autobahn-python.git@pinned#egg=autobahn-23.6.2' && \
+    pip install 'crossbar @ git+https://github.com/fruitflybrain/crossbar.git#egg=crossbar-23.1.2' && \
     cd /home/ffbo/ffbo/ffbo.processor && \
     python -m pip install -e . && \
     conda deactivate" && \
@@ -99,7 +99,7 @@ RUN /bin/bash -c ". $HOME/miniconda/etc/profile.d/conda.sh && \
     cd /home/ffbo/ffbo/FBLClient && \
     python -m pip install -e .[full] && \
     cd /home/ffbo/ffbo/neu3d && \
-    git checkout dev && \
+    git checkout v1.1.4 && \
     npm install && \
     npm run build && \
     cd /home/ffbo/ffbo/NeuroMynerva && \
