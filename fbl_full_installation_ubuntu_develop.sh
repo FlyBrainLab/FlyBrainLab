@@ -188,8 +188,8 @@ conda activate $CROSSBAR_ENV
 # python -m pip install --no-cache .[twisted,encryption,compress,serialization,scram]
 # cd $FFBO_DIR/crossbar
 # python -m pip install .
-pip install "autobahn[twisted,encryption,compress,serialization,scram] @ git+https://github.com/fruitflybrain/autobahn-python.git@pinned#egg=autobahn==23.6.2"
-pip install "crossbar @ git+https://github.com/fruitflybrain/crossbar.git#egg=crossbar==23.1.2"
+pip install "autobahn[twisted,encryption,compress,serialization,scram] @ git+https://github.com/fruitflybrain/autobahn-python.git@pinned#egg=autobahn-23.6.2"
+pip install "crossbar @ git+https://github.com/fruitflybrain/crossbar.git#egg=crossbar-23.1.2"
 cd $FFBO_DIR/ffbo.processor
 python -m pip install -e .
 conda deactivate

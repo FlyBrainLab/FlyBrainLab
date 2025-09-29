@@ -181,8 +181,8 @@ echo
 
 conda create -n $CROSSBAR_ENV python=$PYTHON_VERSION numpy pandas -c conda-forge -y
 conda activate $CROSSBAR_ENV
-pip install "autobahn[twisted,encryption,compress,serialization,scram] @ git+https://github.com/fruitflybrain/autobahn-python.git@pinned#egg=autobahn==23.6.2"
-pip install "crossbar @ git+https://github.com/fruitflybrain/crossbar.git#egg=crossbar==23.1.2"
+pip install "autobahn[twisted,encryption,compress,serialization,scram] @ git+https://github.com/fruitflybrain/autobahn-python.git@pinned#egg=autobahn-23.6.2"
+pip install "crossbar @ git+https://github.com/fruitflybrain/crossbar.git#egg=crossbar-23.1.2"
 cd $FFBO_DIR/ffbo.processor
 python -m pip install -e .
 conda deactivate
